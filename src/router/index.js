@@ -14,7 +14,7 @@ export const publicRoutes = [
   { path: ROUTES.CONTACT, component: PageUser.Contact, layout: Layout },
   { path: ROUTES.PROJECTS, component: PageUser.Projects, layout: Layout },
 
-  { path: "*", component: PageUser.NotFound, layout: Layout }, // Catch-all route for 404
+
 ];
 
 export const privateRoutes = [
