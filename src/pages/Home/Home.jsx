@@ -1,80 +1,212 @@
 import React from "react";
 import './Home.scss'
+
 function ModernHome() {
-  const skills = ["React", "TypeScript", "Node.js", "GraphQL", "Tailwind", "SCSS", "Framer Motion", "A11y"];
+  const skills = [
+    { name: "React", level: 95, icon: "⚛️" },
+    { name: "TypeScript", level: 90, icon: "🔷" },
+    { name: "Node.js", level: 85, icon: "🟢" },
+    { name: "GraphQL", level: 80, icon: "🔮" },
+    { name: "Tailwind", level: 92, icon: "🎨" },
+    { name: "SCSS", level: 88, icon: "💄" },
+    { name: "Framer Motion", level: 85, icon: "🎭" },
+    { name: "A11y", level: 87, icon: "♿" }
+  ];
+
   const featured = [
-    { id: 1, title: "Realtime Dashboard", stack: ["React", "WebSocket"], desc: "High‑frequency financial metrics with smooth streaming charts." },
-    { id: 2, title: "E‑commerce Platform", stack: ["Node", "GraphQL"], desc: "Modular headless commerce API & dynamic storefront." },
-    { id: 3, title: "Design System", stack: ["TS", "Storybook"], desc: "Accessible UI kit with theming & tokens." },
+    { 
+      id: 1, 
+      title: "Realtime Dashboard", 
+      stack: ["React", "WebSocket", "D3.js"], 
+      desc: "High‑frequency financial metrics with smooth streaming charts and real-time analytics.",
+      status: "Live",
+      gradient: "from-blue-500 to-purple-600"
+    },
+    { 
+      id: 2, 
+      title: "E‑commerce Platform", 
+      stack: ["Node", "GraphQL", "Stripe"], 
+      desc: "Modular headless commerce API with dynamic storefront and payment integration.",
+      status: "Beta",
+      gradient: "from-green-500 to-teal-600"
+    },
+    { 
+      id: 3, 
+      title: "Design System", 
+      stack: ["TypeScript", "Storybook", "Figma"], 
+      desc: "Accessible UI kit with comprehensive design tokens and component library.",
+      status: "Active",
+      gradient: "from-purple-500 to-pink-600"
+    },
+  ];
+
+  const achievements = [
+    { metric: "50+", label: "Projects Completed" },
+    { metric: "3Y+", label: "Experience" },
+    { metric: "98%", label: "Client Satisfaction" },
+    { metric: "15+", label: "Technologies" }
   ];
 
   return (
     <>
-      {/* Hero */}
+      {/* Enhanced Hero Section */}
       <section id="home" className="hero">
-        <div className="container" style={{display:'grid', gap:'3.5rem', gridTemplateColumns:'repeat(auto-fit, minmax(320px,1fr))'}}>
-          <div data-aos="fade-right" data-aos-delay="50" style={{display:'flex',flexDirection:'column',gap:'1.6rem'}}>
-            <div>
-              <h1 style={{margin:0,fontSize:'clamp(2.4rem,5.2vw,3.4rem)',fontWeight:700,letterSpacing:'-.5px'}}>
-                <span className="gradient-text">Hi, I'm Dinh</span><br />
-                Front‑End Engineer
+        <div className="hero-container">
+          <div className="hero-content" data-aos="fade-right" data-aos-delay="100">
+            <div className="hero-badge">
+              <span className="status-dot"></span>
+              {' '}
+              Available for work
+            </div>
+            
+            <div className="hero-text">
+              <h1 className="hero-title">
+                <span className="greeting">Hi, I'm</span>
+                <span className="name-highlight">Dinh</span>
+                <span className="role">Front‑End Engineer</span>
               </h1>
-              <p style={{maxWidth:560,margin:'1.15rem 0 0',color:'var(--color-text-muted)',fontSize:'1.05rem',lineHeight:1.6}}>
+              <p className="hero-description">
                 I craft performant, accessible interfaces and delightful product experiences.
-                Focused on design systems, micro‑frontends & smooth interactions.
+                Focused on design systems, micro‑frontends & smooth interactions that users love.
               </p>
             </div>
-            <div style={{display:'flex',gap:'.9rem',flexWrap:'wrap'}}>
-              <a href="#projects" className="btn">View Projects</a>
-              <a href="#contact" className="btn btn--outline">Contact Me</a>
+
+            <div className="hero-actions">
+              <a href="#projects" className="btn btn--primary">
+                <span>View Projects</span>
+                <span className="btn-icon">🚀</span>
+              </a>
+              <a href="#contact" className="btn btn--secondary">
+                <span>Contact Me</span>
+                <span className="btn-icon">📧</span>
+              </a>
             </div>
-            <div style={{display:'flex',flexWrap:'wrap',gap:'.55rem'}} aria-label="Skill highlights">
-              {skills.map(s => <span key={s} className="tag" style={{fontSize:'.58rem'}}>{s}</span>)}
+
+            <div className="skills-showcase">
+              <h3 className="skills-title">Tech Stack</h3>
+              <div className="skills-grid">
+                {skills.map(skill => (
+                  <div key={skill.name} className="skill-item" data-aos="fade-up" data-aos-delay="200">
+                    <span className="skill-icon">{skill.icon}</span>
+                    <span className="skill-name">{skill.name}</span>
+                    <div className="skill-bar">
+                      <div 
+                        className="skill-progress" 
+                        style={{'--progress': `${skill.level}%`}}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div data-aos="zoom-in" data-aos-delay="120" style={{alignSelf:'center'}}>
-            <div className="glass-panel" style={{padding:'2.2rem 2.2rem 2.6rem', position:'relative', overflow:'hidden'}}>
-              <div style={{position:'absolute',inset:0,background:'radial-gradient(circle at 30% 20%,rgba(255,255,255,0.12),transparent 70%)',mixBlendMode:'overlay',pointerEvents:'none'}} />
-              <div style={{display:'flex',flexDirection:'column',gap:'1.35rem'}}>
-                <div>
-                  <h3 style={{margin:'0 0 .5rem',fontSize:'1rem',letterSpacing:'.5px',textTransform:'uppercase',color:'var(--color-text-muted)'}}>Currently Building</h3>
-                  <p style={{margin:0,fontSize:'.9rem',lineHeight:1.5,color:'var(--color-text)'}}>An AI‑assisted component library optimizing bundle size and accessibility metrics.</p>
+
+          <div className="hero-visual" data-aos="zoom-in" data-aos-delay="300">
+            <div className="visual-card">
+              <div className="card-header">
+                <div className="card-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </div>
-                <div>
-                  <h3 style={{margin:'0 0 .5rem',fontSize:'1rem',letterSpacing:'.5px',textTransform:'uppercase',color:'var(--color-text-muted)'}}>Core Values</h3>
-                  <ul style={{margin:0,padding:'0 0 0 1.1rem',display:'grid',gap:'.4rem',fontSize:'.85rem',color:'var(--color-text)'}}>
-                    <li>Performance first</li>
-                    <li>Design consistency</li>
-                    <li>Inclusive UX</li>
-                    <li>Maintainability</li>
+                <span className="card-title">Currently Building</span>
+              </div>
+              
+              <div className="card-content">
+                <div className="project-info">
+                  <h4>AI‑Assisted Component Library</h4>
+                  <p>Optimizing bundle size and accessibility metrics with intelligent code generation.</p>
+                  
+                  <div className="progress-section">
+                    <div className="progress-header">
+                      <span>Development Progress</span>
+                      <span>78%</span>
+                    </div>
+                    <div className="progress-bar">
+                      <div className="progress-fill" style={{'--progress': '78%'}}></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="values-section">
+                  <h4>Core Values</h4>
+                  <ul className="values-list">
+                    <li><span className="value-icon">⚡</span> Performance first</li>
+                    <li><span className="value-icon">🎨</span> Design consistency</li>
+                    <li><span className="value-icon">♿</span> Inclusive UX</li>
+                    <li><span className="value-icon">🔧</span> Maintainability</li>
                   </ul>
                 </div>
               </div>
+            </div>
+
+            <div className="achievement-grid">
+              {achievements.map((achievement, index) => (
+                <div key={achievement.label} className="achievement-item" data-aos="fade-up" data-aos-delay={400 + index * 100}>
+                  <span className="achievement-metric">{achievement.metric}</span>
+                  <span className="achievement-label">{achievement.label}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Projects Preview */}
-      <section id="projects" style={{paddingTop:0}}>
+      {/* Enhanced Featured Projects Section */}
+      <section id="projects" className="projects-section">
         <div className="container">
-          <div className="section-head" data-aos="fade-up">
-            <h2 className="gradient-text">Featured Work</h2>
-            <p>Selected projects demonstrating product thinking & engineering depth.</p>
+          <div className="section-header" data-aos="fade-up">
+            <h2 className="section-title">
+              <span className="section-number">01.</span>
+              {' '}
+              Featured Work
+            </h2>
+            <p className="section-description">
+              Selected projects demonstrating product thinking & engineering depth.
+            </p>
           </div>
-          <div className="projects-grid" style={{display:'grid',gap:'1.6rem',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))'}}>
-            {featured.map((p,i) => (
-              <article key={p.id} className="card-3d" data-aos="fade-up" data-aos-delay={100 + i*70}>
-                <header style={{display:'flex',flexDirection:'column',gap:'.45rem'}}>
-                  <h3 style={{margin:'0 0 .2rem',fontSize:'1.05rem'}}>{p.title}</h3>
-                  <div style={{display:'flex',gap:'.4rem',flexWrap:'wrap'}}>
-                    {p.stack.map(s=> <span key={s} className="tag" style={{fontSize:'.55rem'}}>{s}</span>)}
+
+          <div className="projects-grid">
+            {featured.map((project, index) => (
+              <article key={project.id} className="project-card" data-aos="fade-up" data-aos-delay={100 + index * 100}>
+                <div className="project-header">
+                  <div className="project-status">
+                    <span className="status-badge">{project.status}</span>
                   </div>
-                </header>
-                <p style={{margin:'1rem 0 .5rem',fontSize:'.8rem',lineHeight:1.5,color:'var(--color-text-muted)'}}>{p.desc}</p>
-                <button className="btn btn--outline" style={{fontSize:'.65rem',padding:'.55rem .9rem',marginTop:'.4rem'}}>Details</button>
+                  <h3 className="project-title">{project.title}</h3>
+                  <div className="project-stack">
+                    {project.stack.map(tech => (
+                      <span key={tech} className="tech-tag">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="project-content">
+                  <p className="project-description">{project.desc}</p>
+                  
+                  <div className="project-actions">
+                    <button className="btn btn--ghost">
+                      <span>View Details</span>
+                      <span className="btn-icon">→</span>
+                    </button>
+                    <button className="btn btn--icon">
+                      <span>⭐</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="project-visual">
+                  <div className={`project-gradient ${project.gradient}`}></div>
+                </div>
               </article>
             ))}
+          </div>
+
+          <div className="projects-cta" data-aos="fade-up" data-aos-delay="400">
+            <a href="#projects" className="btn btn--outline btn--large">
+              <span>View All Projects</span>
+              <span className="btn-icon">📁</span>
+            </a>
           </div>
         </div>
       </section>

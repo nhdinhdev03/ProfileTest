@@ -7,8 +7,14 @@ import "./Layout.scss";
 function Layout({ children }) {
   return (
     <div className="app-layout">
+      <div className="layout-background">
+        <div className="bg-grid"></div>
+        <div className="bg-gradient-orb bg-gradient-orb--primary"></div>
+        <div className="bg-gradient-orb bg-gradient-orb--secondary"></div>
+        <div className="bg-noise"></div>
+      </div>
       <Header />
-      <main>
+      <main className="main-content">
         {children}
       </main>
       <Footer />

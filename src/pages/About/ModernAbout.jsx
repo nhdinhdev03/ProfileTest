@@ -1,55 +1,218 @@
 import React from "react";
 import './ModernAbout.scss'
+
 function ModernAbout() {
   const timeline = [
-    { year: '2022‑Now', role: 'Front‑End Engineer', org: 'TechCorp', bullets: ['Design system ownership','Performance budgets','Micro‑frontend architecture']},
-    { year: '2021‑2022', role: 'UI Developer', org: 'StartupX', bullets: ['MVP launches','A/B testing infra','Analytics integration']},
-    { year: '2019‑2021', role: 'Freelance', org: 'Client Projects', bullets: ['Landing pages','E‑commerce','Custom dashboards']},
+    { 
+      year: '2022‑Now', 
+      role: 'Senior Front‑End Engineer', 
+      org: 'TechCorp', 
+      location: 'San Francisco, CA',
+      bullets: ['Led design system architecture serving 50+ developers','Reduced bundle size by 40% through micro‑frontend optimization','Implemented accessibility standards achieving WCAG 2.1 AA compliance'],
+      technologies: ['React', 'TypeScript', 'Next.js', 'GraphQL']
+    },
+    { 
+      year: '2021‑2022', 
+      role: 'UI Developer', 
+      org: 'StartupX', 
+      location: 'Remote',
+      bullets: ['Built MVP from 0 to 10k+ users in 6 months','Implemented A/B testing infrastructure increasing conversion by 25%','Developed real-time analytics dashboard with WebSocket integration'],
+      technologies: ['React', 'Node.js', 'Socket.io', 'MongoDB']
+    },
+    { 
+      year: '2019‑2021', 
+      role: 'Freelance Developer', 
+      org: 'Various Clients', 
+      location: 'Remote',
+      bullets: ['Delivered 20+ custom web applications','Specialized in e‑commerce platforms and business dashboards','Maintained 98% client satisfaction rating'],
+      technologies: ['Vue.js', 'PHP', 'WordPress', 'MySQL']
+    },
   ];
 
   const skillGroups = [
-    { title: 'Core', items: ['HTML5','CSS3 / SCSS','JavaScript (ESNext)','TypeScript']},
-    { title: 'Frameworks', items: ['React','Next.js','Vite','Node.js']},
-    { title: 'Tooling', items: ['Webpack','Vitest/Jest','Storybook','ESLint / Prettier']},
-    { title: 'UX & Quality', items: ['A11y','Lighthouse','Perf Audits','Design Tokens']},
+    { 
+      title: 'Frontend Technologies', 
+      icon: '🎨',
+      items: ['HTML5 & Semantic Web','CSS3 / SCSS / Tailwind','JavaScript (ES2023)','TypeScript','React & Next.js','Vue.js & Nuxt.js']
+    },
+    { 
+      title: 'Backend & Tools', 
+      icon: '⚙️',
+      items: ['Node.js & Express','GraphQL & REST APIs','Webpack & Vite','Docker & CI/CD','Git & GitHub Actions','Testing (Jest, Cypress)']
+    },
+    { 
+      title: 'Design & UX', 
+      icon: '🎭',
+      items: ['Figma & Adobe XD','Design Systems','Accessibility (A11y)','Performance Optimization','User Experience Design','Responsive Design']
+    },
+    { 
+      title: 'Emerging Tech', 
+      icon: '🚀',
+      items: ['AI/ML Integration','Web3 & Blockchain','Progressive Web Apps','Serverless Architecture','Edge Computing','WebAssembly']
+    },
   ];
 
+  const achievements = [
+    { number: '50+', label: 'Projects Delivered', icon: '🎯' },
+    { number: '3+', label: 'Years Experience', icon: '📅' },
+    { number: '98%', label: 'Client Satisfaction', icon: '⭐' },
+    { number: '40%', label: 'Performance Gains', icon: '⚡' }
+  ];
+
+  const personalInfo = {
+    location: 'Ho Chi Minh City, Vietnam',
+    timezone: 'GMT+7',
+    languages: ['Vietnamese (Native)', 'English (Fluent)', 'Japanese (Basic)'],
+    interests: ['Open Source', 'Tech Blogging', 'Photography', 'Coffee Brewing']
+  };
+
   return (
-    <section id="about">
+    <section id="about" className="about-section">
       <div className="container">
-        <div className="section-head" data-aos="fade-up">
-          <h2>About <span className="gradient-text">Me</span></h2>
-          <p>Blending clean UI engineering with product empathy & performance focus.</p>
+        {/* Enhanced Section Header */}
+        <div className="section-header" data-aos="fade-up">
+          <h2 className="section-title">
+            <span className="section-number">02.</span>
+            About <span className="gradient-text">Me</span>
+          </h2>
+          <p className="section-description">
+            Blending clean UI engineering with product empathy & performance focus.
+          </p>
         </div>
-        <div style={{display:'grid',gap:'3rem',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))'}}>
-          <div style={{display:'flex',flexDirection:'column',gap:'1.6rem'}}>
-            <p style={{margin:0,color:'var(--color-text-muted)',fontSize:'.95rem',lineHeight:1.65}} data-aos="fade-right">
-              I'm a front‑end engineer focused on crafting maintainable, performant interfaces.
-              I enjoy building design systems, improving DX, and collaborating across design & backend
-              to deliver cohesive product experiences.
-            </p>
-            <div className="glass-panel" style={{padding:'1.4rem 1.4rem 1.8rem'}} data-aos="fade-right" data-aos-delay="120">
-              <h3 style={{margin:'0 0 1rem',fontSize:'1rem',letterSpacing:'.5px',textTransform:'uppercase',color:'var(--color-text-muted)'}}>Experience</h3>
-              <ul style={{listStyle:'none',margin:0,padding:0,display:'flex',flexDirection:'column',gap:'1.4rem'}}>
-                {timeline.map((t,i) => (
-                  <li key={t.year} style={{position:'relative'}} data-aos="fade-up" data-aos-delay={140 + i*80}>
-                    <div style={{fontSize:'.7rem',letterSpacing:'1px',textTransform:'uppercase',color:'var(--color-primary-accent)',fontWeight:600}}>{t.year}</div>
-                    <div style={{fontWeight:600,margin:'.3rem 0 .4rem'}}>{t.role} • {t.org}</div>
-                    <ul style={{margin:0,padding:'0 0 0 1.1rem',display:'grid',gap:'.3rem',fontSize:'.75rem',color:'var(--color-text-muted)'}}>
-                      {t.bullets.map(b => <li key={b}>{b}</li>)}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
+
+        {/* Main Content Grid */}
+        <div className="about-grid">
+          {/* Personal Story */}
+          <div className="story-section" data-aos="fade-right">
+            <div className="story-content">
+              <h3 className="story-title">My Journey</h3>
+              <div className="story-text">
+                <p>
+                  I'm a passionate front‑end engineer who discovered the magic of code during university. 
+                  What started as curiosity about how websites work has evolved into a deep love for 
+                  crafting maintainable, performant interfaces that users actually enjoy using.
+                </p>
+                <p>
+                  I specialize in building design systems, optimizing performance, and collaborating 
+                  across design & backend teams to deliver cohesive product experiences. My approach 
+                  balances technical excellence with user empathy.
+                </p>
+                <p>
+                  When I'm not coding, you'll find me contributing to open source, writing technical 
+                  articles, or exploring the latest web technologies. I believe in continuous learning 
+                  and sharing knowledge with the developer community.
+                </p>
+              </div>
+            </div>
+
+            {/* Personal Info Card */}
+            <div className="personal-info-card">
+              <h4>Quick Facts</h4>
+              <div className="info-grid">
+                <div className="info-item">
+                  <span className="info-icon">📍</span>
+                  <div>
+                    <span className="info-label">Location</span>
+                    <span className="info-value">{personalInfo.location}</span>
+                  </div>
+                </div>
+                <div className="info-item">
+                  <span className="info-icon">🌍</span>
+                  <div>
+                    <span className="info-label">Timezone</span>
+                    <span className="info-value">{personalInfo.timezone}</span>
+                  </div>
+                </div>
+                <div className="info-item">
+                  <span className="info-icon">🗣️</span>
+                  <div>
+                    <span className="info-label">Languages</span>
+                    <div className="info-values">
+                      {personalInfo.languages.map(lang => (
+                        <span key={lang} className="info-tag">{lang}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="info-item">
+                  <span className="info-icon">🎯</span>
+                  <div>
+                    <span className="info-label">Interests</span>
+                    <div className="info-values">
+                      {personalInfo.interests.map(interest => (
+                        <span key={interest} className="info-tag">{interest}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div style={{display:'grid',gap:'1.4rem',alignContent:'start'}}>
-            {skillGroups.map((g,i) => (
-              <div key={g.title} className="card-3d" data-aos="fade-left" data-aos-delay={60 + i*70}>
-                <h3 style={{margin:'0 0 .8rem',fontSize:'.85rem',letterSpacing:'1px',textTransform:'uppercase',color:'var(--color-text-muted)'}}>{g.title}</h3>
-                <div style={{display:'flex',flexWrap:'wrap',gap:'.5rem'}}>
-                  {g.items.map(it => <span key={it} className="tag" style={{fontSize:'.55rem'}}>{it}</span>)}
+
+          {/* Experience Timeline */}
+          <div className="timeline-section" data-aos="fade-left">
+            <h3 className="timeline-title">Experience</h3>
+            <div className="timeline">
+              {timeline.map((experience, index) => (
+                <div key={experience.year} className="timeline-item" data-aos="fade-up" data-aos-delay={100 + index * 100}>
+                  <div className="timeline-marker">
+                    <span className="timeline-dot"></span>
+                    <div className="timeline-year">{experience.year}</div>
+                  </div>
+                  <div className="timeline-content">
+                    <div className="timeline-header">
+                      <h4 className="timeline-role">{experience.role}</h4>
+                      <div className="timeline-meta">
+                        <span className="timeline-org">{experience.org}</span>
+                        <span className="timeline-location">{experience.location}</span>
+                      </div>
+                    </div>
+                    <ul className="timeline-bullets">
+                      {experience.bullets.map((bullet, bulletIndex) => (
+                        <li key={bulletIndex}>{bullet}</li>
+                      ))}
+                    </ul>
+                    <div className="timeline-tech">
+                      {experience.technologies.map(tech => (
+                        <span key={tech} className="tech-badge">{tech}</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Skills Section */}
+        <div className="skills-section" data-aos="fade-up">
+          <h3 className="skills-title">Technical Expertise</h3>
+          <div className="skills-grid">
+            {skillGroups.map((group, index) => (
+              <div key={group.title} className="skill-group" data-aos="fade-up" data-aos-delay={100 + index * 100}>
+                <div className="skill-group-header">
+                  <span className="skill-group-icon">{group.icon}</span>
+                  <h4 className="skill-group-title">{group.title}</h4>
+                </div>
+                <div className="skill-items">
+                  {group.items.map(skill => (
+                    <span key={skill} className="skill-tag">{skill}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Achievements */}
+        <div className="achievements-section" data-aos="fade-up">
+          <h3 className="achievements-title">Key Achievements</h3>
+          <div className="achievements-grid">
+            {achievements.map((achievement, index) => (
+              <div key={achievement.label} className="achievement-card" data-aos="zoom-in" data-aos-delay={100 + index * 100}>
+                <span className="achievement-icon">{achievement.icon}</span>
+                <span className="achievement-number">{achievement.number}</span>
+                <span className="achievement-label">{achievement.label}</span>
               </div>
             ))}
           </div>
