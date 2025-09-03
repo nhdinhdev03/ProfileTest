@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "router/routeConstants";
-import './Header.scss'
+import { useEffect, useState } from "react";
+import MobileMenu from "./MobileMenu";
+import './Header.scss';
 
 function Header() {
   const links = [
@@ -11,8 +13,24 @@ function Header() {
     { to: ROUTES.BLOG, label: "Blog", icon: "📝" },
   ];
 
+  const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Add scroll event listener to handle header appearance
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header>
+    <header className={isScrolled ? "scrolled" : ""}>
       <div className="brand">
         <h1 className="brand-title">
           <span className="brand-icon">⚡</span>
@@ -36,6 +54,7 @@ function Header() {
           ))}
         </ul>
       </nav>
+      <MobileMenu links={links} />
     </header>
   );
 }
