@@ -1,5 +1,5 @@
 import React from "react";
-
+import'./ModernContact.scss'
 function ModernContact() {
   return (
     <section id="contact">

@@ -1,5 +1,5 @@
 import React from "react";
-
+import './Home.scss'
 function ModernHome() {
   const skills = ["React", "TypeScript", "Node.js", "GraphQL", "Tailwind", "SCSS", "Framer Motion", "A11y"];
   const featured = [

@@ -1,5 +1,5 @@
 import React from "react";
-
+import './ModernAbout.scss'
 function ModernAbout() {
   const timeline = [
     { year: '2022‑Now', role: 'Front‑End Engineer', org: 'TechCorp', bullets: ['Design system ownership','Performance budgets','Micro‑frontend architecture']},

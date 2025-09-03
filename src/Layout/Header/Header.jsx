@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "router/routeConstants";
-
+import './Header.scss'
 function Header() {
   const links = [
     { to: ROUTES.HOME, label: "Home" },

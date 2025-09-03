@@ -1,3 +1,4 @@
+import './Footer.scss'
 function ModernFooter() {
   const year = new Date().getFullYear();
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import './ModernProjects.scss'
 const allProjects = [
   { id:1, title:'Realtime Analytics', cat:'dashboard', stack:['React','D3'], desc:'High‑throughput metrics visualization with adaptive polling & websockets.' },
   { id:2, title:'Headless Commerce', cat:'platform', stack:['Node','GraphQL'], desc:'Composable commerce API with dynamic pricing & inventory sync.' },

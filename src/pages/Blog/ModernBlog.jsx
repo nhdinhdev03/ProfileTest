@@ -1,5 +1,5 @@
 import React from "react";
-
+import './ModernBlog.scss'
 const posts = [
   { id:1, title:'Optimizing React Rendering', tag:'performance', excerpt:'Patterns & heuristics for avoiding wasted renders and improving UI responsiveness.' },
   { id:2, title:'Design Tokens Workflow', tag:'design-system', excerpt:'Scalable multi-brand theming with a tokens pipeline & CI preview.' },
