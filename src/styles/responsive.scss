@@ -1,0 +1,29 @@
+/* Responsive overrides */
+@media (max-width: 1080px) {
+	header nav ul { gap: 1.2rem; }
+}
+
+@media (max-width: 880px) {
+	.hide-md { display: none !important; }
+	header .brand-title { font-size: 1.05rem; }
+	section { padding: 4.5rem 0; }
+}
+
+@media (max-width: 720px) {
+	.container { padding: 0 1.1rem; }
+	header nav { position: fixed; inset: 0 0 auto 0; background: rgba(13,17,23,.92); backdrop-filter: blur(18px); padding: .75rem 1rem; border-bottom:1px solid #222c37; }
+	header nav ul { display:flex; gap:.6rem; justify-content:space-between; }
+	header nav a { padding:.55rem .8rem; font-size:.75rem; border-radius: 8px; }
+	header nav a.active { background:#18212b; }
+	body { padding-top: 64px; }
+	h1, h2 { line-height:1.15; }
+	.hero-grid { grid-template-columns:1fr; }
+	.projects-grid { grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+}
+
+@media (max-width: 480px) {
+	.btn { padding: .75rem 1.05rem; font-size:.8rem; }
+	h2 { font-size: 1.75rem !important; }
+	section { padding: 3.2rem 0; }
+	.card-3d { padding: 1.2rem 1rem 1.3rem; }
+}
