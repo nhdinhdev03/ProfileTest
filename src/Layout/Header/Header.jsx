@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "router/routeConstants";
 import { useEffect, useState } from "react";
-import MobileMenu from "./MobileMenu";
-import './Header.scss';
+
+import "./Header.scss";
 
 function Header() {
   const links = [
@@ -14,7 +14,7 @@ function Header() {
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
-  
+
   // Add scroll event listener to handle header appearance
   useEffect(() => {
     const handleScroll = () => {
@@ -24,7 +24,7 @@ function Header() {
         setIsScrolled(false);
       }
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -33,9 +33,7 @@ function Header() {
     <header className={isScrolled ? "scrolled" : ""}>
       <div className="brand">
         <h1 className="brand-title">
-          <span className="brand-icon">⚡</span>
-          {' '}
-          Dinh's Portfolio
+          <span className="brand-icon">⚡</span> Dinh's Portfolio
         </h1>
         <span className="brand-subtitle">Front-End Engineer</span>
       </div>
@@ -45,7 +43,9 @@ function Header() {
             <li key={link.to}>
               <NavLink
                 to={link.to}
-                className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
               >
                 <span className="nav-icon">{link.icon}</span>
                 <span className="nav-label">{link.label}</span>
@@ -54,7 +54,6 @@ function Header() {
           ))}
         </ul>
       </nav>
-      <MobileMenu links={links} />
     </header>
   );
 }
