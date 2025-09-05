@@ -1,9 +1,10 @@
 // ===== router/index.js (optimized with code-splitting) =====
 
-import React, { lazy } from 'react';
+
 import Layout from "../Layout";
 import { ROUTES } from "./routeConstants";
 import withPageAnimation from '../components/withPageAnimation';
+import { lazy } from "react";
 
 // Lazy load page components for code-splitting
 const Home = lazy(() => import('../pages/Home'));
