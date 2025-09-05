@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "router/routeConstants";
 import { useEffect, useState } from "react";
-import MobileMenu from "./MobileMenu";
+
 import './Header.scss';
 
 function Header() {
@@ -54,7 +54,7 @@ function Header() {
           ))}
         </ul>
       </nav>
-      <MobileMenu links={links} />
+ 
     </header>
   );
 }

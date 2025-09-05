@@ -132,32 +132,3 @@ header {
     transform: translateZ(0);
   }
 }
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .brand-subtitle {
-    display: none;
-  }
-  
-  .brand-title {
-    font-size: 1rem;
-  }
-  
-  .brand-icon {
-    font-size: 1.25rem;
-  }
-  
-  .main-nav {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-nav ul {
-    gap: 0.25rem;
-  }
-  
-  .nav-link {
-    padding: 0.5rem;
-  }
-}
