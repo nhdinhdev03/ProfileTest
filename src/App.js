@@ -1,13 +1,15 @@
-import React, { useMemo, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useMemo, useEffect, Suspense } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 import { publicRoutes, privateRoutes } from "./router";
 import ScrollToHash from "./router/ScrollToHash";
+import Spinner from "./components/Spinner";
 
 function App() {
+  const location = useLocation();
   // Initialize AOS animation library
   useEffect(() => {
     AOS.init({
@@ -44,7 +46,9 @@ function App() {
     <>
       <ScrollToHash />
       <AnimatePresence mode="wait" initial={false}>
-        <Routes>{routeElements}</Routes>
+        <Suspense fallback={<Spinner />}>
+          <Routes location={location} key={location.pathname}>{routeElements}</Routes>
+        </Suspense>
       </AnimatePresence>
     </>
   );
