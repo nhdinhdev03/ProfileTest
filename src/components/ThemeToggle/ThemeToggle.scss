@@ -69,6 +69,42 @@
   padding: $spacing-xs $spacing-sm;
 }
 
+// Variant when rendered in Mobile Menu
+.theme-toggle--mobile {
+  position: static;
+  bottom: auto;
+  right: auto;
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: none;
+  justify-content: flex-start;
+  gap: $spacing-base;
+  margin: 0;
+  
+  &:hover {
+    background: color-mix(in oklab, var(--primary-light) 10%, var(--bg-tertiary));
+    border-color: color-mix(in oklab, var(--primary-light) 30%, var(--border-color));
+    transform: none;
+    box-shadow: none;
+  }
+
+  .theme-toggle__track {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .theme-toggle__label {
+    order: 1;
+    display: block;
+    color: var(--text-primary);
+    font-size: $font-base;
+    font-weight: $font-medium;
+  }
+}
+
 // Mobile specific styles
 @media (max-width: $breakpoint-sm) {
   .theme-toggle {

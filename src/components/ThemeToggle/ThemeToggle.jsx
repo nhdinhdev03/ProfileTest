@@ -6,9 +6,9 @@ import './ThemeToggle.scss'
 const ThemeToggle = ({ theme, toggleTheme, placement = 'floating' }) => {
   return (
     <motion.button
-  className={`theme-toggle ${placement === 'header' ? 'theme-toggle--header' : ''}`}
+      className={`theme-toggle ${placement === 'header' ? 'theme-toggle--header' : ''} ${placement === 'mobile' ? 'theme-toggle--mobile' : ''}`}
       onClick={toggleTheme}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: placement === 'mobile' ? 1.02 : 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}

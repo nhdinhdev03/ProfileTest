@@ -429,7 +429,7 @@ const Hero = () => {
           </motion.div>
 
           <motion.h1 className="hero__name" variants={itemVariants}>
-            <span className="hero__name-text">Professional</span>
+            <span className="hero__name-text">Nhdinh</span>
             <span className="hero__name-highlight">Developer</span>
           </motion.h1>
 
@@ -442,14 +442,14 @@ const Hero = () => {
           </motion.div>
 
           <motion.p className="hero__description" variants={itemVariants}>
-            Chuyên gia phát triển web với hơn 3 năm kinh nghiệm, tạo ra những
+            Chuyên gia phát triển web với hơn 2 năm kinh nghiệm, tạo ra những
             ứng dụng web hiện đại, responsive và user-friendly. Đam mê công nghệ
             mới và luôn sẵn sàng đối mặt với thử thách.
           </motion.p>
 
           <motion.div className="hero__location" variants={itemVariants}>
             <FiMapPin className="hero__location-icon" />
-            <span>Hà Nội, Việt Nam</span>
+            <span>Hậu Giang, Việt Nam</span>
           </motion.div>
 
           <motion.div className="hero__actions" variants={itemVariants}>

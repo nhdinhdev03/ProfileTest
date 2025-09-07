@@ -9,6 +9,8 @@ import {
   FiFolder,
   FiBookOpen,
   FiMail,
+  FiSun,
+  FiMoon,
 } from "react-icons/fi";
 import "./Header.scss";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
@@ -226,9 +228,23 @@ const Header = ({ theme, toggleTheme }) => {
           </motion.ul>
         </nav>
 
-        {/* Theme toggle moved into header */}
+        {/* Theme toggle for desktop - compact version */}
         <div className="header__actions">
-          <ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="header" />
+          <motion.button
+            className="header__theme-toggle"
+            onClick={toggleTheme}
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          >
+            <motion.div
+              animate={{ rotate: theme === 'dark' ? 0 : 180 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {theme === 'dark' ? <FiMoon /> : <FiSun />}
+            </motion.div>
+          </motion.button>
         </div>
 
   <motion.button
@@ -353,6 +369,27 @@ const Header = ({ theme, toggleTheme }) => {
                     </motion.li>
                   );
                 })}
+
+                {/* Theme Toggle in Mobile Menu */}
+                <motion.li
+                  className="header__nav-item header__nav-item--theme"
+                  initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                    scale: 1,
+                    transition: {
+                      delay: navItems.length * 0.1 + 0.3,
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 25,
+                    },
+                  }}
+                >
+                  <div className="header__mobile-theme-toggle">
+                    <ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="mobile" />
+                  </div>
+                </motion.li>
               </ul>
             </motion.nav>
           </>
