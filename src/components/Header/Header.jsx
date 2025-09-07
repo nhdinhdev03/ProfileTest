@@ -95,17 +95,43 @@ const Header = ({ theme, toggleTheme }) => {
 
   return (
     <motion.header
-      className={`header ${isScrolled ? "header--scrolled" : ""}`}
+      className={`header ${isScrolled ? "header--scrolled" : ""} ${isMenuOpen ? "header--menu-open" : ""}`}
       variants={headerVariants}
       initial="hidden"
       animate="visible"
     >
   <div className="header__container">
+        {/* Mobile Menu Title - only visible when menu is open */}
+        <motion.div
+          className="header__mobile-title"
+          animate={{ 
+            opacity: isMenuOpen ? 1 : 0,
+            x: isMenuOpen ? 0 : -30,
+            scale: isMenuOpen ? 1 : 0.9
+          }}
+          transition={{ 
+            duration: 0.3, 
+            ease: "easeInOut",
+            delay: isMenuOpen ? 0.1 : 0
+          }}
+        >
+          <span>Menu</span>
+        </motion.div>
+
         <motion.div
           className="header__logo"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => scrollToSection("home")}
+          animate={{ 
+            opacity: isMenuOpen ? 0 : 1,
+            x: isMenuOpen ? -30 : 0,
+            scale: isMenuOpen ? 0.9 : 1
+          }}
+          transition={{ 
+            duration: 0.3, 
+            ease: "easeInOut" 
+          }}
         >
           <motion.div
             className="header__logo-container"

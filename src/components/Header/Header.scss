@@ -53,12 +53,48 @@
     @include flex-between;
     max-width: 1400px;
     margin: 0 auto;
-  padding: 0 clamp(1rem, 4vw, 2rem);
-  height: var(--header-height);
+    padding: 0 clamp(1rem, 4vw, 2rem);
+    height: var(--header-height);
     position: relative;
+    transition: all 0.3s ease;
 
     @media (min-width: $breakpoint-sm) {
       padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    /* When mobile menu is open, adjust layout */
+    .header--menu-open & {
+      justify-content: flex-end;
+
+      @media (min-width: $breakpoint-md) {
+        justify-content: space-between; // Keep normal layout on desktop
+      }
+    }
+  }
+
+  &__mobile-title {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+
+    @media (min-width: $breakpoint-md) {
+      display: none; // Hide on desktop
+    }
+
+    span {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
   }
 
@@ -150,6 +186,14 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    pointer-events: auto;
+
+    /* Hide logo completely when mobile menu is open */
+    &.header__logo--hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-30px) scale(0.9);
+    }
 
     &::before {
       content: "";
@@ -271,15 +315,30 @@
       top: var(--header-height);
       right: 0;
       left: auto;
-      width: 310px; /* default width on larger small screens */
+      width: 320px; /* slightly wider for better UX */
       height: calc(100vh - var(--header-height));
-      /* Use themed surface so light/dark match the app */
-      background: color-mix(in oklab, var(--bg-secondary) 96%, transparent);
-      backdrop-filter: blur(25px) saturate(200%);
-  border-left: 1px solid var(--border-color);
+      /* Solid background with proper theming */
+      background: var(--bg-primary);
+      backdrop-filter: blur(30px) saturate(200%);
+      border-left: 1px solid var(--border-color);
       padding: 2rem 0;
       overflow-y: auto;
-      z-index: 1000; // ensure menu is above the overlay for clickability
+      z-index: 1001; // ensure menu is above everything
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+
+      /* Dark mode specific enhancements */
+      [data-theme="dark"] & {
+        background: color-mix(in oklab, var(--bg-primary) 95%, transparent);
+        border-left-color: color-mix(in oklab, var(--border-color) 80%, transparent);
+        box-shadow: -4px 0 32px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Light mode specific enhancements */
+      [data-theme="light"] & {
+        background: color-mix(in oklab, var(--bg-primary) 98%, transparent);
+        border-left-color: var(--border-color);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+      }
 
       &::before {
         content: "";
@@ -288,11 +347,13 @@
         left: 0;
         right: 0;
         bottom: 0;
-        /* Subtle top glow sheet; adapts to theme */
-  background: linear-gradient(
+        /* Theme-aware gradient overlay */
+        background: linear-gradient(
           180deg,
-          color-mix(in oklab, #ffffff 8%, transparent) 0%,
-          transparent 35%
+          color-mix(in oklab, var(--primary-light) 5%, transparent) 0%,
+          transparent 20%,
+          transparent 80%,
+          color-mix(in oklab, var(--primary-light) 3%, transparent) 100%
         );
         pointer-events: none;
       }
@@ -301,20 +362,26 @@
     &-mobile-header {
       padding: 0 calc(2rem + env(safe-area-inset-right, 0px)) 1.5rem
         calc(2rem + env(safe-area-inset-left, 0px));
-      border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+      border-bottom: 1px solid var(--border-color);
       margin-bottom: 1.5rem;
+      background: color-mix(in oklab, var(--bg-secondary) 30%, transparent);
+      backdrop-filter: blur(10px);
     }
 
     &-mobile-title {
       font-size: 1.125rem;
       font-weight: 700;
-      color: #f8fafc;
+      color: var(--text-primary);
       margin-bottom: 0.25rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     &-mobile-subtitle {
       font-size: 0.875rem;
-      color: #64748b;
+      color: var(--text-secondary);
       font-weight: 400;
     }
 
@@ -364,10 +431,24 @@
         width: 100%;
         justify-content: flex-start;
         padding: 1rem 1.25rem;
-        border-radius: 10px;
+        border-radius: 12px;
         margin-bottom: 0.25rem;
-     
-        border: 1px solid rgba(99, 102, 241, 0.1);
+        border: 1px solid var(--border-color);
+        background: color-mix(in oklab, var(--bg-secondary) 40%, transparent);
+        color: var(--text-primary);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        /* Dark mode specific styling */
+        [data-theme="dark"] & {
+          background: color-mix(in oklab, var(--bg-secondary) 25%, transparent);
+          border-color: color-mix(in oklab, var(--border-color) 60%, transparent);
+        }
+
+        /* Light mode specific styling */
+        [data-theme="light"] & {
+          background: color-mix(in oklab, var(--bg-secondary) 60%, transparent);
+          border-color: var(--border-color);
+        }
       }
 
       &::before {
@@ -387,35 +468,66 @@
       }
 
       &:hover {
-        color: #f8fafc;
-        background: rgba(99, 102, 241, 0.1);
+        color: var(--text-primary);
+        background: color-mix(in oklab, var(--primary-light) 12%, var(--bg-secondary));
         transform: translateY(-1px);
+        border-color: color-mix(in oklab, var(--primary-light) 30%, var(--border-color));
 
         &::before {
           opacity: 1;
         }
 
         .header__nav-icon {
-          color: #6366f1;
+          color: var(--primary-light);
           transform: scale(1.1);
+        }
+
+        /* Dark mode hover */
+        [data-theme="dark"] & {
+          background: color-mix(in oklab, var(--primary-light) 8%, var(--bg-secondary));
+          color: var(--text-primary);
+        }
+
+        /* Light mode hover */
+        [data-theme="light"] & {
+          background: color-mix(in oklab, var(--primary-light) 15%, var(--bg-secondary));
+          color: var(--text-primary);
         }
       }
 
       &--active {
-        color: #f8fafc;
+        color: var(--text-primary);
         background: linear-gradient(
           135deg,
-          rgba(99, 102, 241, 0.15) 0%,
-          rgba(139, 92, 246, 0.15) 100%
+          color-mix(in oklab, var(--primary-light) 15%, transparent) 0%,
+          color-mix(in oklab, var(--accent-primary) 15%, transparent) 100%
         );
-        border: 1px solid rgba(99, 102, 241, 0.3);
+        border: 1px solid color-mix(in oklab, var(--primary-light) 40%, var(--border-color));
 
         .header__nav-icon {
-          color: #6366f1;
+          color: var(--primary-light);
         }
 
         &::before {
           opacity: 1;
+        }
+
+        /* Dark mode active */
+        [data-theme="dark"] & {
+          background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--primary-light) 12%, transparent) 0%,
+            color-mix(in oklab, var(--accent-primary) 12%, transparent) 100%
+          );
+        }
+
+        /* Light mode active */
+        [data-theme="light"] & {
+          background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--primary-light) 18%, transparent) 0%,
+            color-mix(in oklab, var(--accent-primary) 18%, transparent) 100%
+          );
         }
       }
     }
@@ -500,10 +612,11 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    z-index: 1001;
+    z-index: 1002; // Higher than menu to ensure it stays clickable
     backdrop-filter: blur(10px);
     /* Prevent clipping near notches on mobile */
     margin-right: env(safe-area-inset-right, 0px);
+    margin-left: auto; // Push to right when logo is hidden
 
     @media (min-width: $breakpoint-md) {
       display: none;
@@ -534,7 +647,19 @@
     left: 0;
     width: 100%;
     height: calc(100vh - var(--header-height));
-    z-index: 999;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+
+    /* Dark mode overlay */
+    [data-theme="dark"] & {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Light mode overlay */
+    [data-theme="light"] & {
+      background: rgba(0, 0, 0, 0.3);
+    }
   }
 }
 
