@@ -332,14 +332,14 @@
     }
 
     &-text {
-      color: black;
+      color: black; // follow button color state
       position: relative;
       z-index: 1;
     }
 
     &-indicator {
       position: absolute;
-      bottom: -1px;
+      bottom: 2px; // keep dot closer under the active pill
       left: 50%;
       transform: translateX(-50%);
       width: 6px;
@@ -347,6 +347,7 @@
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       border-radius: 50%;
       box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+      pointer-events: none;
     }
 
     &-glow {
