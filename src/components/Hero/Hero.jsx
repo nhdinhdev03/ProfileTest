@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useAnimation, useScroll, AnimatePresence } from 'framer-motion'
-import { FiDownload, FiGithub, FiLinkedin, FiMail, FiMapPin, FiChevronDown, FiStar, FiZap, FiHeart } from 'react-icons/fi'
+import { FiDownload, FiGithub, FiLinkedin, FiMail, FiMapPin, FiChevronDown, FiStar, FiZap } from 'react-icons/fi'
 import { FaReact, FaJsSquare, FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiTypescript, SiTailwindcss } from 'react-icons/si'
 import './Hero.scss'
@@ -464,10 +464,95 @@ const Hero = () => {
                 boxShadow: "0 15px 30px rgba(99, 102, 241, 0.2)"
               }}
             >
-              <img 
-                src="/api/placeholder/300/300" 
-                alt="Professional Developer" 
-              />
+              {/* Holographic animated avatar (modern tech effect) */}
+              <svg
+                className="hero__avatar-holo"
+                viewBox="0 0 300 300"
+                width="100%"
+                height="100%"
+                aria-labelledby="avatarTitle"
+                style={{ display: 'block' }}
+              >
+                <title id="avatarTitle">Professional Developer holographic avatar</title>
+                <defs>
+                  {/* Animated radial gradient core */}
+                  <radialGradient id="holoGrad" cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85">
+                      <animate attributeName="stop-opacity" values="0.85;0.95;0.85" dur="6s" repeatCount="indefinite" />
+                    </stop>
+                    <stop offset="35%" stopColor="#8b5cf6" stopOpacity="0.65">
+                      <animate attributeName="stop-color" values="#8b5cf6;#6366f1;#06b6d4;#8b5cf6" dur="14s" repeatCount="indefinite" />
+                    </stop>
+                    <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.35">
+                      <animate attributeName="stop-color" values="#0ea5e9;#22d3ee;#a78bfa;#0ea5e9" dur="14s" repeatCount="indefinite" />
+                      <animate attributeName="stop-opacity" values="0.35;0.55;0.35" dur="8s" repeatCount="indefinite" />
+                    </stop>
+                    <animate attributeName="fy" values="40%;55%;40%" dur="10s" repeatCount="indefinite" />
+                    <animate attributeName="fx" values="45%;60%;45%" dur="11s" repeatCount="indefinite" />
+                  </radialGradient>
+
+                  {/* Subtle evolving noise for holographic shimmer */}
+                  <filter id="holoNoise">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="noise">
+                      <animate attributeName="baseFrequency" values="0.9;0.6;0.9" dur="12s" repeatCount="indefinite" />
+                    </feTurbulence>
+                    <feColorMatrix type="saturate" values="0" />
+                    <feComponentTransfer>
+                      <feFuncA type="table" tableValues="0 0.04" />
+                    </feComponentTransfer>
+                    <feBlend mode="screen" in2="SourceGraphic" />
+                  </filter>
+
+                  {/* Rotating ring gradient for the border */}
+                  <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#22d3ee" />
+                    <stop offset="50%" stopColor="#a78bfa" />
+                    <stop offset="100%" stopColor="#6366f1" />
+                    <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="16s" repeatCount="indefinite" />
+                  </linearGradient>
+
+                  {/* Scanline overlay pattern */}
+                  <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="4" height="1" fill="rgba(255,255,255,0.06)" />
+                  </pattern>
+                </defs>
+
+                {/* Outer glow ring */}
+                <circle cx="150" cy="150" r="140" fill="none" stroke="url(#ringGrad)" strokeWidth="3">
+                  <animate attributeName="stroke-width" values="3;5;3" dur="6s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.8;1;0.8" dur="6s" repeatCount="indefinite" />
+                </circle>
+
+                {/* Core holographic disc */}
+                <g filter="url(#holoNoise)">
+                  <circle cx="150" cy="150" r="120" fill="url(#holoGrad)" />
+                </g>
+
+                {/* Moving highlight sweep */}
+                <ellipse cx="150" cy="110" rx="95" ry="25" fill="white" opacity="0.25">
+                  <animate attributeName="opacity" values="0.15;0.35;0.15" dur="5s" repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="rotate" from="-15 150 150" to="345 150 150" dur="14s" repeatCount="indefinite" />
+                </ellipse>
+
+                {/* Subtle scanlines overlay */}
+                <circle cx="150" cy="150" r="118" fill="url(#scanlines)" opacity="0.25">
+                  <animate attributeName="opacity" values="0.18;0.28;0.18" dur="4s" repeatCount="indefinite" />
+                </circle>
+
+                {/* Rotating dashed tech ring */}
+                <circle
+                  cx="150"
+                  cy="150"
+                  r="128"
+                  fill="none"
+                  stroke="url(#ringGrad)"
+                  strokeWidth="2"
+                  strokeDasharray="6 10"
+                  opacity="0.8"
+                >
+                  <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="20s" repeatCount="indefinite" />
+                </circle>
+              </svg>
               <motion.div
                 className="hero__avatar-glow"
                 animate={{
