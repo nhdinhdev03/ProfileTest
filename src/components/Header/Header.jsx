@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from "prop-types";
 import {
   FiMenu,
   FiX,
@@ -426,3 +427,8 @@ const Header = ({ theme, toggleTheme }) => {
 };
 
 export default Header;
+
+Header.propTypes = {
+  theme: PropTypes.string.isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+};

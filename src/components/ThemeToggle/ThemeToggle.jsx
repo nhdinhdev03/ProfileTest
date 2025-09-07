@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { FiSun, FiMoon } from 'react-icons/fi'
+import PropTypes from 'prop-types'
 import './ThemeToggle.scss'
 
 const ThemeToggle = ({ theme, toggleTheme, placement = 'floating' }) => {
@@ -33,11 +34,19 @@ const ThemeToggle = ({ theme, toggleTheme, placement = 'floating' }) => {
           </motion.div>
         </motion.div>
       </div>
-      <span className="theme-toggle__label">
-        {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
-      </span>
+      {placement !== 'mobile' && (
+        <span className="theme-toggle__label">
+          {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+        </span>
+      )}
     </motion.button>
   )
 }
 
 export default ThemeToggle
+
+ThemeToggle.propTypes = {
+  theme: PropTypes.string.isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+  placement: PropTypes.oneOf(['floating', 'header', 'mobile']),
+}
