@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
 import './Projects.scss'
@@ -10,10 +10,14 @@ const Projects = () => {
     threshold: 0.1
   })
   
-  const [filter, setFilter] = useState('all')
+  // Default to Featured to match the section title "Dự Án Nổi Bật"
+  const [filter, setFilter] = useState('featured')
   const [viewMode, setViewMode] = useState('grid')
   const [hoveredProject, setHoveredProject] = useState(null)
   const [floatingElements, setFloatingElements] = useState([])
+  const shouldReduceMotion = useReducedMotion()
+  // Toggle to quickly disable 3D effects globally
+  const enable3D = false
   
   // Mouse tracking for 3D effects
   const mouseX = useMotionValue(0)
@@ -26,18 +30,24 @@ const Projects = () => {
 
   // Enhanced mouse tracking for 3D effects
   useEffect(() => {
+    if (shouldReduceMotion || !enable3D) return
+
+    let rafId = null
     const handleMouseMove = (event) => {
-      if (projectsRef.current) {
-        const rect = projectsRef.current.getBoundingClientRect()
-        const centerX = rect.left + rect.width / 2
-        const centerY = rect.top + rect.height / 2
-        
+      if (!projectsRef.current) return
+      const rect = projectsRef.current.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
         mouseX.set((event.clientX - centerX) / 20)
         mouseY.set((event.clientY - centerY) / 20)
-      }
+      })
     }
 
     const handleMouseLeave = () => {
+      if (rafId) cancelAnimationFrame(rafId)
       mouseX.set(0)
       mouseY.set(0)
     }
@@ -48,11 +58,12 @@ const Projects = () => {
       projectsElement.addEventListener('mouseleave', handleMouseLeave)
 
       return () => {
+        if (rafId) cancelAnimationFrame(rafId)
         projectsElement.removeEventListener('mousemove', handleMouseMove)
         projectsElement.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
-  }, [mouseX, mouseY])
+  }, [mouseX, mouseY, shouldReduceMotion, enable3D])
 
   // Initialize gentle floating elements
   useEffect(() => {
@@ -70,7 +81,8 @@ const Projects = () => {
     setFloatingElements(elements)
   }, [])
 
-  const projects = [
+  // Memoize project data to avoid re-creating arrays on each render
+  const projects = useMemo(() => [
     {
       id: 1,
       title: 'E-Commerce Platform',
@@ -153,7 +165,7 @@ const Projects = () => {
       status: 'completed',
       year: '2023'
     }
-  ]
+  ], [])
 
   const getComplexityIcon = (complexity) => {
     switch (complexity) {
@@ -166,13 +178,13 @@ const Projects = () => {
     }
   }
 
-  const categories = [
-    { id: 'all', label: 'Tất cả', count: projects.length },
+  const categories = useMemo(() => ([
     { id: 'featured', label: 'Nổi bật', count: projects.filter(p => p.featured).length },
+    { id: 'all', label: 'Tất cả', count: projects.length },
     { id: 'fullstack', label: 'Full Stack', count: projects.filter(p => p.category === 'fullstack').length },
     { id: 'frontend', label: 'Frontend', count: projects.filter(p => p.category === 'frontend').length },
     { id: 'mobile', label: 'Mobile', count: projects.filter(p => p.category === 'mobile').length }
-  ]
+  ]), [projects])
 
   // Keep filtered list in state for more predictable re-renders (align with Blog behavior)
   const [filteredProjects, setFilteredProjects] = useState(projects)
@@ -184,7 +196,7 @@ const Projects = () => {
       return project.category === filter
     })
     setFilteredProjects(next)
-  }, [filter])
+  }, [filter, projects])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -212,9 +224,10 @@ const Projects = () => {
 
   return (
     <section id="projects" className="projects" ref={projectsRef}>
-      {/* Floating Background Elements */}
-      <div className="projects__floating-elements">
-        {floatingElements.map((element) => {
+      {/* Floating Background Elements (disabled for reduced motion and when out of view) */}
+  {!shouldReduceMotion && inView && enable3D && (
+        <div className="projects__floating-elements">
+          {floatingElements.map((element) => {
           const IconComponent = element.icon
           return (
             <motion.div
@@ -232,7 +245,7 @@ const Projects = () => {
                 rotate: [0, 360]
               }}
               transition={{
-                duration: element.speed * 8,
+                duration: element.speed * 6,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
@@ -244,19 +257,20 @@ const Projects = () => {
               <IconComponent />
             </motion.div>
           )
-        })}
-      </div>
+          })}
+        </div>
+      )}
 
       <div className="projects__container">
-        <motion.div
+    <motion.div
           ref={ref}
           className="projects__content"
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           style={{
-            perspective: 1500,
-            transformStyle: "preserve-3d"
+      perspective: enable3D ? 1500 : undefined,
+      transformStyle: enable3D ? "preserve-3d" : undefined
           }}
         >
           <motion.div className="projects__header" variants={itemVariants}>
@@ -315,7 +329,7 @@ const Projects = () => {
             key={`${filter}-${viewMode}`}
             layout
             style={{
-              transformStyle: "preserve-3d"
+              transformStyle: enable3D ? "preserve-3d" : undefined
             }}
           >
             <AnimatePresence initial={false}>
@@ -325,36 +339,39 @@ const Projects = () => {
                     key={project.id}
                     className={`projects__item glass-card ${project.featured ? 'projects__item--featured' : ''}`}
                     variants={itemVariants}
-                    initial={{ opacity: 0, scale: 0.8, rotateX: -20, z: -100 }}
-                    animate={{ opacity: 1, scale: 1, rotateX: 0, z: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotateX: 20, z: -100 }}
-                    whileHover={{ 
+                    initial={enable3D ? { opacity: 0, scale: 0.8, rotateX: -20, z: -100 } : { opacity: 0, scale: 0.98 }}
+                    animate={enable3D ? { opacity: 1, scale: 1, rotateX: 0, z: 0 } : { opacity: 1, scale: 1 }}
+                    exit={enable3D ? { opacity: 0, scale: 0.8, rotateX: 20, z: -100 } : { opacity: 0, scale: 0.98 }}
+                    whileHover={enable3D ? {
                       y: -8,
                       rotateY: 3,
                       z: 15,
                       transition: { type: 'spring', stiffness: 200, damping: 25 }
+                    } : {
+                      y: -4,
+                      transition: { type: 'spring', stiffness: 250, damping: 20 }
                     }}
                     onMouseEnter={() => setHoveredProject(project.id)}
                     onMouseLeave={() => setHoveredProject(null)}
                     style={{
-                      transformStyle: "preserve-3d",
-                      rotateX,
-                      rotateY
+                      transformStyle: enable3D ? "preserve-3d" : undefined,
+                      rotateX: enable3D ? rotateX : 0,
+                      rotateY: enable3D ? rotateY : 0
                     }}
                   >
                     <motion.div 
                       className="projects__item-image"
                       style={{
-                        transform: `translateZ(20px)`
+                        transform: enable3D ? `translateZ(20px)` : undefined
                       }}
                     >
-                      <img src={project.image} alt={project.title} />
+                      <img src={project.image} alt={project.title} loading="lazy" />
                       
                       {/* Enhanced Status Badge */}
                       <motion.div 
                         className="projects__item-status"
                         style={{
-                          transform: `translateZ(30px)`
+                          transform: enable3D ? `translateZ(30px)` : undefined
                         }}
                       >
                         <span className={`projects__status-badge projects__status-badge--${project.status}`}>
@@ -380,10 +397,10 @@ const Projects = () => {
                       <motion.div 
                         className="projects__item-overlay"
                         style={{
-                          transform: `translateZ(40px)`
+                          transform: enable3D ? `translateZ(40px)` : undefined
                         }}
                         initial={{ opacity: 0, z: -20 }}
-                        whileHover={{ opacity: 1, z: 0 }}
+                        whileHover={enable3D ? { opacity: 1, z: 0 } : { opacity: 1 }}
                         transition={{ duration: 0.3 }}
                       >
                         <div className="projects__item-actions">
@@ -434,10 +451,10 @@ const Projects = () => {
                         </div>
 
                         {/* Performance Indicator */}
-                        <motion.div
+            <motion.div
                           className="projects__performance-indicator"
                           style={{
-                            transform: `translateZ(10px)`
+              transform: enable3D ? `translateZ(10px)` : undefined
                           }}
                           animate={{
                             rotate: [0, 360]
@@ -456,7 +473,7 @@ const Projects = () => {
 
                       {/* Enhanced Sparkles with 3D Effect */}
                       <AnimatePresence>
-                        {hoveredProject === project.id && (
+                        {hoveredProject === project.id && !shouldReduceMotion && enable3D && (
                           <motion.div
                             className="projects__item-sparkles"
                             initial={{ opacity: 0 }}
@@ -509,14 +526,14 @@ const Projects = () => {
                     <motion.div 
                       className="projects__item-content"
                       style={{
-                        transform: `translateZ(15px)`,
-                        transformStyle: "preserve-3d"
+                        transform: enable3D ? `translateZ(15px)` : undefined,
+                        transformStyle: enable3D ? "preserve-3d" : undefined
                       }}
                     >
                       <motion.div 
                         className="projects__item-header"
                         style={{
-                          transform: `translateZ(5px)`
+                          transform: enable3D ? `translateZ(5px)` : undefined
                         }}
                       >
                         <div className="projects__item-title-section">
@@ -541,11 +558,11 @@ const Projects = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="projects__link"
-                            whileHover={{ 
+                            whileHover={enable3D ? { 
                               scale: 1.3, 
                               rotate: 15,
                               z: 10
-                            }}
+                            } : { scale: 1.08 }}
                             whileTap={{ scale: 0.8 }}
                             style={{ transformStyle: "preserve-3d" }}
                           >
@@ -568,11 +585,11 @@ const Projects = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="projects__link"
-                            whileHover={{ 
+                            whileHover={enable3D ? { 
                               scale: 1.3, 
                               rotate: -15,
                               z: 10
-                            }}
+                            } : { scale: 1.08 }}
                             whileTap={{ scale: 0.8 }}
                             style={{ transformStyle: "preserve-3d" }}
                           >
@@ -584,7 +601,7 @@ const Projects = () => {
                       <motion.p 
                         className="projects__item-description"
                         style={{
-                          transform: `translateZ(3px)`
+                          transform: enable3D ? `translateZ(3px)` : undefined
                         }}
                       >
                         {project.description}
@@ -593,20 +610,20 @@ const Projects = () => {
                       <motion.div 
                         className="projects__item-technologies"
                         style={{
-                          transform: `translateZ(8px)`,
-                          transformStyle: "preserve-3d"
+                          transform: enable3D ? `translateZ(8px)` : undefined,
+                          transformStyle: enable3D ? "preserve-3d" : undefined
                         }}
                       >
                         {project.technologies.map((tech, i) => (
                           <motion.span 
                             key={i} 
                             className="projects__tech-tag"
-                            whileHover={{ 
+                            whileHover={enable3D ? { 
                               scale: 1.15,
                               rotateY: 10,
                               z: 5,
                               transition: { type: 'spring', stiffness: 400 }
-                            }}
+                            } : { scale: 1.08, transition: { type: 'spring', stiffness: 350 } }}
                             style={{
                               transformStyle: "preserve-3d"
                             }}
@@ -641,10 +658,10 @@ const Projects = () => {
                       </motion.div>
 
                       {project.featured && (
-                        <motion.div 
+            <motion.div 
                           className="projects__featured-badge"
                           style={{
-                            transform: `translateZ(12px)`
+              transform: enable3D ? `translateZ(12px)` : undefined
                           }}
                           animate={{
                             scale: [1, 1.05, 1],
