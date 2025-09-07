@@ -16,7 +16,13 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const HEADER_OFFSET = 90;
+
+  // Get the current header height (includes safe-area padding) for precise offsets
+  const getHeaderOffset = () => {
+    const headerEl = document.querySelector(".header");
+    if (!headerEl) return 80; // sensible fallback
+    return headerEl.getBoundingClientRect().height;
+  };
 
   const navItems = [
     { id: "home", label: "Home", icon: FiHome },
@@ -32,12 +38,12 @@ const Header = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
-    const handleSectionInView = () => {
+  const handleSectionInView = () => {
       let current = "home";
       navItems.forEach(({ id }) => {
         const el = document.getElementById(id);
         if (!el) return;
-        const top = el.offsetTop - HEADER_OFFSET - 2;
+    const top = el.offsetTop - getHeaderOffset() - 2;
         const bottom = top + el.offsetHeight;
         const y = window.scrollY;
         if (y >= top && y < bottom) {
@@ -62,8 +68,8 @@ const Header = () => {
 
     const element = document.getElementById(sectionId);
     if (element) {
-      // Account for fixed header height to prevent misalignment
-      const headerOffset = 90;
+      // Account for fixed header height (dynamic, includes safe-area)
+      const headerOffset = getHeaderOffset();
       const elementTop = element.getBoundingClientRect().top + window.scrollY;
       const targetY = Math.max(0, elementTop - headerOffset);
       window.scrollTo({ top: targetY, behavior: "smooth" });

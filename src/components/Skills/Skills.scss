@@ -1,7 +1,7 @@
-@use '../../styles/variables.scss' as *;
+@use "../../styles/variables.scss" as *;
 
 .skills {
-  background: var(--bg-primary);
+
   position: relative;
 
   &__marquee-wrapper {
@@ -11,13 +11,19 @@
       padding-top: 0;
       padding-bottom: 0;
     }
-    .logos-slideshow { margin-bottom: $spacing-2xl; }
+    .logos-slideshow {
+      margin-bottom: $spacing-2xl;
+    }
   }
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* responsive placeholder removed */

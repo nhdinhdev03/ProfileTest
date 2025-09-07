@@ -5,12 +5,8 @@
   @include flex-center;
   position: relative;
   padding: 0 $spacing-base;
-  padding-top: 80px;
   overflow: hidden;
 
-  @media (min-width: $breakpoint-md) {
-    padding-top: 100px;
-  }
 
   &__container {
     display: grid;
@@ -444,8 +440,8 @@
 // Mobile optimizations
 @media (max-width: $breakpoint-md) {
   .hero {
-    min-height: 90vh;
-    padding-top: 60px;
+    min-height: 200vh;
+    
 
     &__container {
       gap: $spacing-3xl;
