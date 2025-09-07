@@ -1,0 +1,526 @@
+@use '../../styles/variables.scss' as *;
+
+.hero {
+  min-height: 100vh;
+  @include flex-center;
+  position: relative;
+  padding: 0 $spacing-base;
+  padding-top: 80px;
+  overflow: hidden;
+
+  @media (min-width: $breakpoint-md) {
+    padding-top: 100px;
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-4xl;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+    z-index: 2;
+
+    @media (min-width: $breakpoint-lg) {
+      grid-template-columns: 1.2fr 1fr;
+      gap: $spacing-6xl;
+    }
+  }
+
+  &__content {
+    text-align: center;
+
+    @media (min-width: $breakpoint-lg) {
+      text-align: left;
+    }
+  }
+
+  &__greeting {
+    margin-bottom: $spacing-base;
+
+    &-text {
+      font-size: $font-lg;
+      color: var(--text-secondary);
+      font-weight: $font-medium;
+    }
+  }
+
+  &__name {
+    margin-bottom: $spacing-lg;
+    line-height: 1.1;
+
+    &-text {
+      display: block;
+      font-size: clamp($font-4xl, 6vw, $font-6xl);
+      font-weight: $font-bold;
+      color: var(--text-primary);
+    }
+
+    &-highlight {
+      display: block;
+      font-size: clamp($font-4xl, 6vw, $font-6xl);
+      font-weight: $font-bold;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60%;
+        height: 4px;
+        background: var(--gradient-primary);
+        border-radius: 2px;
+
+        @media (min-width: $breakpoint-lg) {
+          left: 0;
+        }
+      }
+    }
+  }
+
+  &__role {
+    font-size: clamp($font-xl, 2.5vw, $font-2xl);
+    font-weight: $font-medium;
+    margin-bottom: $spacing-xl;
+    height: 50px;
+    @include flex-center;
+
+    @media (min-width: $breakpoint-lg) {
+      justify-content: flex-start;
+    }
+
+    &-label {
+      color: var(--text-secondary);
+    }
+
+    &-dynamic {
+      color: var(--primary-light);
+      font-weight: $font-semibold;
+      margin-left: $spacing-sm;
+      position: relative;
+    }
+  }
+
+  &__cursor {
+    font-weight: $font-light;
+    animation: blink 1s infinite;
+    color: var(--primary-light);
+  }
+
+  &__description {
+    max-width: 500px;
+    margin: 0 auto $spacing-xl auto;
+    line-height: 1.7;
+    color: var(--text-secondary);
+
+    @media (min-width: $breakpoint-lg) {
+      margin: 0 0 $spacing-xl 0;
+    }
+  }
+
+  &__location {
+    @include flex-center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-2xl;
+    color: var(--text-tertiary);
+    font-size: $font-sm;
+
+    @media (min-width: $breakpoint-lg) {
+      justify-content: flex-start;
+    }
+
+    &-icon {
+      font-size: $font-base;
+      color: var(--primary-light);
+    }
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-base;
+    margin-bottom: $spacing-2xl;
+    flex-wrap: wrap;
+
+    @media (min-width: $breakpoint-lg) {
+      justify-content: flex-start;
+    }
+  }
+
+  &__social {
+    @include flex-center;
+    gap: $spacing-base;
+
+    @media (min-width: $breakpoint-lg) {
+      justify-content: flex-start;
+    }
+
+    &-link {
+      @include flex-center;
+      width: 50px;
+      height: 50px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      font-size: $font-xl;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      &:hover {
+        color: white;
+        border-color: var(--primary-light);
+        box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  &__visual {
+    @include flex-center;
+    position: relative;
+  }
+
+  &__avatar {
+    position: relative;
+    z-index: 2;
+
+    &-image {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid var(--bg-primary);
+      box-shadow: 0 20px 40px var(--shadow-color);
+      position: relative;
+      z-index: 2;
+
+      @media (min-width: $breakpoint-xl) {
+        width: 320px;
+        height: 320px;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(20%);
+        transition: filter 0.3s ease;
+
+        &:hover {
+          filter: grayscale(0%);
+        }
+      }
+    }
+
+    &-ring {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      border: 2px solid var(--primary-light);
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      animation: rotateRing 8s linear infinite;
+      z-index: 1;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border: 2px solid var(--secondary-light);
+        border-radius: 50%;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+        animation: rotateRing 6s linear infinite reverse;
+      }
+    }
+  }
+
+  &__tech-stack {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    z-index: 1;
+
+    @media (min-width: $breakpoint-xl) {
+      width: 450px;
+      height: 450px;
+    }
+  }
+
+  &__tech-icon {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    @include flex-center;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    font-size: $font-2xl;
+    color: var(--icon-color);
+    box-shadow: 0 8px 20px var(--shadow-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--bg-primary);
+      border-color: var(--icon-color);
+      box-shadow: 0 12px 30px var(--shadow-color);
+    }
+
+    // Position tech icons in a circle
+    &:nth-child(1) { // React
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &:nth-child(2) { // JavaScript
+      top: 25%;
+      right: 10%;
+    }
+
+    &:nth-child(3) { // TypeScript
+      bottom: 25%;
+      right: 10%;
+    }
+
+    &:nth-child(4) { // Node.js
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &:nth-child(5) { // Tailwind
+      bottom: 25%;
+      left: 10%;
+    }
+
+    &:nth-child(6) { // Python
+      top: 25%;
+      left: 10%;
+    }
+  }
+
+  &__scroll {
+    position: absolute;
+    bottom: $spacing-2xl;
+    left: 50%;
+    transform: translateX(-50%);
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-sm;
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: $font-sm;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: var(--primary-light);
+      transform: translateX(-50%) translateY(-5px);
+    }
+
+    svg {
+      font-size: $font-xl;
+    }
+
+    span {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: $font-xs;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+
+      @media (min-width: $breakpoint-md) {
+        writing-mode: initial;
+        text-orientation: initial;
+      }
+    }
+  }
+
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+
+    &-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      opacity: 0.1;
+      filter: blur(40px);
+
+      &--1 {
+        width: 300px;
+        height: 300px;
+        top: 20%;
+        left: -10%;
+        animation: floatCircle 8s ease-in-out infinite;
+      }
+
+      &--2 {
+        width: 200px;
+        height: 200px;
+        top: 60%;
+        right: -5%;
+        background: var(--gradient-secondary);
+        animation: floatCircle 6s ease-in-out infinite reverse;
+      }
+
+      &--3 {
+        width: 150px;
+        height: 150px;
+        bottom: 20%;
+        left: 20%;
+        background: var(--gradient-accent);
+        animation: floatCircle 10s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes rotateRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes floatCircle {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  50% {
+    transform: translateY(0) translateX(20px);
+  }
+  75% {
+    transform: translateY(20px) translateX(10px);
+  }
+}
+
+// Mobile optimizations
+@media (max-width: $breakpoint-md) {
+  .hero {
+    min-height: 90vh;
+    padding-top: 60px;
+
+    &__container {
+      gap: $spacing-3xl;
+    }
+
+    &__avatar {
+      &-image {
+        width: 240px;
+        height: 240px;
+      }
+
+      &-ring {
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+      }
+    }
+
+    &__tech-stack {
+      width: 320px;
+      height: 320px;
+    }
+
+    &__tech-icon {
+      width: 45px;
+      height: 45px;
+      font-size: $font-lg;
+    }
+
+    &__actions {
+      flex-direction: column;
+      
+      .btn {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .hero {
+    &__name-highlight {
+      -webkit-text-fill-color: var(--primary-light);
+    }
+
+    &__tech-icon {
+      border-width: 3px;
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    &__cursor {
+      animation: none;
+    }
+
+    &__avatar-ring {
+      animation: none;
+      
+      &::after {
+        animation: none;
+      }
+    }
+
+    &__background-circle {
+      animation: none;
+    }
+
+    &__scroll {
+      animation: none;
+    }
+  }
+}

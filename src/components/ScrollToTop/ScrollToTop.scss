@@ -1,0 +1,94 @@
+@use '../../styles/variables.scss' as *;
+
+.scroll-to-top {
+  position: fixed;
+  bottom: $spacing-6xl;
+  right: $spacing-2xl;
+  width: 50px;
+  height: 50px;
+  @include flex-center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  color: var(--primary-light);
+  font-size: $font-lg;
+  cursor: pointer;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  z-index: 998;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: var(--primary-light);
+    color: white;
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+  }
+
+  &__progress {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    &-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: conic-gradient(
+        var(--primary-light) 0deg,
+        var(--primary-light) calc(360deg * var(--progress, 0)),
+        transparent calc(360deg * var(--progress, 0))
+      );
+      border-radius: 50%;
+      mask: radial-gradient(
+        circle at center,
+        transparent 20px,
+        black 22px
+      );
+      -webkit-mask: radial-gradient(
+        circle at center,
+        transparent 20px,
+        black 22px
+      );
+    }
+  }
+}
+
+// Mobile specific styles
+@media (max-width: $breakpoint-sm) {
+  .scroll-to-top {
+    bottom: $spacing-5xl;
+    right: $spacing-xl;
+    width: 45px;
+    height: 45px;
+    font-size: $font-base;
+  }
+}
+
+// Adjust position when theme toggle is visible
+@media (min-width: $breakpoint-sm) {
+  .scroll-to-top {
+    bottom: calc($spacing-2xl + 60px); // Adjust for theme toggle height
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .scroll-to-top {
+    border-width: 2px;
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .scroll-to-top {
+    transition: none;
+  }
+}

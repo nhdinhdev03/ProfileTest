@@ -1,0 +1,232 @@
+@use '../../styles/variables.scss' as *;
+
+.footer {
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  padding: $spacing-4xl 0 $spacing-2xl;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--gradient-primary);
+  }
+
+  &__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-base;
+
+    @media (min-width: $breakpoint-sm) {
+      padding: 0 $spacing-2xl;
+    }
+  }
+
+  &__main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-3xl;
+    margin-bottom: $spacing-3xl;
+
+    @media (min-width: $breakpoint-md) {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-4xl;
+    }
+
+    @media (min-width: $breakpoint-lg) {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  &__brand {
+    text-align: center;
+
+    @media (min-width: $breakpoint-md) {
+      text-align: left;
+    }
+  }
+
+  &__title {
+    font-size: $font-2xl;
+    margin-bottom: $spacing-base;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+
+    @media (min-width: $breakpoint-md) {
+      margin: 0;
+    }
+  }
+
+  &__links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-2xl;
+
+    @media (min-width: $breakpoint-sm) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (min-width: $breakpoint-md) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-xl;
+    }
+  }
+
+  &__section {
+    h4 {
+      color: var(--text-primary);
+      font-size: $font-base;
+      margin-bottom: $spacing-base;
+      font-weight: $font-semibold;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: $spacing-sm;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        a {
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: $font-sm;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: var(--primary-light);
+          }
+        }
+      }
+    }
+  }
+
+  &__social {
+    display: flex;
+    gap: $spacing-sm;
+
+    &-link {
+      @include flex-center;
+      width: 40px;
+      height: 40px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--primary-light);
+        color: white;
+        border-color: var(--primary-light);
+      }
+    }
+  }
+
+  &__bottom {
+    @include flex-between;
+    padding-top: $spacing-xl;
+    border-top: 1px solid var(--border-color);
+    flex-direction: column;
+    gap: $spacing-base;
+
+    @media (min-width: $breakpoint-md) {
+      flex-direction: row;
+      gap: 0;
+    }
+  }
+
+  &__copyright {
+    p {
+      @include flex-center;
+      gap: $spacing-xs;
+      color: var(--text-tertiary);
+      font-size: $font-sm;
+      margin: 0;
+
+      @media (min-width: $breakpoint-md) {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &__heart {
+    color: #ef4444;
+    animation: heartbeat 2s infinite;
+  }
+
+  &__scroll-top {
+    @include flex-center;
+    width: 45px;
+    height: 45px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--primary-light);
+      color: white;
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+  }
+}
+
+@keyframes heartbeat {
+  0%, 50%, 100% {
+    transform: scale(1);
+  }
+  25%, 75% {
+    transform: scale(1.1);
+  }
+}
+
+// Mobile optimizations
+@media (max-width: $breakpoint-md) {
+  .footer {
+    padding: $spacing-3xl 0 $spacing-xl;
+
+    &__main {
+      gap: $spacing-2xl;
+      margin-bottom: $spacing-2xl;
+    }
+
+    &__links {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-xl;
+    }
+
+    &__section {
+      &:nth-child(3) {
+        grid-column: 1 / -1;
+        text-align: center;
+      }
+    }
+
+    &__social {
+      justify-content: center;
+    }
+  }
+}

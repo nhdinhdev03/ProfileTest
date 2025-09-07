@@ -1,0 +1,297 @@
+@use '../../styles/variables.scss' as *;
+
+.contact {
+  background: var(--bg-secondary);
+  position: relative;
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-4xl;
+
+    @media (min-width: $breakpoint-lg) {
+      grid-template-columns: 1fr 1.2fr;
+      gap: $spacing-6xl;
+    }
+  }
+
+  &__info {
+    h3 {
+      margin-bottom: $spacing-base;
+      color: var(--text-primary);
+      font-size: $font-2xl;
+    }
+
+    p {
+      margin-bottom: $spacing-2xl;
+      line-height: 1.7;
+      font-size: $font-lg;
+    }
+
+    &-list {
+      margin-bottom: $spacing-3xl;
+    }
+
+    &-item {
+      @include flex-center;
+      gap: $spacing-base;
+      padding: $spacing-lg;
+      margin-bottom: $spacing-base;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      justify-content: flex-start;
+
+      &:hover {
+        border-color: var(--primary-light);
+        box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &-icon {
+      width: 50px;
+      height: 50px;
+      @include flex-center;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      color: white;
+      font-size: $font-lg;
+      flex-shrink: 0;
+    }
+
+    &-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-title {
+      font-size: $font-sm;
+      color: var(--text-tertiary);
+      margin-bottom: $spacing-xs;
+    }
+
+    &-value {
+      font-size: $font-base;
+      color: var(--text-primary);
+      font-weight: $font-medium;
+    }
+  }
+
+  &__availability {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: $spacing-xl;
+
+    h4 {
+      margin-bottom: $spacing-base;
+      color: var(--text-primary);
+    }
+  }
+
+  &__status {
+    @include flex-center;
+    gap: $spacing-sm;
+    justify-content: flex-start;
+
+    &-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--secondary-light);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    span {
+      color: var(--text-secondary);
+      font-weight: $font-medium;
+    }
+  }
+
+  &__form-wrapper {
+    height: fit-content;
+  }
+
+  &__form {
+    padding: $spacing-2xl;
+
+    h3 {
+      margin-bottom: $spacing-2xl;
+      color: var(--text-primary);
+      font-size: $font-2xl;
+      text-align: center;
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+
+      @media (min-width: $breakpoint-sm) {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    &-group {
+      margin-bottom: $spacing-lg;
+
+      label {
+        @include flex-center;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-sm;
+        color: var(--text-primary);
+        font-weight: $font-medium;
+        font-size: $font-sm;
+        justify-content: flex-start;
+
+        svg {
+          font-size: $font-base;
+          color: var(--primary-light);
+        }
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: $spacing-base $spacing-lg;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 0.5rem;
+        color: var(--text-primary);
+        font-size: $font-base;
+        font-family: $font-primary;
+        transition: all 0.3s ease;
+        resize: vertical;
+
+        &::placeholder {
+          color: var(--text-tertiary);
+        }
+
+        &:focus {
+          outline: none;
+          border-color: var(--primary-light);
+          background: var(--bg-primary);
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+      }
+
+      textarea {
+        min-height: 120px;
+        line-height: 1.6;
+      }
+    }
+
+    &-submit {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+
+      &.loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .contact {
+    &__wrapper {
+      gap: $spacing-3xl;
+    }
+
+    &__info {
+      order: 2;
+
+      h3 {
+        font-size: $font-xl;
+      }
+    }
+
+    &__form-wrapper {
+      order: 1;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .contact {
+    &__form {
+      padding: $spacing-xl;
+
+      &-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__info {
+      &-item {
+        padding: $spacing-base;
+      }
+
+      &-icon {
+        width: 40px;
+        height: 40px;
+        font-size: $font-base;
+      }
+    }
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .contact {
+    &__form {
+      input,
+      textarea {
+        border-width: 3px;
+      }
+    }
+
+    &__info-item {
+      border-width: 2px;
+    }
+  }
+}
+
+// Focus styles for accessibility
+.contact__form {
+  input:focus,
+  textarea:focus,
+  button:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+  }
+}
