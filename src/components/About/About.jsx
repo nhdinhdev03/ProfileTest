@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
 
 import "./About.scss";
@@ -378,27 +380,73 @@ const About = () => {
     typeof document !== "undefined" &&
     document.documentElement.getAttribute("data-theme") === "light";
 
+  // Reveal-on-scroll like other sections
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.15 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 40, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100, damping: 14 },
+    },
+  };
+
   return (
     <section id="about" className="about section">
       <div className="container">
-        <div className="section-title">
-          <h2>About</h2>
-          <p>Giới thiệu ngắn gọn về kinh nghiệm, kỹ năng và các dự án tiêu biểu.</p>
-        </div>
-        <div className={`about-page ${light ? "light" : ""}`}>
+        <motion.div
+          ref={ref}
+          className="section-title"
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
+          <motion.h2 variants={itemVariants}>About</motion.h2>
+          <motion.p variants={itemVariants}>
+            Giới thiệu ngắn gọn về kinh nghiệm, kỹ năng và các dự án tiêu biểu.
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          className={`about-page ${light ? "light" : ""}`}
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
           <div className="gradient-line" aria-hidden="true" />
-          <ProfileHero profile={profile} light={light} />
+          <motion.div variants={itemVariants}>
+            <ProfileHero profile={profile} light={light} />
+          </motion.div>
           <div className="gradient-line" aria-hidden="true" />
-          <QuickStats repos={repos} profile={profile} />
+          <motion.div variants={itemVariants}>
+            <QuickStats repos={repos} profile={profile} />
+          </motion.div>
           <div className="gradient-line" aria-hidden="true" />
-          <SkillsOverview />
+          <motion.div variants={itemVariants}>
+            <SkillsOverview />
+          </motion.div>
           <div className="gradient-line" aria-hidden="true" />
-          <RecentProjects repos={repos} />
+          <motion.div variants={itemVariants}>
+            <RecentProjects repos={repos} />
+          </motion.div>
           <div className="gradient-line" aria-hidden="true" />
-          <ExperienceTimeline />
+          <motion.div variants={itemVariants}>
+            <ExperienceTimeline />
+          </motion.div>
           <div className="gradient-line" aria-hidden="true" />
-          <ContactSection profile={profile} light={light} />
-        </div>
+          <motion.div variants={itemVariants}>
+            <ContactSection profile={profile} light={light} />
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

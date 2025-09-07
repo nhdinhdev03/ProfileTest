@@ -36,6 +36,8 @@
   .container {
     position: relative;
     z-index: 1;
+  // Match Projects container width
+  max-width: 1400px;
   }
 }
 
@@ -91,8 +93,7 @@
     transparent
   );
   border-radius: 999px;
-  max-width: 1200px;
-  width: 90%;
+  width: 100%;
 }
 
 // =====================================
@@ -102,7 +103,6 @@
   display: flex;
   align-items: center;
   gap: 3rem;
-  max-width: 1200px;
   margin: 0 auto;
   padding: clamp(20px, 4vw, 32px);
   margin-bottom: 2rem;
@@ -276,19 +276,10 @@
 // =====================================
 
 .quick-stats {
-  max-width: 1200px;
   margin: 2rem auto;
   padding: 0 clamp(12px, 3vw, 20px);
 
-  @media (max-width: 768px) {
-    margin: 1.5rem auto;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
+  // grid layout handled by global .grid utilities
 
   .stat-card {
     padding: clamp(16px, 3vw, 24px);
@@ -331,7 +322,6 @@
 // Skills Overview Section - Unified styling
 // =====================================
 .skills-overview {
-  max-width: 1200px;
   margin: 3rem auto;
   padding: 0 clamp(12px, 3vw, 20px);
 
@@ -351,14 +341,7 @@
   }
 
   .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
+    // layout via .grid utilities
 
     .skill-category {
       padding: clamp(16px, 3vw, 24px);
@@ -423,7 +406,6 @@
 // Recent Projects Section - Unified card styling
 // =====================================
 .recent-projects {
-  max-width: 1200px;
   margin: 3rem auto;
   padding: 0 clamp(12px, 3vw, 20px);
 
@@ -443,14 +425,7 @@
   }
 
   .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
+    // layout via .grid utilities
 
     .project-card {
       overflow: hidden;
@@ -988,21 +963,11 @@
     }
 
     .quick-stats {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      
-      .stat-card {
-        padding: 1rem;
-      }
+      // layout handled by .grid utilities
+      .stat-card { padding: 1rem; }
     }
 
-    .skills-overview .skills-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .recent-projects .projects-grid {
-      grid-template-columns: 1fr;
-    }
+  // grid utilities own responsive behavior for skills-grid & projects-grid
 
     .experience-timeline {
       .timeline {
