@@ -8,6 +8,8 @@
   overflow: hidden;
   perspective: 2000px;
   transform-style: preserve-3d;
+  -webkit-tap-highlight-color: transparent; // remove gray tap highlight on mobile
+  touch-action: manipulation; // hint for better tap behavior
 
 
   &__container {
@@ -184,13 +186,22 @@
         z-index: -1;
       }
 
-      &:hover {
+  &:hover {
         color: white;
         border-color: var(--primary-light);
         box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
 
         &::before {
           opacity: 1;
+        }
+      }
+
+      // On touch devices, disable hover visual changes
+      @media (hover: none), (pointer: coarse) {
+        &:hover {
+          color: var(--text-secondary);
+          border-color: var(--border-color);
+          box-shadow: none;
         }
       }
     }
@@ -340,6 +351,14 @@
       background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
       border-color: var(--icon-color);
       transform: scale(1.2) translateZ(20px);
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      &:hover {
+        background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+        border-color: var(--border-color);
+        transform: none;
+      }
     }
 
     &-glow {
