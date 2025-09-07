@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap, FiTrendingUp } from 'react-icons/fi'
+import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
 import './Projects.scss'
 
 const Projects = () => {
@@ -37,20 +37,19 @@ const Projects = () => {
       }
     }
 
+    const handleMouseLeave = () => {
+      mouseX.set(0)
+      mouseY.set(0)
+    }
+
     const projectsElement = projectsRef.current
     if (projectsElement) {
       projectsElement.addEventListener('mousemove', handleMouseMove)
-      projectsElement.addEventListener('mouseleave', () => {
-        mouseX.set(0)
-        mouseY.set(0)
-      })
+      projectsElement.addEventListener('mouseleave', handleMouseLeave)
 
       return () => {
         projectsElement.removeEventListener('mousemove', handleMouseMove)
-        projectsElement.removeEventListener('mouseleave', () => {
-          mouseX.set(0)
-          mouseY.set(0)
-        })
+        projectsElement.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
   }, [mouseX, mouseY])
@@ -156,6 +155,17 @@ const Projects = () => {
     }
   ]
 
+  const getComplexityIcon = (complexity) => {
+    switch (complexity) {
+      case 'advanced':
+        return '🔥'
+      case 'intermediate':
+        return '⚡'
+      default:
+        return '💡'
+    }
+  }
+
   const categories = [
     { id: 'all', label: 'Tất cả', count: projects.length },
     { id: 'featured', label: 'Nổi bật', count: projects.filter(p => p.featured).length },
@@ -164,11 +174,17 @@ const Projects = () => {
     { id: 'mobile', label: 'Mobile', count: projects.filter(p => p.category === 'mobile').length }
   ]
 
-  const filteredProjects = projects.filter(project => {
-    if (filter === 'all') return true
-    if (filter === 'featured') return project.featured
-    return project.category === filter
-  })
+  // Keep filtered list in state for more predictable re-renders (align with Blog behavior)
+  const [filteredProjects, setFilteredProjects] = useState(projects)
+
+  useEffect(() => {
+    const next = projects.filter(project => {
+      if (filter === 'all') return true
+      if (filter === 'featured') return project.featured
+      return project.category === filter
+    })
+    setFilteredProjects(next)
+  }, [filter])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -296,12 +312,13 @@ const Projects = () => {
 
           <motion.div 
             className={`projects__grid projects__grid--${viewMode}`} 
+            key={`${filter}-${viewMode}`}
             layout
             style={{
               transformStyle: "preserve-3d"
             }}
           >
-            <AnimatePresence mode="wait">
+            <AnimatePresence initial={false}>
               {filteredProjects.map((project, index) => {
                 return (
                   <motion.div
@@ -355,7 +372,7 @@ const Projects = () => {
                             ease: "easeInOut"
                           }}
                         >
-                          {project.complexity === 'advanced' ? '🔥' : project.complexity === 'intermediate' ? '⚡' : '💡'}
+                          {getComplexityIcon(project.complexity)}
                         </motion.div>
                       </motion.div>
 
@@ -662,6 +679,17 @@ const Projects = () => {
                 )
               })}
             </AnimatePresence>
+            {filteredProjects.length === 0 && (
+              <motion.div
+                className="projects__no-results"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h3>Không có dự án phù hợp</h3>
+                <p>Hãy chọn danh mục khác.</p>
+              </motion.div>
+            )}
           </motion.div>
 
           <motion.div className="projects__cta" variants={itemVariants}>
