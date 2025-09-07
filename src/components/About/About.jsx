@@ -32,7 +32,7 @@ const useGithubData = () => {
               headers: { Accept: "application/vnd.github+json" },
             }
           ),
-  ]);
+        ]);
         if (!profileRes.ok || !reposRes.ok) throw new Error("Failed to fetch");
 
         const [profile, repos] = await Promise.all([
@@ -87,7 +87,9 @@ const ProfileHero = ({ profile, light }) => (
           Biến ý tưởng thành những sản phẩm tinh xảo
         </span>
         {" — chuyên về "}
-        <span className="highlight-secondary">JavaScript/TypeScript front-end</span>
+        <span className="highlight-secondary">
+          JavaScript/TypeScript front-end
+        </span>
         {" và "}
         <span className="highlight-accent">phát triển API back-end</span>.
         <br />
@@ -345,7 +347,9 @@ const ContactSection = ({ profile, light }) => (
       Hãy liên hệ nếu bạn muốn hợp tác hoặc chỉ đơn giản là muốn chào hỏi!
     </p>
     <div className="contact-actions">
-      <a href="mailto:nhdinhdev03@gmail.com" className="btn btn-primary">Email</a>
+      <a href="mailto:nhdinhdev03@gmail.com" className="btn btn-primary">
+        Email
+      </a>
       <a
         href={profile?.html_url}
         target="_blank"
@@ -434,18 +438,18 @@ const About = () => {
           <motion.div variants={itemVariants}>
             <SkillsOverview />
           </motion.div>
-          <div className="gradient-line" aria-hidden="true" />
+          {/* <div className="gradient-line" aria-hidden="true" />
           <motion.div variants={itemVariants}>
             <RecentProjects repos={repos} />
-          </motion.div>
-          <div className="gradient-line" aria-hidden="true" />
+          </motion.div> */}
+          {/* <div className="gradient-line" aria-hidden="true" />
           <motion.div variants={itemVariants}>
             <ExperienceTimeline />
           </motion.div>
           <div className="gradient-line" aria-hidden="true" />
           <motion.div variants={itemVariants}>
             <ContactSection profile={profile} light={light} />
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </div>
     </section>
