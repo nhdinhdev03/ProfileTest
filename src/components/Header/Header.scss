@@ -193,11 +193,13 @@
       position: fixed;
       top: var(--header-height);
       right: 0;
-      width: 320px;
+      left: auto;
+      width: 310px; /* default width on larger small screens */
       height: calc(100vh - var(--header-height));
-      background: rgba(15, 23, 42, 0.98);
+      /* Use themed surface so light/dark match the app */
+      background: color-mix(in oklab, var(--bg-secondary) 96%, transparent);
       backdrop-filter: blur(25px) saturate(200%);
-      border-left: 1px solid rgba(99, 102, 241, 0.2);
+  border-left: 1px solid var(--border-color);
       padding: 2rem 0;
       overflow-y: auto;
       z-index: 1000; // ensure menu is above the overlay for clickability
@@ -209,17 +211,19 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(99, 102, 241, 0.05) 0%,
-          rgba(139, 92, 246, 0.05) 100%
+        /* Subtle top glow sheet; adapts to theme */
+  background: linear-gradient(
+          180deg,
+          color-mix(in oklab, #ffffff 8%, transparent) 0%,
+          transparent 35%
         );
         pointer-events: none;
       }
     }
 
     &-mobile-header {
-      padding: 0 2rem 1.5rem;
+      padding: 0 calc(2rem + env(safe-area-inset-right, 0px)) 1.5rem
+        calc(2rem + env(safe-area-inset-left, 0px));
       border-bottom: 1px solid rgba(99, 102, 241, 0.1);
       margin-bottom: 1.5rem;
     }
@@ -247,7 +251,8 @@
         flex-direction: column;
         align-items: stretch;
         gap: 0.25rem;
-        padding: 0 1.5rem;
+        padding: 0 calc(1.5rem + env(safe-area-inset-right, 0px))
+          0 calc(1.5rem + env(safe-area-inset-left, 0px));
       }
     }
 
@@ -275,6 +280,7 @@
       @media (min-width: $breakpoint-lg) {
         padding: 0.75rem 1.5rem;
         font-size: 0.9rem;
+        
       }
 
       .header__nav--mobile & {
@@ -283,7 +289,7 @@
         padding: 1rem 1.25rem;
         border-radius: 10px;
         margin-bottom: 0.25rem;
-        background: rgba(30, 41, 59, 0.3);
+     
         border: 1px solid rgba(99, 102, 241, 0.1);
       }
 
@@ -408,31 +414,40 @@
     @include flex-center;
     width: 50px;
     height: 50px;
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(99, 102, 241, 0.2);
+    /* Themed frosted button for mobile */
+    background: color-mix(in oklab, var(--bg-secondary) 75%, transparent);
+    border: 1px solid var(--border-color);
     border-radius: 14px;
-    color: #f8fafc;
+    color: var(--text-primary);
     font-size: 1.25rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 1001;
     backdrop-filter: blur(10px);
+    /* Prevent clipping near notches on mobile */
+    margin-right: env(safe-area-inset-right, 0px);
 
     @media (min-width: $breakpoint-md) {
       display: none;
     }
 
     &:hover {
-      background: rgba(99, 102, 241, 0.1);
-      border-color: rgba(99, 102, 241, 0.4);
+      background: color-mix(in oklab, var(--primary-light) 14%, var(--bg-secondary));
+      border-color: color-mix(in oklab, var(--primary-light) 45%, var(--border-color));
       transform: scale(1.05);
     }
 
     &--open {
-      background: rgba(99, 102, 241, 0.15);
-      border-color: rgba(99, 102, 241, 0.4);
-      color: #6366f1;
+      background: color-mix(in oklab, var(--primary-light) 22%, var(--bg-secondary));
+      border-color: color-mix(in oklab, var(--primary-light) 55%, var(--border-color));
+      color: var(--primary-light);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    &:focus-visible {
+      outline: 2px solid color-mix(in oklab, var(--primary-light) 60%, transparent);
+      outline-offset: 2px;
     }
   }
 
@@ -462,10 +477,14 @@ html {
     }
 
     &__nav--mobile {
+
       top: var(--header-height);
       height: calc(100vh - var(--header-height));
-      width: 100%;
-      max-width: 350px;
+      left: 0;
+      right: 0;
+      width: 100vw; /* full width on mobile */
+      max-width: none; /* remove constraint */
+      border-left: none; /* no divider when full width */
       z-index: 1000; // keep above overlay on small screens
     }
 
