@@ -23,8 +23,8 @@ function App() {
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
 
-    // Simulate loading time
-    setTimeout(() => setIsLoading(false), 2000);
+    // Shorter loading time for better UX
+    setTimeout(() => setIsLoading(false), 1500);
   }, []);
 
   const toggleTheme = () => {

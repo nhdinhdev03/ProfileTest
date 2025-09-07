@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList } from 'react-icons/fi'
+import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap, FiTrendingUp } from 'react-icons/fi'
 import './Projects.scss'
 
 const Projects = () => {
@@ -13,6 +13,63 @@ const Projects = () => {
   const [filter, setFilter] = useState('all')
   const [viewMode, setViewMode] = useState('grid')
   const [hoveredProject, setHoveredProject] = useState(null)
+  const [floatingElements, setFloatingElements] = useState([])
+  
+  // Mouse tracking for 3D effects
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const projectsRef = useRef(null)
+
+  // Gentle 3D transforms for projects
+  const rotateX = useSpring(useTransform(mouseY, [-100, 100], [2, -2]), { stiffness: 80, damping: 25 })
+  const rotateY = useSpring(useTransform(mouseX, [-100, 100], [-2, 2]), { stiffness: 80, damping: 25 })
+
+  // Enhanced mouse tracking for 3D effects
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      if (projectsRef.current) {
+        const rect = projectsRef.current.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+        
+        mouseX.set((event.clientX - centerX) / 20)
+        mouseY.set((event.clientY - centerY) / 20)
+      }
+    }
+
+    const projectsElement = projectsRef.current
+    if (projectsElement) {
+      projectsElement.addEventListener('mousemove', handleMouseMove)
+      projectsElement.addEventListener('mouseleave', () => {
+        mouseX.set(0)
+        mouseY.set(0)
+      })
+
+      return () => {
+        projectsElement.removeEventListener('mousemove', handleMouseMove)
+        projectsElement.removeEventListener('mouseleave', () => {
+          mouseX.set(0)
+          mouseY.set(0)
+        })
+      }
+    }
+  }, [mouseX, mouseY])
+
+  // Initialize gentle floating elements
+  useEffect(() => {
+    const elements = []
+    for (let i = 0; i < 8; i++) { // Reduced from 15
+      elements.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        icon: [FiStar, FiZap][Math.floor(Math.random() * 2)], // Reduced icons
+        size: Math.random() * 12 + 8, // Smaller
+        speed: Math.random() * 2 + 1.5 // Slower
+      })
+    }
+    setFloatingElements(elements)
+  }, [])
 
   const projects = [
     {
@@ -26,7 +83,9 @@ const Projects = () => {
       featured: true,
       category: 'fullstack',
       status: 'completed',
-      year: '2024'
+      year: '2024',
+      complexity: 'advanced',
+      performance: 95
     },
     {
       id: 2,
@@ -39,7 +98,9 @@ const Projects = () => {
       featured: true,
       category: 'frontend',
       status: 'completed',
-      year: '2024'
+      year: '2024',
+      complexity: 'intermediate',
+      performance: 88
     },
     {
       id: 3,
@@ -134,7 +195,42 @@ const Projects = () => {
   }
 
   return (
-    <section id="projects" className="projects">
+    <section id="projects" className="projects" ref={projectsRef}>
+      {/* Floating Background Elements */}
+      <div className="projects__floating-elements">
+        {floatingElements.map((element) => {
+          const IconComponent = element.icon
+          return (
+            <motion.div
+              key={element.id}
+              className="projects__floating-element"
+              initial={{
+                x: `${element.x}%`,
+                y: `${element.y}%`,
+                opacity: 0
+              }}
+              animate={{
+                x: [`${element.x}%`, `${(element.x + 20) % 100}%`, `${element.x}%`],
+                y: [`${element.y}%`, `${(element.y + 10) % 100}%`, `${element.y}%`],
+                opacity: [0.1, 0.3, 0.1],
+                rotate: [0, 360]
+              }}
+              transition={{
+                duration: element.speed * 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              style={{
+                fontSize: element.size,
+                color: 'var(--primary-light)'
+              }}
+            >
+              <IconComponent />
+            </motion.div>
+          )
+        })}
+      </div>
+
       <div className="projects__container">
         <motion.div
           ref={ref}
@@ -142,6 +238,10 @@ const Projects = () => {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
+          style={{
+            perspective: 1500,
+            transformStyle: "preserve-3d"
+          }}
         >
           <motion.div className="projects__header" variants={itemVariants}>
             <div className="projects__title-section">
@@ -194,139 +294,373 @@ const Projects = () => {
             </div>
           </motion.div>
 
-          <motion.div className={`projects__grid projects__grid--${viewMode}`} layout>
+          <motion.div 
+            className={`projects__grid projects__grid--${viewMode}`} 
+            layout
+            style={{
+              transformStyle: "preserve-3d"
+            }}
+          >
             <AnimatePresence mode="wait">
-              {filteredProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  className={`projects__item glass-card ${project.featured ? 'projects__item--featured' : ''}`}
-                  variants={itemVariants}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ 
-                    y: -10,
-                    transition: { type: 'spring', stiffness: 300, damping: 20 }
-                  }}
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  <div className="projects__item-image">
-                    <img src={project.image} alt={project.title} />
-                    <div className="projects__item-status">
-                      <span className={`projects__status-badge projects__status-badge--${project.status}`}>
-                        {project.status === 'completed' ? 'Hoàn thành' : 'Đang phát triển'}
-                      </span>
-                    </div>
-                    <div className="projects__item-overlay">
-                      <div className="projects__item-actions">
-                        <motion.a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="projects__action-btn"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <FiEye />
-                          <span>Xem Demo</span>
-                        </motion.a>
-                        <motion.a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="projects__action-btn"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <FiGithub />
-                          <span>Source Code</span>
-                        </motion.a>
-                      </div>
-                    </div>
-                    {hoveredProject === project.id && (
-                      <motion.div
-                        className="projects__item-sparkles"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+              {filteredProjects.map((project, index) => {
+                return (
+                  <motion.div
+                    key={project.id}
+                    className={`projects__item glass-card ${project.featured ? 'projects__item--featured' : ''}`}
+                    variants={itemVariants}
+                    initial={{ opacity: 0, scale: 0.8, rotateX: -20, z: -100 }}
+                    animate={{ opacity: 1, scale: 1, rotateX: 0, z: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotateX: 20, z: -100 }}
+                    whileHover={{ 
+                      y: -8,
+                      rotateY: 3,
+                      z: 15,
+                      transition: { type: 'spring', stiffness: 200, damping: 25 }
+                    }}
+                    onMouseEnter={() => setHoveredProject(project.id)}
+                    onMouseLeave={() => setHoveredProject(null)}
+                    style={{
+                      transformStyle: "preserve-3d",
+                      rotateX,
+                      rotateY
+                    }}
+                  >
+                    <motion.div 
+                      className="projects__item-image"
+                      style={{
+                        transform: `translateZ(20px)`
+                      }}
+                    >
+                      <img src={project.image} alt={project.title} />
+                      
+                      {/* Enhanced Status Badge */}
+                      <motion.div 
+                        className="projects__item-status"
+                        style={{
+                          transform: `translateZ(30px)`
+                        }}
                       >
-                        {[...Array(6)].map((_, i) => (
+                        <span className={`projects__status-badge projects__status-badge--${project.status}`}>
+                          {project.status === 'completed' ? 'Hoàn thành' : 'Đang phát triển'}
+                        </span>
+                        <motion.div
+                          className="projects__complexity-badge"
+                          animate={{
+                            scale: [1, 1.05, 1],
+                            opacity: [0.8, 1, 0.8]
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        >
+                          {project.complexity === 'advanced' ? '🔥' : project.complexity === 'intermediate' ? '⚡' : '💡'}
+                        </motion.div>
+                      </motion.div>
+
+                      {/* 3D Overlay with Enhanced Actions */}
+                      <motion.div 
+                        className="projects__item-overlay"
+                        style={{
+                          transform: `translateZ(40px)`
+                        }}
+                        initial={{ opacity: 0, z: -20 }}
+                        whileHover={{ opacity: 1, z: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="projects__item-actions">
+                          <motion.a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="projects__action-btn projects__action-btn--primary"
+                            whileHover={{ 
+                              scale: 1.1, 
+                              rotateY: 10,
+                              z: 10
+                            }}
+                            whileTap={{ scale: 0.9 }}
+                            style={{ transformStyle: "preserve-3d" }}
+                          >
+                            <FiEye />
+                            <span>Demo</span>
+                            <motion.div
+                              className="projects__action-btn-glow"
+                              animate={{
+                                opacity: [0.5, 1, 0.5],
+                                scale: [1, 1.2, 1]
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
+                          </motion.a>
+                          <motion.a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="projects__action-btn projects__action-btn--secondary"
+                            whileHover={{ 
+                              scale: 1.1, 
+                              rotateY: -10,
+                              z: 10
+                            }}
+                            whileTap={{ scale: 0.9 }}
+                            style={{ transformStyle: "preserve-3d" }}
+                          >
+                            <FiGithub />
+                            <span>Code</span>
+                          </motion.a>
+                        </div>
+
+                        {/* Performance Indicator */}
+                        <motion.div
+                          className="projects__performance-indicator"
+                          style={{
+                            transform: `translateZ(10px)`
+                          }}
+                          animate={{
+                            rotate: [0, 360]
+                          }}
+                          transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        >
+                          <div className="projects__performance-circle">
+                            <span>{project.performance}%</span>
+                          </div>
+                        </motion.div>
+                      </motion.div>
+
+                      {/* Enhanced Sparkles with 3D Effect */}
+                      <AnimatePresence>
+                        {hoveredProject === project.id && (
                           <motion.div
-                            key={i}
-                            className="projects__sparkle"
+                            className="projects__item-sparkles"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                          >
+                            {[...Array(8)].map((_, i) => (
+                              <motion.div
+                                key={i}
+                                className="projects__sparkle"
+                                animate={{
+                                  scale: [0, 1, 0],
+                                  opacity: [0, 1, 0],
+                                  rotateZ: [0, 360],
+                                  z: [0, 20, 0]
+                                }}
+                                transition={{
+                                  duration: 2 + i * 0.1,
+                                  repeat: Infinity,
+                                  delay: i * 0.2,
+                                  ease: "easeInOut"
+                                }}
+                                style={{
+                                  left: `${Math.random() * 100}%`,
+                                  top: `${Math.random() * 100}%`,
+                                  background: `hsl(${Math.random() * 360}, 70%, 60%)`
+                                }}
+                              />
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* 3D Morphing Border */}
+                      <motion.div
+                        className="projects__item-border"
+                        animate={{
+                          opacity: hoveredProject === project.id ? 1 : 0,
+                          rotateZ: hoveredProject === project.id ? [0, 360] : 0,
+                          scale: hoveredProject === project.id ? [1, 1.02, 1] : 1
+                        }}
+                        transition={{
+                          rotateZ: { duration: 4, repeat: Infinity, ease: "linear" },
+                          opacity: { duration: 0.3 },
+                          scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                      />
+                    </motion.div>
+
+                    <motion.div 
+                      className="projects__item-content"
+                      style={{
+                        transform: `translateZ(15px)`,
+                        transformStyle: "preserve-3d"
+                      }}
+                    >
+                      <motion.div 
+                        className="projects__item-header"
+                        style={{
+                          transform: `translateZ(5px)`
+                        }}
+                      >
+                        <div className="projects__item-title-section">
+                          <h3 className="projects__item-title">{project.title}</h3>
+                          <motion.span 
+                            className="projects__item-year"
                             animate={{
-                              scale: [0, 1, 0],
-                              opacity: [0, 1, 0]
+                              color: ['var(--text-tertiary)', 'var(--primary-light)', 'var(--text-tertiary)']
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          >
+                            {project.year}
+                          </motion.span>
+                        </div>
+                        <div className="projects__item-links">
+                          <motion.a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="projects__link"
+                            whileHover={{ 
+                              scale: 1.3, 
+                              rotate: 15,
+                              z: 10
+                            }}
+                            whileTap={{ scale: 0.8 }}
+                            style={{ transformStyle: "preserve-3d" }}
+                          >
+                            <FiExternalLink />
+                            <motion.div
+                              className="projects__link-glow"
+                              animate={{
+                                opacity: [0, 0.8, 0],
+                                scale: [1, 1.5, 1]
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
+                          </motion.a>
+                          <motion.a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="projects__link"
+                            whileHover={{ 
+                              scale: 1.3, 
+                              rotate: -15,
+                              z: 10
+                            }}
+                            whileTap={{ scale: 0.8 }}
+                            style={{ transformStyle: "preserve-3d" }}
+                          >
+                            <FiGithub />
+                          </motion.a>
+                        </div>
+                      </motion.div>
+
+                      <motion.p 
+                        className="projects__item-description"
+                        style={{
+                          transform: `translateZ(3px)`
+                        }}
+                      >
+                        {project.description}
+                      </motion.p>
+
+                      <motion.div 
+                        className="projects__item-technologies"
+                        style={{
+                          transform: `translateZ(8px)`,
+                          transformStyle: "preserve-3d"
+                        }}
+                      >
+                        {project.technologies.map((tech, i) => (
+                          <motion.span 
+                            key={i} 
+                            className="projects__tech-tag"
+                            whileHover={{ 
+                              scale: 1.15,
+                              rotateY: 10,
+                              z: 5,
+                              transition: { type: 'spring', stiffness: 400 }
+                            }}
+                            style={{
+                              transformStyle: "preserve-3d"
+                            }}
+                            animate={{
+                              boxShadow: [
+                                '0 2px 8px rgba(99, 102, 241, 0.1)',
+                                '0 4px 16px rgba(99, 102, 241, 0.3)',
+                                '0 2px 8px rgba(99, 102, 241, 0.1)'
+                              ]
+                            }}
+                            transition={{
+                              duration: 2 + i * 0.2,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          >
+                            {tech}
+                            <motion.div
+                              className="projects__tech-tag-shine"
+                              animate={{
+                                x: ['-100%', '100%']
+                              }}
+                              transition={{
+                                duration: 3,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: i * 0.5
+                              }}
+                            />
+                          </motion.span>
+                        ))}
+                      </motion.div>
+
+                      {project.featured && (
+                        <motion.div 
+                          className="projects__featured-badge"
+                          style={{
+                            transform: `translateZ(12px)`
+                          }}
+                          animate={{
+                            scale: [1, 1.05, 1],
+                            rotateZ: [0, 2, -2, 0]
+                          }}
+                          transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        >
+                          <motion.span
+                            animate={{
+                              textShadow: [
+                                '0 0 5px rgba(255, 215, 0, 0.5)',
+                                '0 0 15px rgba(255, 215, 0, 0.8)',
+                                '0 0 5px rgba(255, 215, 0, 0.5)'
+                              ]
                             }}
                             transition={{
                               duration: 2,
                               repeat: Infinity,
-                              delay: i * 0.2
+                              ease: "easeInOut"
                             }}
-                            style={{
-                              left: `${Math.random() * 100}%`,
-                              top: `${Math.random() * 100}%`
-                            }}
-                          />
-                        ))}
-                      </motion.div>
-                    )}
-                  </div>
-
-                  <div className="projects__item-content">
-                    <div className="projects__item-header">
-                      <div className="projects__item-title-section">
-                        <h3 className="projects__item-title">{project.title}</h3>
-                        <span className="projects__item-year">{project.year}</span>
-                      </div>
-                      <div className="projects__item-links">
-                        <motion.a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="projects__link"
-                          whileHover={{ scale: 1.2, rotate: 5 }}
-                          whileTap={{ scale: 0.8 }}
-                        >
-                          <FiExternalLink />
-                        </motion.a>
-                        <motion.a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="projects__link"
-                          whileHover={{ scale: 1.2, rotate: -5 }}
-                          whileTap={{ scale: 0.8 }}
-                        >
-                          <FiGithub />
-                        </motion.a>
-                      </div>
-                    </div>
-
-                    <p className="projects__item-description">{project.description}</p>
-
-                    <div className="projects__item-technologies">
-                      {project.technologies.map((tech, i) => (
-                        <motion.span 
-                          key={i} 
-                          className="projects__tech-tag"
-                          whileHover={{ scale: 1.1 }}
-                          transition={{ type: 'spring', stiffness: 300 }}
-                        >
-                          {tech}
-                        </motion.span>
-                      ))}
-                    </div>
-
-                    {project.featured && (
-                      <div className="projects__featured-badge">
-                        <span>⭐ Dự án nổi bật</span>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
+                          >
+                            ⭐ Dự án nổi bật
+                          </motion.span>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  </motion.div>
+                )
+              })}
             </AnimatePresence>
           </motion.div>
 

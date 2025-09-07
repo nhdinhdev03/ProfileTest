@@ -10,8 +10,6 @@ const Skills = () => {
     threshold: 0.1
   })
 
-  // Grid skills section removed per request; keeping title + TechMarquee only
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -51,14 +49,13 @@ const Skills = () => {
             <p>Các công nghệ và công cụ tôi sử dụng để tạo ra những sản phẩm tuyệt vời</p>
           </motion.div>
 
-          {/* Slideshow + Marquee of tech like TechMarquee, compact and without header */}
-          <div className="skills__marquee-wrapper">
+          {/* Tech Marquee */}
+          <motion.div 
+            className="skills__marquee-wrapper"
+            variants={itemVariants}
+          >
             <TechMarquee showHeader={false} compact direction="ltr" />
-          </div>
-
-          {/* Grid skills removed */}
-
-   
+          </motion.div>
         </motion.div>
       </div>
     </section>

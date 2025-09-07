@@ -30,7 +30,7 @@
       rgba(139, 92, 246, 0.1) 0%,
       transparent 50%
     );
-    animation: backgroundFloat 20s ease-in-out infinite;
+    animation: backgroundFloat 30s ease-in-out infinite;
     z-index: -1;
     pointer-events: none;
   }
@@ -101,7 +101,7 @@ html {
     background: var(--primary-light);
     border-radius: 50%;
     opacity: 0.1;
-    animation: particleFloat 15s infinite linear;
+    animation: particleFloat 20s infinite linear;
 
     &:nth-child(odd) {
       animation-delay: -7.5s;

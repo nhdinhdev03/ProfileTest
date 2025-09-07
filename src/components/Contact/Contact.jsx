@@ -112,8 +112,8 @@ const Contact = () => {
                       key={index}
                       href={info.link}
                       className="contact__info-item"
-                      whileHover={{ scale: 1.05, x: 10 }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                      whileHover={{ scale: 1.02, x: 5 }}
+                      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                     >
                       <div className="contact__info-icon">
                         <IconComponent />

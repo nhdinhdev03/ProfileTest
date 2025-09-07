@@ -181,19 +181,19 @@ const Header = () => {
                     onClick={() => scrollToSection(item.id)}
                     aria-label={`Navigate to ${item.label}`}
                     whileHover={{
-                      scale: 1.05,
-                      backgroundColor: "rgba(99, 102, 241, 0.1)",
+                      scale: 1.02,
+                      backgroundColor: "rgba(99, 102, 241, 0.08)",
                     }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
                   >
                     <motion.div
                       className="header__nav-icon-container"
-                      whileHover={{ rotate: 5, scale: 1.1 }}
+                      whileHover={{ rotate: 3, scale: 1.05 }}
                       transition={{
                         type: "spring",
-                        stiffness: 400,
-                        damping: 15,
+                        stiffness: 250,
+                        damping: 20,
                       }}
                     >
                       <Icon className="header__nav-icon" />

@@ -61,8 +61,8 @@ const Footer = () => {
                         rel="noopener noreferrer"
                         className="footer__social-link"
                         aria-label={social.label}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.9 }}
+                        whileHover={{ scale: 1.05, y: -1 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         <IconComponent />
                       </motion.a>
@@ -83,8 +83,8 @@ const Footer = () => {
             <motion.button
               className="footer__scroll-top"
               onClick={scrollToTop}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.95 }}
               aria-label="Scroll to top"
             >
               <FiArrowUp />
