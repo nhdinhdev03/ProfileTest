@@ -12,9 +12,9 @@ const Header = () => {
     { id: 'home', label: 'Home', icon: FiHome },
     { id: 'about', label: 'About', icon: FiUser },
     { id: 'skills', label: 'Skills', icon: FiCode },
-    { id: 'experience', label: 'Experience', icon: FiBriefcase },
+
     { id: 'projects', label: 'Projects', icon: FiFolder },
-    { id: 'testimonials', label: 'Testimonials', icon: FiMessageSquare },
+
     { id: 'blog', label: 'Blog', icon: FiBookOpen },
     { id: 'contact', label: 'Contact', icon: FiMail }
   ]
@@ -67,27 +67,6 @@ const Header = () => {
     }
   }
 
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      x: '100%',
-      transition: {
-        type: 'spring',
-        stiffness: 400,
-        damping: 40
-      }
-    },
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 400,
-        damping: 40
-      }
-    }
-  }
-
   return (
     <motion.header 
       className={`header ${isScrolled ? 'header--scrolled' : ''}`}
@@ -98,61 +77,141 @@ const Header = () => {
       <div className="header__container">
         <motion.div 
           className="header__logo"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => scrollToSection('home')}
         >
-          <span className="header__logo-text">Portfolio</span>
-          <span className="header__logo-dot">.</span>
+          <motion.div 
+            className="header__logo-container"
+            whileHover={{ rotate: 5 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            <div className="header__logo-gradient">
+              <motion.div 
+                className="header__logo-icon"
+                animate={{ 
+                  boxShadow: [
+                    "0 0 20px rgba(99, 102, 241, 0.3)",
+                    "0 0 30px rgba(139, 92, 246, 0.4)",
+                    "0 0 20px rgba(99, 102, 241, 0.3)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <span>HD</span>
+              </motion.div>
+            </div>
+          </motion.div>
+          <div className="header__logo-text">
+            <motion.span 
+              className="header__logo-name"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              Hoang Dinh
+            </motion.span>
+            <motion.span 
+              className="header__logo-title"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              Full Stack Developer
+            </motion.span>
+          </div>
         </motion.div>
 
         <nav className="header__nav header__nav--desktop">
-          <ul className="header__nav-list">
+          <motion.ul 
+            className="header__nav-list"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
             {navItems.map((item, index) => {
               const Icon = item.icon
               return (
                 <motion.li 
                   key={item.id}
                   className="header__nav-item"
-                  initial={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, y: -30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ 
+                    delay: index * 0.08,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20
+                  }}
+                  whileHover={{ y: -2 }}
                 >
-                  <button
+                  <motion.button
                     className={`header__nav-link ${activeSection === item.id ? 'header__nav-link--active' : ''}`}
                     onClick={() => scrollToSection(item.id)}
                     aria-label={`Navigate to ${item.label}`}
+                    whileHover={{ 
+                      scale: 1.05,
+                      backgroundColor: "rgba(99, 102, 241, 0.1)"
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    <Icon className="header__nav-icon" />
-                    <span>{item.label}</span>
-                    {activeSection === item.id && (
-                      <motion.div
-                        className="header__nav-indicator"
-                        layoutId="activeIndicator"
-                        transition={{
-                          type: 'spring',
-                          stiffness: 380,
-                          damping: 30
-                        }}
-                      />
-                    )}
-                  </button>
+                    <motion.div
+                      className="header__nav-icon-container"
+                      whileHover={{ rotate: 5, scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    >
+                      <Icon className="header__nav-icon" />
+                    </motion.div>
+                    <span className="header__nav-text">{item.label}</span>
+                    <AnimatePresence>
+                      {activeSection === item.id && (
+                        <motion.div
+                          className="header__nav-indicator"
+                          layoutId="activeIndicator"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{
+                            type: 'spring',
+                            stiffness: 500,
+                            damping: 30
+                          }}
+                        />
+                      )}
+                    </AnimatePresence>
+                    <motion.div
+                      className="header__nav-glow"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </motion.button>
                 </motion.li>
               )
             })}
-          </ul>
+          </motion.ul>
         </nav>
 
-        <button
+        <motion.button
           className={`header__menu-toggle ${isMenuOpen ? 'header__menu-toggle--open' : ''}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          {isMenuOpen ? <FiX /> : <FiMenu />}
-        </button>
+          <motion.div
+            animate={{ rotate: isMenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            {isMenuOpen ? <FiX /> : <FiMenu />}
+          </motion.div>
+        </motion.button>
       </div>
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isMenuOpen && (
           <>
             <motion.div
@@ -160,15 +219,40 @@ const Header = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.nav
               className="header__nav header__nav--mobile"
-              variants={menuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ 
+                x: 0, 
+                opacity: 1,
+                transition: {
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30
+                }
+              }}
+              exit={{ 
+                x: "100%", 
+                opacity: 0,
+                transition: {
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }
+              }}
             >
+              <motion.div
+                className="header__nav-mobile-header"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <div className="header__nav-mobile-title">Navigation</div>
+                <div className="header__nav-mobile-subtitle">Choose your destination</div>
+              </motion.div>
+              
               <ul className="header__nav-list header__nav-list--mobile">
                 {navItems.map((item, index) => {
                   const Icon = item.icon
@@ -176,17 +260,46 @@ const Header = () => {
                     <motion.li
                       key={item.id}
                       className="header__nav-item"
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 0, 
+                        scale: 1,
+                        transition: {
+                          delay: index * 0.1 + 0.2,
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 25
+                        }
+                      }}
+                      whileHover={{ 
+                        scale: 1.02,
+                        x: 10,
+                        transition: { duration: 0.2 }
+                      }}
                     >
-                      <button
+                      <motion.button
                         className={`header__nav-link ${activeSection === item.id ? 'header__nav-link--active' : ''}`}
                         onClick={() => scrollToSection(item.id)}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <Icon className="header__nav-icon" />
-                        <span>{item.label}</span>
-                      </button>
+                        <motion.div
+                          className="header__nav-icon-container"
+                          whileHover={{ rotate: 10, scale: 1.1 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                        >
+                          <Icon className="header__nav-icon" />
+                        </motion.div>
+                        <span className="header__nav-text">{item.label}</span>
+                        {activeSection === item.id && (
+                          <motion.div
+                            className="header__nav-active-dot"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            layoutId="activeDotMobile"
+                          />
+                        )}
+                      </motion.button>
                     </motion.li>
                   )
                 })}

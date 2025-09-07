@@ -146,12 +146,26 @@ const Testimonials = () => {
         >
           <motion.div className="testimonials__title-section" variants={itemVariants}>
             <h2 className="testimonials__title">
-              <span className="testimonials__title-text">Client</span>
-              <span className="testimonials__title-highlight">Testimonials</span>
+              <span className="testimonials__title-text">Khách Hàng</span>
+              <span className="testimonials__title-highlight">Đánh Giá</span>
             </h2>
             <p className="testimonials__description">
-              Những phản hồi từ khách hàng và đối tác đã làm việc cùng tôi
+              Những phản hồi chân thực từ khách hàng và đối tác đã làm việc cùng tôi
             </p>
+            <div className="testimonials__stats-preview">
+              <div className="testimonials__stat-item">
+                <span className="testimonials__stat-number">5.0</span>
+                <span className="testimonials__stat-label">⭐ Rating</span>
+              </div>
+              <div className="testimonials__stat-item">
+                <span className="testimonials__stat-number">50+</span>
+                <span className="testimonials__stat-label">👥 Clients</span>
+              </div>
+              <div className="testimonials__stat-item">
+                <span className="testimonials__stat-number">100%</span>
+                <span className="testimonials__stat-label">💯 Satisfaction</span>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
 
