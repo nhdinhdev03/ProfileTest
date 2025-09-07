@@ -30,8 +30,7 @@ const useGithubData = () => {
               headers: { Accept: "application/vnd.github+json" },
             }
           ),
-        ]);
-
+  ]);
         if (!profileRes.ok || !reposRes.ok) throw new Error("Failed to fetch");
 
         const [profile, repos] = await Promise.all([
@@ -65,7 +64,7 @@ const useGithubData = () => {
 };
 
 const ProfileHero = ({ profile, light }) => (
-  <section className="profile-hero">
+  <section className="profile-hero card">
     <div className="profile-image">
       <img src={profile?.avatar_url || "/default-avatar.png"} alt="Profile" />
       <div className="profile-status">
@@ -136,13 +135,15 @@ const QuickStats = ({ repos, profile }) => {
 
   return (
     <section className="quick-stats">
-      {stats.map((stat, index) => (
-        <div key={index} className="stat-card">
-          <div className="stat-icon">{stat.icon}</div>
-          <div className="stat-number">{stat.number}</div>
-          <div className="stat-label">{stat.label}</div>
-        </div>
-      ))}
+      <div className="grid grid-4">
+        {stats.map((stat, index) => (
+          <div key={index} className="stat-card card">
+            <div className="stat-icon">{stat.icon}</div>
+            <div className="stat-number">{stat.number}</div>
+            <div className="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 };
@@ -201,9 +202,9 @@ const SkillsOverview = () => {
   return (
     <section className="skills-overview">
       <h2>Kỹ Năng Công Nghệ</h2>
-      <div className="skills-grid">
+      <div className="skills-grid grid grid-3">
         {skillCategories.map((category, index) => (
-          <div key={index} className="skill-category">
+          <div key={index} className="skill-category card">
             <div className="category-header">
               <span className="category-icon">{category.icon}</span>
               <h3>{category.title}</h3>
@@ -229,9 +230,9 @@ const RecentProjects = ({ repos }) => {
   return (
     <section className="recent-projects">
       <h2>Dự Án Gần Đây</h2>
-      <div className="projects-grid">
+      <div className="projects-grid grid grid-3">
         {featuredRepos.map((repo, index) => (
-          <div key={index} className="project-card">
+          <div key={index} className="project-card card">
             <div className="project-header">
               <div className="project-icon">📁</div>
               <div className="project-status">
@@ -267,7 +268,7 @@ const RecentProjects = ({ repos }) => {
                   href={repo.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="project-link primary"
+                  className="btn btn-primary"
                 >
                   Xem Code
                 </a>
@@ -276,7 +277,7 @@ const RecentProjects = ({ repos }) => {
                     href={repo.homepage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="project-link secondary"
+                    className="btn btn-secondary"
                   >
                     Demo Trực Tiếp
                   </a>
@@ -321,7 +322,7 @@ const ExperienceTimeline = () => {
       <h2>Kinh Nghiệm</h2>
       <div className="timeline">
         {experiences.map((exp, index) => (
-          <div key={index} className="timeline-item">
+          <div key={index} className="timeline-item card">
             <div className="timeline-date">{exp.date}</div>
             <div className="timeline-title">{exp.title}</div>
             <div className="timeline-company">{exp.company}</div>
@@ -335,21 +336,19 @@ const ExperienceTimeline = () => {
 
 // Contact Section
 const ContactSection = ({ profile, light }) => (
-  <section className="contact-section">
+  <section className="contact-section card">
     <h3>Kết Nối</h3>
     <p>
       Tôi luôn quan tâm đến việc nghe về những cơ hội mới và các dự án thú vị.
       Hãy liên hệ nếu bạn muốn hợp tác hoặc chỉ đơn giản là muốn chào hỏi!
     </p>
-    <div className="contact-badges">
-      <a href="mailto:nhdinhdev03@gmail.com" className="contact-badge email">
-        Email
-      </a>
+    <div className="contact-actions">
+      <a href="mailto:nhdinhdev03@gmail.com" className="btn btn-primary">Email</a>
       <a
         href={profile?.html_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="contact-badge github"
+        className="btn btn-secondary"
       >
         GitHub
       </a>
@@ -357,7 +356,7 @@ const ContactSection = ({ profile, light }) => (
         href="https://linkedin.com/in/nhdinhdev03"
         target="_blank"
         rel="noopener noreferrer"
-        className="contact-badge linkedin"
+        className="btn btn-outline"
       >
         LinkedIn
       </a>
@@ -380,20 +379,28 @@ const About = () => {
     document.documentElement.getAttribute("data-theme") === "light";
 
   return (
-    <div className={`about-page ${light ? "light" : ""}`}>
-      <div className="gradient-line" aria-hidden="true" />
-      <ProfileHero profile={profile} light={light} />
-      <div className="gradient-line" aria-hidden="true" />
-      <QuickStats repos={repos} profile={profile} />
-      <div className="gradient-line" aria-hidden="true" />
-      <SkillsOverview />
-      <div className="gradient-line" aria-hidden="true" />
-      <RecentProjects repos={repos} />
-      <div className="gradient-line" aria-hidden="true" />
-      <ExperienceTimeline />
-    
-
-    </div>
+    <section id="about" className="about section">
+      <div className="container">
+        <div className="section-title">
+          <h2>About</h2>
+          <p>Giới thiệu ngắn gọn về kinh nghiệm, kỹ năng và các dự án tiêu biểu.</p>
+        </div>
+        <div className={`about-page ${light ? "light" : ""}`}>
+          <div className="gradient-line" aria-hidden="true" />
+          <ProfileHero profile={profile} light={light} />
+          <div className="gradient-line" aria-hidden="true" />
+          <QuickStats repos={repos} profile={profile} />
+          <div className="gradient-line" aria-hidden="true" />
+          <SkillsOverview />
+          <div className="gradient-line" aria-hidden="true" />
+          <RecentProjects repos={repos} />
+          <div className="gradient-line" aria-hidden="true" />
+          <ExperienceTimeline />
+          <div className="gradient-line" aria-hidden="true" />
+          <ContactSection profile={profile} light={light} />
+        </div>
+      </div>
+    </section>
   );
 };
 
