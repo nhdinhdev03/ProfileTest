@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
 // Lazy load components for better performance
 const About = lazy(() => import("./components/About/About"));
@@ -218,7 +217,6 @@ function App() {
   <Suspense fallback={<div className="loading-footer">Loading...</div>}>
         <Footer />
       </Suspense>
-      <ScrollToTop />
     </div>
   );
 }
