@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 import { FiSun, FiMoon } from 'react-icons/fi'
 import './ThemeToggle.scss'
 
-const ThemeToggle = ({ theme, toggleTheme }) => {
+const ThemeToggle = ({ theme, toggleTheme, placement = 'floating' }) => {
   return (
     <motion.button
-      className="theme-toggle"
+  className={`theme-toggle ${placement === 'header' ? 'theme-toggle--header' : ''}`}
       onClick={toggleTheme}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

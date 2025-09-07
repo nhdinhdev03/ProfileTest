@@ -58,6 +58,17 @@
   }
 }
 
+// Variant when rendered in Header
+.theme-toggle--header {
+  position: static;
+  bottom: auto;
+  right: auto;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  box-shadow: none;
+  padding: $spacing-xs $spacing-sm;
+}
+
 // Mobile specific styles
 @media (max-width: $breakpoint-sm) {
   .theme-toggle {

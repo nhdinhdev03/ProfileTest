@@ -11,8 +11,9 @@ import {
   FiMail,
 } from "react-icons/fi";
 import "./Header.scss";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
-const Header = () => {
+const Header = ({ theme, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -97,7 +98,7 @@ const Header = () => {
       initial="hidden"
       animate="visible"
     >
-      <div className="header__container">
+  <div className="header__container">
         <motion.div
           className="header__logo"
           whileHover={{ scale: 1.02 }}
@@ -149,7 +150,7 @@ const Header = () => {
           </div>
         </motion.div>
 
-        <nav className="header__nav header__nav--desktop">
+  <nav className="header__nav header__nav--desktop">
           <motion.ul
             className="header__nav-list"
             initial={{ opacity: 0 }}
@@ -225,7 +226,12 @@ const Header = () => {
           </motion.ul>
         </nav>
 
-        <motion.button
+        {/* Theme toggle moved into header */}
+        <div className="header__actions">
+          <ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="header" />
+        </div>
+
+  <motion.button
           className={`header__menu-toggle ${
             isMenuOpen ? "header__menu-toggle--open" : ""
           }`}

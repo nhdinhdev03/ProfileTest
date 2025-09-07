@@ -62,6 +62,13 @@
     }
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-base;
+    margin-left: $spacing-lg;
+  }
+
   &__logo {
     display: flex;
     align-items: center;

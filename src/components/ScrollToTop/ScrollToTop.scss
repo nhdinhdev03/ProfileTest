@@ -2,7 +2,7 @@
 
 .scroll-to-top {
   position: fixed;
-  bottom: $spacing-6xl;
+  bottom: $spacing-2xl; // occupy old theme-toggle spot
   right: $spacing-2xl;
   width: 50px;
   height: 50px;
@@ -64,18 +64,11 @@
 // Mobile specific styles
 @media (max-width: $breakpoint-sm) {
   .scroll-to-top {
-    bottom: $spacing-5xl;
-    right: $spacing-xl;
+  bottom: $spacing-xl; // match old theme-toggle mobile position
+  right: $spacing-xl;
     width: 45px;
     height: 45px;
     font-size: $font-base;
-  }
-}
-
-// Adjust position when theme toggle is visible
-@media (min-width: $breakpoint-sm) {
-  .scroll-to-top {
-    bottom: calc($spacing-2xl + 60px); // Adjust for theme toggle height
   }
 }
 
