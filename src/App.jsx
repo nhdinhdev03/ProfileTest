@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 import { motion } from 'framer-motion'
 import Header from './components/Header/Header'
 import Hero from './components/Hero/Hero'
-import About from './components/About/About'
-import Skills from './components/Skills/Skills'
-import Experience from './components/Experience/Experience'
-import Projects from './components/Projects/Projects'
-import Contact from './components/Contact/Contact'
-import Footer from './components/Footer/Footer'
 import ThemeToggle from './components/ThemeToggle/ThemeToggle'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+
+// Lazy load components for better performance
+const About = lazy(() => import('./components/About/About'))
+const Skills = lazy(() => import('./components/Skills/Skills'))
+const Experience = lazy(() => import('./components/Experience/Experience'))
+const Projects = lazy(() => import('./components/Projects/Projects'))
+const Stats = lazy(() => import('./components/Stats/Stats'))
+const Testimonials = lazy(() => import('./components/Testimonials/Testimonials'))
+const Blog = lazy(() => import('./components/Blog/Blog'))
+const Contact = lazy(() => import('./components/Contact/Contact'))
+const Footer = lazy(() => import('./components/Footer/Footer'))
 import './styles/App.scss'
 
 function App() {
@@ -58,13 +63,30 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Contact />
+        <Suspense fallback={
+          <div className="loading-section">
+            <motion.div 
+              className="loading-spinner"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+              <div className="spinner"></div>
+            </motion.div>
+          </div>
+        }>
+          <About />
+          <Skills />
+          <Experience />
+          <Projects />
+          <Stats />
+          <Testimonials />
+          <Blog />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={<div className="loading-footer">Loading...</div>}>
+        <Footer />
+      </Suspense>
       <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
       <ScrollToTop />
     </div>

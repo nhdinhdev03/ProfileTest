@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiMenu, FiX, FiHome, FiUser, FiCode, FiBriefcase, FiFolder, FiMail } from 'react-icons/fi'
+import { FiMenu, FiX, FiHome, FiUser, FiCode, FiBriefcase, FiFolder, FiMessageSquare, FiBookOpen, FiMail } from 'react-icons/fi'
 import './Header.scss'
 
 const Header = () => {
@@ -14,6 +14,8 @@ const Header = () => {
     { id: 'skills', label: 'Skills', icon: FiCode },
     { id: 'experience', label: 'Experience', icon: FiBriefcase },
     { id: 'projects', label: 'Projects', icon: FiFolder },
+    { id: 'testimonials', label: 'Testimonials', icon: FiMessageSquare },
+    { id: 'blog', label: 'Blog', icon: FiBookOpen },
     { id: 'contact', label: 'Contact', icon: FiMail }
   ]
 

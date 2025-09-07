@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState, useRef } from 'react'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { FiDownload, FiGithub, FiLinkedin, FiMail, FiMapPin, FiChevronDown } from 'react-icons/fi'
 import { FaReact, FaJsSquare, FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiTypescript, SiTailwindcss } from 'react-icons/si'
@@ -9,6 +9,15 @@ const Hero = () => {
   const [displayText, setDisplayText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [particles, setParticles] = useState([])
+  
+  // Mouse tracking for 3D effect
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const rotateX = useSpring(useTransform(mouseY, [-300, 300], [15, -15]))
+  const rotateY = useSpring(useTransform(mouseX, [-300, 300], [-15, 15]))
+  
+  const heroRef = useRef(null)
   
   const roles = [
     'Full Stack Developer',
@@ -49,6 +58,57 @@ const Hero = () => {
     return () => clearTimeout(timeout)
   }, [displayText, currentIndex, isDeleting, roles])
 
+  // Initialize particles
+  useEffect(() => {
+    const particleCount = 50
+    const newParticles = []
+    
+    for (let i = 0; i < particleCount; i++) {
+      newParticles.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 4 + 1,
+        speed: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.5 + 0.2,
+        direction: Math.random() * 360
+      })
+    }
+    
+    setParticles(newParticles)
+  }, [])
+
+  // Mouse move handler for 3D effect
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+        
+        mouseX.set(event.clientX - centerX)
+        mouseY.set(event.clientY - centerY)
+      }
+    }
+
+    const handleMouseLeave = () => {
+      mouseX.set(0)
+      mouseY.set(0)
+    }
+
+    if (heroRef.current) {
+      heroRef.current.addEventListener('mousemove', handleMouseMove)
+      heroRef.current.addEventListener('mouseleave', handleMouseLeave)
+      
+      return () => {
+        if (heroRef.current) {
+          heroRef.current.removeEventListener('mousemove', handleMouseMove)
+          heroRef.current.removeEventListener('mouseleave', handleMouseLeave)
+        }
+      }
+    }
+  }, [])
+
   const scrollToNext = () => {
     const aboutSection = document.getElementById('about')
     if (aboutSection) {
@@ -81,7 +141,40 @@ const Hero = () => {
   }
 
   return (
-    <section id="home" className="hero">
+    <section id="home" className="hero" ref={heroRef}>
+      {/* Floating particles */}
+      <div className="hero__particles">
+        {particles.map((particle) => (
+          <motion.div
+            key={particle.id}
+            className="hero__particle"
+            initial={{ 
+              x: `${particle.x}vw`, 
+              y: `${particle.y}vh`,
+              opacity: 0
+            }}
+            animate={{ 
+              x: [`${particle.x}vw`, `${(particle.x + 10) % 100}vw`],
+              y: [`${particle.y}vh`, `${(particle.y + 5) % 100}vh`],
+              opacity: [0, particle.opacity, 0]
+            }}
+            transition={{
+              duration: particle.speed * 10,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{
+              width: particle.size,
+              height: particle.size,
+              background: 'var(--primary-light)',
+              borderRadius: '50%',
+              position: 'absolute',
+              pointerEvents: 'none'
+            }}
+          />
+        ))}
+      </div>
+
       <div className="hero__container">
         <motion.div 
           className="hero__content"
@@ -176,6 +269,11 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
+          style={{
+            rotateX,
+            rotateY,
+            transformStyle: "preserve-3d"
+          }}
         >
           <div className="hero__avatar">
             <div className="hero__avatar-image">
