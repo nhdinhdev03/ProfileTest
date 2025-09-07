@@ -1,11 +1,19 @@
 @use '../../styles/variables.scss' as *;
 
+// Header specific theme variables
+[data-theme="light"] {
+  --header-nav-text: #000000;
+}
+
+[data-theme="dark"] {
+  --header-nav-text: #ffffff;
+}
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  // background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(99, 102, 241, 0.1);
   z-index: 1000;
@@ -332,9 +340,16 @@
     }
 
     &-text {
-      color: black; // follow button color state
       position: relative;
       z-index: 1;
+      // Theme-aware default color
+      color: var(--header-nav-text);
+    }
+
+    // Ensure hover/active states still apply highlight color
+    .header__nav-link:hover .header__nav-text,
+    .header__nav-link--active .header__nav-text {
+      color: #3a9dff;
     }
 
     &-indicator {
