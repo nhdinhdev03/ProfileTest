@@ -423,146 +423,7 @@ ProfileHero.propTypes = {
   light: PropTypes.bool.isRequired,
 };
 
-// Recent Projects Section
-const RecentProjects = ({ repos }) => {
-  const featuredRepos = repos?.slice(0, 6) || [];
 
-  return (
-    <motion.section 
-      className="recent-projects"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2, type: 'spring', stiffness: 100 }}
-    >
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, type: 'spring', stiffness: 120 }}
-      >
-        Dự Án Nổi Bật
-      </motion.h2>
-      <div className="projects-grid">
-        {featuredRepos.map((repo, index) => (
-          <motion.div 
-            key={index} 
-            className="project-card"
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ 
-              delay: 0.4 + index * 0.1,
-              type: 'spring',
-              stiffness: 100,
-              damping: 15
-            }}
-            whileHover={{ 
-              y: -8,
-              scale: 1.02,
-              transition: { type: 'spring', stiffness: 400 }
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="project-header">
-              <motion.div 
-                className="project-icon"
-                animate={{
-                  rotate: [0, 10, -10, 0]
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut'
-                }}
-              >
-                📁
-              </motion.div>
-              <div className="project-status">
-                {repo.private ? (
-                  <motion.span 
-                    className="private-badge"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    🔒 Private
-                  </motion.span>
-                ) : (
-                  <motion.span 
-                    className="public-badge"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    🌍 Public
-                  </motion.span>
-                )}
-              </div>
-            </div>
-            <div className="project-content">
-              <motion.h3
-                whileHover={{ x: 5 }}
-                transition={{ type: 'spring', stiffness: 400 }}
-              >
-                {repo.name}
-              </motion.h3>
-              <p className="project-description">
-                {repo.description || "Không có mô tả"}
-              </p>
-              <div className="project-tech">
-                {repo.language && (
-                  <motion.span 
-                    className="tech-tag primary"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {repo.language}
-                  </motion.span>
-                )}
-                <motion.span 
-                  className="tech-tag stars"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="stat-indicator stars">
-                    ⭐ {repo.stargazers_count}
-                  </span>
-                </motion.span>
-                <motion.span 
-                  className="tech-tag forks"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="stat-indicator forks">
-                    🔀 {repo.forks_count}
-                  </span>
-                </motion.span>
-              </div>
-              <div className="project-links">
-                <motion.a
-                  href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Xem Code
-                </motion.a>
-                {repo.homepage && (
-                  <motion.a
-                    href={repo.homepage}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-secondary"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Demo Live
-                  </motion.a>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </motion.section>
-  );
-};
 
 // Contact Section
 const ContactSection = ({ profile, light }) => (
@@ -656,7 +517,7 @@ const ContactSection = ({ profile, light }) => (
 
 // Main About Component
 const About = () => {
-  const { profile, repos } = useGithubData();
+  const { profile } = useGithubData();
   const [particles, setParticles] = useState([])
   const aboutRef = useRef(null)
   const light =
@@ -804,18 +665,6 @@ const About = () => {
           />
           
           <motion.div variants={itemVariants}>
-            <RecentProjects repos={repos} />
-          </motion.div>
-          
-          <motion.div 
-            className="gradient-line" 
-            aria-hidden="true"
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            transition={{ delay: 0.9, duration: 1.2, ease: 'easeOut' }}
-          />
-          
-          <motion.div variants={itemVariants}>
             <ContactSection profile={profile} light={light} />
           </motion.div>
         </motion.div>
@@ -827,20 +676,6 @@ const About = () => {
 export default About;
 
 // PropTypes definitions - fix existing warnings
-RecentProjects.propTypes = {
-  repos: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      description: PropTypes.string,
-      language: PropTypes.string,
-      stargazers_count: PropTypes.number,
-      forks_count: PropTypes.number,
-      html_url: PropTypes.string,
-      homepage: PropTypes.string,
-      private: PropTypes.bool,
-    })
-  ),
-};
 
 ContactSection.propTypes = {
   profile: PropTypes.shape({
