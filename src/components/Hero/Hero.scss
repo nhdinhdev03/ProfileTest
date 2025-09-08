@@ -65,20 +65,7 @@
       background-clip: text;
       position: relative;
 
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        width: 60%;
-        height: 4px;
-        background: var(--gradient-primary);
-        border-radius: 2px;
-
-        @media (min-width: $breakpoint-lg) {
-          left: 0;
-        }
-      }
+    
     }
   }
 
