@@ -440,44 +440,6 @@
     }
   }
 
-  &__scroll {
-    position: absolute;
-    bottom: $spacing-2xl;
-    left: 50%;
-    transform: translateX(-50%);
-    @include flex-center;
-    flex-direction: column;
-    gap: $spacing-sm;
-    background: none;
-    border: none;
-    color: var(--text-tertiary);
-    font-size: $font-sm;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      color: var(--primary-light);
-      transform: translateX(-50%) translateY(-5px);
-    }
-
-    svg {
-      font-size: $font-xl;
-    }
-
-    span {
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: $font-xs;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-
-      @media (min-width: $breakpoint-md) {
-        writing-mode: initial;
-        text-orientation: initial;
-      }
-    }
-  }
-
   // Advanced particle and shape systems
   &__particles {
     position: absolute;
@@ -775,10 +737,6 @@
     }
 
     &__background-circle {
-      animation: none;
-    }
-
-    &__scroll {
       animation: none;
     }
   }

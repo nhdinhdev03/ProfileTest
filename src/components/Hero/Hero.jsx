@@ -14,7 +14,6 @@ import {
   FiLinkedin,
   FiMail,
   FiMapPin,
-  FiChevronDown,
   FiStar,
   FiZap,
 } from "react-icons/fi";
@@ -226,13 +225,6 @@ const Hero = () => {
       };
     }
   }, [handleMouseMove, handleMouseLeave, isTouch]);
-
-  const scrollToNext = () => {
-    const aboutSection = document.getElementById("about");
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -1097,25 +1089,6 @@ const Hero = () => {
         </motion.div>
         </div>
       </div>
-
-      <motion.button
-        className="hero__scroll"
-        onClick={scrollToNext}
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: 1,
-          y: [0, 10, 0],
-        }}
-        transition={{
-          opacity: { delay: 2 },
-          y: { repeat: Infinity, duration: 2 },
-        }}
-  whileHover={isTouch ? undefined : { scale: 1.1 }}
-  whileTap={isTouch ? undefined : { scale: 0.9 }}
-      >
-        <FiChevronDown />
-        <span>Cuộn xuống</span>
-      </motion.button>
 
       {/* Enhanced 3D Background */}
       <motion.div
