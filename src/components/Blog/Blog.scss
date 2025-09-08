@@ -30,6 +30,12 @@
 
     @media (max-width: $breakpoint-md) {
       padding: 0 $spacing-base;
+      margin-bottom: $spacing-4xl;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 0 $spacing-sm;
+      margin-bottom: $spacing-3xl;
     }
   }
 
@@ -84,6 +90,13 @@
     @media (max-width: $breakpoint-md) {
       flex-direction: column;
       align-items: center;
+      gap: $spacing-base;
+      padding: 0 $spacing-base;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      gap: $spacing-sm;
+      padding: 0 $spacing-sm;
     }
   }
 
@@ -94,6 +107,11 @@
     @media (max-width: $breakpoint-md) {
       min-width: 100%;
       max-width: 400px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      min-width: 100%;
+      max-width: 100%;
     }
   }
 
@@ -173,6 +191,22 @@
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: $spacing-4xl;
+
+    @media (max-width: $breakpoint-md) {
+      padding: 0 $spacing-base;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      gap: $spacing-sm;
+      padding: 0 $spacing-sm;
+      margin-bottom: $spacing-3xl;
+    }
   }
 
   &__category {
@@ -187,6 +221,19 @@
     font-weight: $font-medium;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: fit-content;
+
+    @media (max-width: $breakpoint-md) {
+      padding: $spacing-sm $spacing-base;
+      font-size: $font-sm;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 6px $spacing-sm;
+      font-size: $font-xs;
+      gap: 4px;
+    }
 
     &:hover {
       border-color: var(--primary-light);
@@ -221,9 +268,26 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: $spacing-3xl;
 
+    @media (max-width: $breakpoint-lg) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: $spacing-2xl;
+    }
+
     @media (max-width: $breakpoint-md) {
       grid-template-columns: 1fr;
-      gap: $spacing-2xl;
+      gap: $spacing-xl;
+      padding: 0 $spacing-base;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      gap: $spacing-lg;
+      padding: 0 $spacing-sm;
+    }
+
+    // Extra small screens
+    @media (max-width: 480px) {
+      gap: $spacing-base;
+      padding: 0 $spacing-xs;
     }
   }
 
@@ -235,6 +299,14 @@
     transition: all 0.3s ease;
     border: 2px solid transparent;
     position: relative;
+
+    @media (max-width: $breakpoint-md) {
+      border-radius: 16px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      border-radius: 12px;
+    }
 
     &:hover {
       border-color: var(--primary-light);
@@ -283,6 +355,14 @@
 
   &__card-content {
     padding: $spacing-xl;
+
+    @media (max-width: $breakpoint-md) {
+      padding: $spacing-lg;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-base;
+    }
   }
 
   &__card-meta {

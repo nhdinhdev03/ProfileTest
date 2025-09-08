@@ -104,6 +104,12 @@
     @media (max-width: $breakpoint-md) {
       flex-direction: column;
       gap: $spacing-lg;
+      padding: 0 $spacing-base;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      gap: $spacing-base;
+      padding: 0 $spacing-sm;
     }
   }
 
@@ -135,8 +141,19 @@
     flex-wrap: wrap;
     justify-content: center;
 
+    @media (max-width: $breakpoint-md) {
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
     @media (max-width: $breakpoint-sm) {
       gap: $spacing-sm;
+      padding: 0 $spacing-sm;
     }
   }
 
@@ -155,6 +172,19 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    min-width: fit-content;
+
+    @media (max-width: $breakpoint-md) {
+      padding: $spacing-xs $spacing-base;
+      font-size: $font-xs;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 6px $spacing-sm;
+      font-size: $font-xs;
+      gap: 4px;
+    }
 
     &::before {
       content: '';
@@ -254,16 +284,25 @@
 
       @media (max-width: $breakpoint-lg) {
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: $spacing-2xl;
       }
 
       @media (max-width: $breakpoint-md) {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: $spacing-2xl;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: $spacing-xl;
+        padding: 0 $spacing-base;
       }
 
       @media (max-width: $breakpoint-sm) {
         grid-template-columns: 1fr;
-        gap: $spacing-xl;
+        gap: $spacing-lg;
+        padding: 0 $spacing-sm;
+      }
+
+      // Extra small screens (mobile portrait)
+      @media (max-width: 480px) {
+        gap: $spacing-base;
+        padding: 0 $spacing-xs;
       }
     }
 
@@ -281,6 +320,14 @@
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+
+    @media (max-width: $breakpoint-md) {
+      border-radius: 20px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      border-radius: 16px;
+    }
 
     &--featured {
       position: relative;
