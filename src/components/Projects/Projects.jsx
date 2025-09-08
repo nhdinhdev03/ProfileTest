@@ -261,8 +261,8 @@ const Projects = () => {
         </div>
       )}
 
-      <div className="projects__container">
-    <motion.div
+      <div className="container">
+        <motion.div
           ref={ref}
           className="projects__content"
           variants={containerVariants}

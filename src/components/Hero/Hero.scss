@@ -1,27 +1,25 @@
-@use '../../styles/variables.scss' as *;
+@use "../../styles/variables.scss" as *;
 
 .hero {
   min-height: 100vh;
-  @include flex-center;
+  display: flex;
+  align-items: center;
   position: relative;
-  padding: 0 $spacing-base;
   overflow: hidden;
   perspective: 2000px;
   transform-style: preserve-3d;
   -webkit-tap-highlight-color: transparent; // remove gray tap highlight on mobile
   touch-action: manipulation; // hint for better tap behavior
 
-
-  &__container {
+  &__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: $spacing-4xl;
-  max-width: 1400px;
-    margin: 0 auto;
     align-items: center;
     z-index: 2;
+    width: 100%;
 
-    @media (min-width: $breakpoint-lg) {
+    @media (min-width: $breakpoint-2xl) {
       grid-template-columns: 1.2fr 1fr;
       gap: $spacing-6xl;
     }
@@ -31,6 +29,7 @@
     text-align: center;
 
     @media (min-width: $breakpoint-lg) {
+      margin-right: 100px;
       text-align: left;
     }
   }
@@ -67,7 +66,7 @@
       position: relative;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -10px;
         left: 0;
@@ -174,7 +173,7 @@
       overflow: hidden;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
@@ -186,7 +185,7 @@
         z-index: -1;
       }
 
-  &:hover {
+      &:hover {
         color: white;
         border-color: var(--primary-light);
         box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
@@ -256,7 +255,7 @@
       right: -10px;
       bottom: -10px;
       border-radius: 50%;
-      background: radial-gradient(circle, var(--primary-light)20, transparent);
+      background: radial-gradient(circle, var(--primary-light) 20, transparent);
       pointer-events: none;
       z-index: -1;
     }
@@ -275,7 +274,7 @@
       transform-style: preserve-3d;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         top: -3px;
         left: -3px;
@@ -336,7 +335,11 @@
     width: 70px;
     height: 70px;
     @include flex-center;
-    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    background: linear-gradient(
+      135deg,
+      var(--bg-secondary),
+      var(--bg-tertiary)
+    );
     border: 3px solid var(--border-color);
     border-radius: 50%;
     font-size: $font-2xl;
@@ -348,14 +351,22 @@
     backdrop-filter: blur(10px);
 
     &:hover {
-      background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+      background: linear-gradient(
+        135deg,
+        var(--bg-primary),
+        var(--bg-secondary)
+      );
       border-color: var(--icon-color);
       transform: scale(1.2) translateZ(20px);
     }
 
     @media (hover: none), (pointer: coarse) {
       &:hover {
-        background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary),
+          var(--bg-tertiary)
+        );
         border-color: var(--border-color);
         transform: none;
       }
@@ -373,63 +384,69 @@
     }
 
     // Static circular positioning (6 icons)
-    &:nth-child(1) { // React - top
+    &:nth-child(1) {
+      // React - top
       top: 10%;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    &:nth-child(2) { // TypeScript - top right
+    &:nth-child(2) {
+      // TypeScript - top right
       top: 25%;
       right: 15%;
     }
 
-    &:nth-child(3) { // Node.js - bottom right
+    &:nth-child(3) {
+      // Node.js - bottom right
       bottom: 25%;
       right: 15%;
     }
 
-    &:nth-child(4) { // Python - bottom
+    &:nth-child(4) {
+      // Python - bottom
       bottom: 10%;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    &:nth-child(5) { // TailwindCSS - bottom left
+    &:nth-child(5) {
+      // TailwindCSS - bottom left
       bottom: 25%;
       left: 15%;
     }
 
-    &:nth-child(6) { // JavaScript - top left
+    &:nth-child(6) {
+      // JavaScript - top left
       top: 25%;
       left: 15%;
     }
 
     @media (min-width: $breakpoint-xl) {
-      &:nth-child(1) { 
+      &:nth-child(1) {
         top: 8%;
       }
 
-      &:nth-child(2) { 
+      &:nth-child(2) {
         top: 20%;
         right: 12%;
       }
 
-      &:nth-child(3) { 
+      &:nth-child(3) {
         bottom: 20%;
         right: 12%;
       }
 
-      &:nth-child(4) { 
+      &:nth-child(4) {
         bottom: 8%;
       }
 
-      &:nth-child(5) { 
+      &:nth-child(5) {
         bottom: 20%;
         left: 12%;
       }
 
-      &:nth-child(6) { 
+      &:nth-child(6) {
         top: 20%;
         left: 12%;
       }
@@ -577,9 +594,18 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: 
-        linear-gradient(90deg, transparent 49%, var(--primary-light)10 50%, transparent 51%),
-        linear-gradient(0deg, transparent 49%, var(--secondary-light)10 50%, transparent 51%);
+      background: linear-gradient(
+          90deg,
+          transparent 49%,
+          var(--primary-light) 10 50%,
+          transparent 51%
+        ),
+        linear-gradient(
+          0deg,
+          transparent 49%,
+          var(--secondary-light) 10 50%,
+          transparent 51%
+        );
       background-size: 100px 100px;
       opacity: 0.05;
       pointer-events: none;
@@ -588,17 +614,28 @@
 }
 
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes rotateRing {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes floatCircle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
   }
   25% {
@@ -614,7 +651,8 @@
 
 // Advanced 3D animations
 @keyframes float3D {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateZ(0px) rotateX(0deg);
   }
   25% {
@@ -629,7 +667,8 @@
 }
 
 @keyframes morphShape {
-  0%, 100% {
+  0%,
+  100% {
     border-radius: 20%;
     transform: scale(1) rotate(0deg);
   }
@@ -648,12 +687,14 @@
 }
 
 @keyframes particleGlow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
     opacity: 0.6;
   }
   50% {
-    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor,
+      0 0 40px currentColor;
     opacity: 1;
   }
 }
@@ -677,7 +718,6 @@
 @media (max-width: $breakpoint-md) {
   .hero {
     min-height: 105vh;
-    
 
     &__container {
       gap: $spacing-3xl;
@@ -710,7 +750,7 @@
 
     &__actions {
       flex-direction: column;
-      
+
       .btn {
         width: 100%;
         max-width: 280px;
@@ -741,7 +781,7 @@
 
     &__avatar-ring {
       animation: none;
-      
+
       &::after {
         animation: none;
       }

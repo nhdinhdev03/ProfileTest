@@ -417,13 +417,14 @@ const Hero = () => {
         })}
       </div>
 
-      <div className="hero__container">
-        <motion.div
-          className="hero__content"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+      <div className="container">
+        <div className="hero__grid">
+          <motion.div
+            className="hero__content"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
           <motion.div className="hero__greeting" variants={itemVariants}>
             <span className="hero__greeting-text">Xin chào! 👋 Tôi là</span>
           </motion.div>
@@ -1094,6 +1095,7 @@ const Hero = () => {
             })}
           </motion.div>
         </motion.div>
+        </div>
       </div>
 
       <motion.button

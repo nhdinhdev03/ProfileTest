@@ -236,7 +236,7 @@ const Blog = () => {
   if (selectedPost) {
     return (
       <section id="blog" className="blog blog--single">
-        <div className="blog__container">
+        <div className="container">
           <motion.button
             className="blog__back-btn"
             onClick={() => setSelectedPost(null)}
@@ -298,7 +298,7 @@ const Blog = () => {
 
   return (
     <section id="blog" className="blog">
-      <div className="blog__container">
+      <div className="container">
         <motion.div
           className="blog__header"
           variants={containerVariants}

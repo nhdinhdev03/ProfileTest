@@ -43,20 +43,10 @@
     will-change: transform;
   }
 
-  &__container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 $spacing-xl;
+  &__header {
     position: relative;
     z-index: 2;
     transform-style: preserve-3d;
-
-    @media (max-width: $breakpoint-md) {
-      padding: 0 $spacing-base;
-    }
-  }
-
-  &__header {
     margin-bottom: $spacing-5xl;
 
     @media (max-width: $breakpoint-md) {
@@ -618,37 +608,6 @@
       .btn {
         width: 100%;
         max-width: 280px;
-      }
-    }
-  }
-}
-
-// List view specific styles
-.projects__grid--list {
-  .projects__item {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: $spacing-xl;
-    align-items: center;
-
-    @media (max-width: $breakpoint-md) {
-      grid-template-columns: 1fr;
-      gap: $spacing-base;
-    }
-
-    .projects__item-image {
-      height: 200px;
-
-      @media (max-width: $breakpoint-md) {
-        height: 240px;
-      }
-    }
-
-    .projects__item-content {
-      padding: $spacing-lg;
-
-      @media (max-width: $breakpoint-md) {
-        padding: $spacing-base;
       }
     }
   }
