@@ -235,8 +235,8 @@ const Skills = () => {
                 transformStyle: "preserve-3d"
               }}
             >
-              <span className="skills__title-text">Kỹ Năng</span>
-              <span className="skills__title-highlight">Chuyên Môn</span>
+       
+              <span className="skills__title-highlight">Kỹ Năng Chuyên Môn</span>
             </motion.h2>
             <motion.p
               style={{

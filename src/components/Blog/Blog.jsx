@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { FiCalendar, FiClock, FiUser, FiTag, FiArrowRight, FiSearch, FiFilter } from 'react-icons/fi'
-import './Blog.scss'
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FiCalendar,
+  FiClock,
+  FiUser,
+  FiTag,
+  FiArrowRight,
+  FiSearch,
+  FiFilter,
+} from "react-icons/fi";
+import "./Blog.scss";
 
 const Blog = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState([])
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   // Mock blog data - trong thực tế sẽ fetch từ API
   const blogPosts = [
     {
       id: 1,
       title: "React 18: Những tính năng mới và cải tiến đáng chú ý",
-      excerpt: "Khám phá những tính năng mới trong React 18 như Concurrent Features, Automatic Batching, và Suspense improvements.",
+      excerpt:
+        "Khám phá những tính năng mới trong React 18 như Concurrent Features, Automatic Batching, và Suspense improvements.",
       content: `
         <h2>React 18 đã ra mắt với nhiều tính năng mới thú vị</h2>
         <p>React 18 mang đến nhiều cải tiến quan trọng cho developers...</p>
@@ -23,17 +32,18 @@ const Blog = () => {
         <h3>Automatic Batching</h3>
         <p>Automatic Batching giúp tối ưu hóa performance...</p>
       `,
-      category: 'react',
-      author: 'Professional Developer',
-      date: '2024-01-15',
+      category: "react",
+      author: "Professional Developer",
+      date: "2024-01-15",
       readTime: 8,
-      image: '/api/placeholder/600/300',
-      tags: ['React', 'JavaScript', 'Frontend']
+      image: "/api/placeholder/600/300",
+      tags: ["React", "JavaScript", "Frontend"],
     },
     {
       id: 2,
       title: "CSS Grid vs Flexbox: Khi nào nên sử dụng cái gì?",
-      excerpt: "So sánh chi tiết giữa CSS Grid và Flexbox, cách sử dụng hiệu quả cho layout responsive.",
+      excerpt:
+        "So sánh chi tiết giữa CSS Grid và Flexbox, cách sử dụng hiệu quả cho layout responsive.",
       content: `
         <h2>CSS Grid và Flexbox: Hai công cụ mạnh mẽ</h2>
         <p>CSS Grid và Flexbox đều là những công cụ layout mạnh mẽ...</p>
@@ -42,17 +52,18 @@ const Blog = () => {
         <h3>Khi nào sử dụng Flexbox</h3>
         <p>Flexbox tốt cho layout 1D...</p>
       `,
-      category: 'css',
-      author: 'Professional Developer',
-      date: '2024-01-10',
+      category: "css",
+      author: "Professional Developer",
+      date: "2024-01-10",
       readTime: 6,
-      image: '/api/placeholder/600/300',
-      tags: ['CSS', 'Layout', 'Responsive']
+      image: "/api/placeholder/600/300",
+      tags: ["CSS", "Layout", "Responsive"],
     },
     {
       id: 3,
       title: "Node.js Performance: Tối ưu hóa ứng dụng backend",
-      excerpt: "Các kỹ thuật tối ưu hóa performance cho ứng dụng Node.js, từ caching đến database optimization.",
+      excerpt:
+        "Các kỹ thuật tối ưu hóa performance cho ứng dụng Node.js, từ caching đến database optimization.",
       content: `
         <h2>Tối ưu hóa Node.js Performance</h2>
         <p>Performance là yếu tố quan trọng trong phát triển backend...</p>
@@ -61,17 +72,18 @@ const Blog = () => {
         <h3>Database Optimization</h3>
         <p>Indexing và query optimization...</p>
       `,
-      category: 'nodejs',
-      author: 'Professional Developer',
-      date: '2024-01-05',
+      category: "nodejs",
+      author: "Professional Developer",
+      date: "2024-01-05",
       readTime: 12,
-      image: '/api/placeholder/600/300',
-      tags: ['Node.js', 'Performance', 'Backend']
+      image: "/api/placeholder/600/300",
+      tags: ["Node.js", "Performance", "Backend"],
     },
     {
       id: 4,
       title: "TypeScript: Từ JavaScript đến Type Safety",
-      excerpt: "Hướng dẫn chuyển đổi từ JavaScript sang TypeScript và những lợi ích của type safety.",
+      excerpt:
+        "Hướng dẫn chuyển đổi từ JavaScript sang TypeScript và những lợi ích của type safety.",
       content: `
         <h2>TypeScript mang lại type safety cho JavaScript</h2>
         <p>TypeScript giúp developers viết code an toàn hơn...</p>
@@ -80,17 +92,18 @@ const Blog = () => {
         <h3>Advanced Types</h3>
         <p>Generics, Union types, và Intersection types...</p>
       `,
-      category: 'typescript',
-      author: 'Professional Developer',
-      date: '2023-12-28',
+      category: "typescript",
+      author: "Professional Developer",
+      date: "2023-12-28",
       readTime: 10,
-      image: '/api/placeholder/600/300',
-      tags: ['TypeScript', 'JavaScript', 'Type Safety']
+      image: "/api/placeholder/600/300",
+      tags: ["TypeScript", "JavaScript", "Type Safety"],
     },
     {
       id: 5,
       title: "Modern CSS: Variables, Nesting và Container Queries",
-      excerpt: "Khám phá những tính năng CSS hiện đại giúp viết stylesheet hiệu quả và dễ maintain.",
+      excerpt:
+        "Khám phá những tính năng CSS hiện đại giúp viết stylesheet hiệu quả và dễ maintain.",
       content: `
         <h2>CSS hiện đại với nhiều tính năng mới</h2>
         <p>CSS đã phát triển rất nhiều trong những năm gần đây...</p>
@@ -99,17 +112,18 @@ const Blog = () => {
         <h3>Container Queries</h3>
         <p>Responsive design dựa trên container size...</p>
       `,
-      category: 'css',
-      author: 'Professional Developer',
-      date: '2023-12-20',
+      category: "css",
+      author: "Professional Developer",
+      date: "2023-12-20",
       readTime: 7,
-      image: '/api/placeholder/600/300',
-      tags: ['CSS', 'Modern CSS', 'Responsive']
+      image: "/api/placeholder/600/300",
+      tags: ["CSS", "Modern CSS", "Responsive"],
     },
     {
       id: 6,
       title: "Web Performance: Core Web Vitals và Optimization",
-      excerpt: "Tối ưu hóa website performance với Core Web Vitals, lazy loading, và code splitting.",
+      excerpt:
+        "Tối ưu hóa website performance với Core Web Vitals, lazy loading, và code splitting.",
       content: `
         <h2>Web Performance và User Experience</h2>
         <p>Performance ảnh hưởng trực tiếp đến user experience...</p>
@@ -118,46 +132,69 @@ const Blog = () => {
         <h3>Optimization Techniques</h3>
         <p>Image optimization, code splitting, lazy loading...</p>
       `,
-      category: 'performance',
-      author: 'Professional Developer',
-      date: '2023-12-15',
+      category: "performance",
+      author: "Professional Developer",
+      date: "2023-12-15",
       readTime: 9,
-      image: '/api/placeholder/600/300',
-      tags: ['Performance', 'Web Vitals', 'Optimization']
-    }
-  ]
+      image: "/api/placeholder/600/300",
+      tags: ["Performance", "Web Vitals", "Optimization"],
+    },
+  ];
 
   const categories = [
-    { id: 'all', label: 'Tất cả', count: blogPosts.length },
-    { id: 'react', label: 'React', count: blogPosts.filter(p => p.category === 'react').length },
-    { id: 'css', label: 'CSS', count: blogPosts.filter(p => p.category === 'css').length },
-    { id: 'nodejs', label: 'Node.js', count: blogPosts.filter(p => p.category === 'nodejs').length },
-    { id: 'typescript', label: 'TypeScript', count: blogPosts.filter(p => p.category === 'typescript').length },
-    { id: 'performance', label: 'Performance', count: blogPosts.filter(p => p.category === 'performance').length }
-  ]
+    { id: "all", label: "Tất cả", count: blogPosts.length },
+    {
+      id: "react",
+      label: "React",
+      count: blogPosts.filter((p) => p.category === "react").length,
+    },
+    {
+      id: "css",
+      label: "CSS",
+      count: blogPosts.filter((p) => p.category === "css").length,
+    },
+    {
+      id: "nodejs",
+      label: "Node.js",
+      count: blogPosts.filter((p) => p.category === "nodejs").length,
+    },
+    {
+      id: "typescript",
+      label: "TypeScript",
+      count: blogPosts.filter((p) => p.category === "typescript").length,
+    },
+    {
+      id: "performance",
+      label: "Performance",
+      count: blogPosts.filter((p) => p.category === "performance").length,
+    },
+  ];
 
   useEffect(() => {
-    let filtered = blogPosts
+    let filtered = blogPosts;
 
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(post => post.category === selectedCategory)
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((post) => post.category === selectedCategory);
     }
 
     if (searchTerm) {
-      filtered = filtered.filter(post =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-      )
+      filtered = filtered.filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.tags.some((tag) =>
+            tag.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      );
     }
 
-    setFilteredPosts(filtered)
-  }, [selectedCategory, searchTerm])
+    setFilteredPosts(filtered);
+  }, [selectedCategory, searchTerm]);
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' }
-    return new Date(dateString).toLocaleDateString('vi-VN', options)
-  }
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("vi-VN", options);
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -165,10 +202,10 @@ const Blog = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
+        delayChildren: 0.2,
+      },
+    },
+  };
 
   const itemVariants = {
     hidden: { y: 50, opacity: 0 },
@@ -176,12 +213,12 @@ const Blog = () => {
       y: 0,
       opacity: 1,
       transition: {
-        type: 'spring',
+        type: "spring",
         stiffness: 100,
-        damping: 12
-      }
-    }
-  }
+        damping: 12,
+      },
+    },
+  };
 
   const cardVariants = {
     hidden: { scale: 0.8, opacity: 0 },
@@ -189,12 +226,12 @@ const Blog = () => {
       scale: 1,
       opacity: 1,
       transition: {
-        type: 'spring',
+        type: "spring",
         stiffness: 100,
-        damping: 15
-      }
-    }
-  }
+        damping: 15,
+      },
+    },
+  };
 
   if (selectedPost) {
     return (
@@ -218,15 +255,17 @@ const Blog = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="blog__single-header">
-              <img 
-                src={selectedPost.image} 
+              <img
+                src={selectedPost.image}
                 alt={selectedPost.title}
                 className="blog__single-image"
               />
               <div className="blog__single-meta">
                 <div className="blog__single-tags">
                   {selectedPost.tags.map((tag, index) => (
-                    <span key={index} className="blog__tag">{tag}</span>
+                    <span key={index} className="blog__tag">
+                      {tag}
+                    </span>
                   ))}
                 </div>
                 <h1 className="blog__single-title">{selectedPost.title}</h1>
@@ -247,14 +286,14 @@ const Blog = () => {
               </div>
             </div>
 
-            <div 
+            <div
               className="blog__single-content"
               dangerouslySetInnerHTML={{ __html: selectedPost.content }}
             />
           </motion.article>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -269,8 +308,9 @@ const Blog = () => {
         >
           <motion.div className="blog__title-section" variants={itemVariants}>
             <h2 className="blog__title">
-              <span className="blog__title-text">Blog</span>
-              <span className="blog__title-highlight">& Insights</span>
+              <span className="blog__title-highlight">Blog </span>
+              <span>&</span>
+              <span className="blog__title-highlight"> Insights</span>
             </h2>
             <p className="blog__description">
               Chia sẻ kiến thức, kinh nghiệm và xu hướng công nghệ mới nhất
@@ -296,7 +336,7 @@ const Blog = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="blog__filter-select"
               >
-                {categories.map(category => (
+                {categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.label} ({category.count})
                   </option>
@@ -310,7 +350,9 @@ const Blog = () => {
           {categories.map((category) => (
             <motion.button
               key={category.id}
-              className={`blog__category ${selectedCategory === category.id ? 'blog__category--active' : ''}`}
+              className={`blog__category ${
+                selectedCategory === category.id ? "blog__category--active" : ""
+              }`}
               onClick={() => setSelectedCategory(category.id)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -338,9 +380,9 @@ const Blog = () => {
                 animate="visible"
                 exit="hidden"
                 layout
-                whileHover={{ 
+                whileHover={{
                   y: -10,
-                  transition: { type: 'spring', stiffness: 300, damping: 20 }
+                  transition: { type: "spring", stiffness: 300, damping: 20 },
                 }}
                 onClick={() => setSelectedPost(post)}
               >
@@ -407,7 +449,7 @@ const Blog = () => {
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Blog
+export default Blog;

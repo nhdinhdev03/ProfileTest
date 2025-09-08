@@ -276,7 +276,7 @@ const Projects = () => {
           <motion.div className="projects__header" variants={itemVariants}>
             <div className="projects__title-section">
               <h2 className="projects__title">
-                <span className="projects__title-text">Dự Án</span>
+                <span className="projects__title-text">Dự Án </span>
                 <span className="projects__title-highlight">Nổi Bật</span>
               </h2>
               <p className="projects__description">

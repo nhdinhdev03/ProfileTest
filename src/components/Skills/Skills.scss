@@ -30,35 +30,11 @@
   }
 
   // Enhanced title styling
-  &__title-text {
-    display: block;
-    font-size: clamp($font-3xl, 5vw, $font-5xl);
-    font-weight: $font-bold;
-    color: var(--text-primary);
-    margin-bottom: $spacing-sm;
-  }
+
 
   &__title-highlight {
-    display: block;
-    font-size: clamp($font-2xl, 4vw, $font-4xl);
-    font-weight: $font-semibold;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 60%;
-      height: 3px;
-      background: var(--gradient-primary);
-      border-radius: 2px;
-      animation: shimmer 2s ease-in-out infinite alternate;
-    }
+@include gradient-text(var(--gradient-primary));
+  
   }
 
   &__marquee-wrapper {
