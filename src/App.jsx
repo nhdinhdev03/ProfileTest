@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
+import BlogDetail from "./components/Blog/BlogDetail";
 
 // Lazy load components for better performance
 const About = lazy(() => import("./components/About/About"));
@@ -15,6 +16,8 @@ import "./styles/App.scss";
 function App() {
   const [theme, setTheme] = useState("dark");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentView, setCurrentView] = useState("home");
+  const [selectedBlogPost, setSelectedBlogPost] = useState(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
@@ -30,6 +33,16 @@ function App() {
     setTheme(newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
+  };
+
+  const handleBlogPostSelect = (post) => {
+    setSelectedBlogPost(post);
+    setCurrentView("blog-detail");
+  };
+
+  const handleBackToBlog = () => {
+    setSelectedBlogPost(null);
+    setCurrentView("home");
   };
 
   if (isLoading) {
@@ -189,9 +202,25 @@ function App() {
     );
   }
 
+  // Render blog detail view
+  if (currentView === "blog-detail" && selectedBlogPost) {
+    return (
+      <div className="App" data-theme={theme}>
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <main>
+          <BlogDetail post={selectedBlogPost} onBack={handleBackToBlog} />
+        </main>
+        <Suspense fallback={<div className="loading-footer">Loading...</div>}>
+          <Footer />
+        </Suspense>
+      </div>
+    );
+  }
+
+  // Render main portfolio view
   return (
     <div className="App" data-theme={theme}>
-  <Header theme={theme} toggleTheme={toggleTheme} />
+      <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />
         <Suspense
@@ -210,11 +239,11 @@ function App() {
           <About />
           <Skills />
           <Projects />
-          <Blog />
+          <Blog onPostSelect={handleBlogPostSelect} />
           <Contact />
         </Suspense>
       </main>
-  <Suspense fallback={<div className="loading-footer">Loading...</div>}>
+      <Suspense fallback={<div className="loading-footer">Loading...</div>}>
         <Footer />
       </Suspense>
     </div>

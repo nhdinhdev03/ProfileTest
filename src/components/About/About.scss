@@ -40,12 +40,7 @@
   isolation: isolate;
 
   @media (max-width: 768px) {
-    min-height: auto;
-    padding: clamp(8px, 2vw, 16px) 0;
-  }
-
-  @media (max-width: 480px) {
-    padding: $spacing-xs 0;
+    padding: clamp(16px, 4vw, 32px) 0;
   }
 }
 
@@ -57,15 +52,6 @@
   border-radius: 999px;
   position: relative;
   overflow: hidden;
-
-  @media (max-width: 768px) {
-    height: 2px;
-    margin: $spacing-sm 0 $spacing-base;
-  }
-
-  @media (max-width: 480px) {
-    margin: $spacing-xs 0 $spacing-sm;
-  }
 
   &::before {
     content: '';
@@ -87,16 +73,6 @@
   overflow: hidden;
   padding: $spacing-3xl;
   margin-bottom: $spacing-3xl;
-
-  @media (max-width: 768px) {
-    padding: $spacing-base;
-    margin-bottom: $spacing-base;
-  }
-
-  @media (max-width: 480px) {
-    padding: $spacing-sm;
-    margin-bottom: $spacing-sm;
-  }
   
   // Floating particles background
   &__particles {
@@ -122,16 +98,6 @@
     position: relative;
     z-index: 1;
 
-    @media (max-width: 768px) {
-      flex-direction: column;
-      text-align: center;
-      gap: $spacing-base;
-    }
-
-    @media (max-width: 480px) {
-      gap: $spacing-sm;
-    }
-
     @media (max-width: $breakpoint-lg) {
       flex-direction: column;
       gap: $spacing-3xl;
@@ -151,18 +117,8 @@
       transform-style: preserve-3d;
 
       @media (max-width: $breakpoint-md) {
-        width: 180px;
-        height: 180px;
-      }
-
-      @media (max-width: 480px) {
-        width: 120px;
-        height: 120px;
-      }
-
-      @media (max-width: 320px) {
-        width: 100px;
-        height: 100px;
+        width: 220px;
+        height: 220px;
       }
     }
 
@@ -260,25 +216,11 @@
   .profile-content {
     flex: 1;
 
-    @media (max-width: 768px) {
-      width: 100%;
-    }
-
     h1 {
       font-size: clamp($font-3xl, 5vw, $font-5xl);
       font-weight: $font-bold;
       margin-bottom: $spacing-base;
       line-height: 1.1;
-
-      @media (max-width: 768px) {
-        font-size: clamp($font-xl, 5vw, $font-2xl);
-        margin-bottom: $spacing-xs;
-      }
-
-      @media (max-width: 480px) {
-        font-size: clamp($font-lg, 5vw, $font-xl);
-        margin-bottom: $spacing-xs;
-      }
     }
 
     .title {
@@ -294,25 +236,9 @@
         justify-content: center;
       }
 
-      @media (max-width: 768px) {
-        font-size: clamp($font-sm, 3vw, $font-base);
-        margin-bottom: $spacing-xs;
-        gap: $spacing-xs;
-      }
-
-      @media (max-width: 480px) {
-        font-size: $font-sm;
-        margin-bottom: $spacing-xs;
-        gap: $spacing-xs;
-      }
-
       &-icon {
         color: var(--primary-light);
         font-size: $font-xl;
-
-        @media (max-width: 768px) {
-          font-size: $font-base;
-        }
       }
     }
 
@@ -323,30 +249,8 @@
       max-width: 600px;
       margin-bottom: $spacing-xl;
 
-      @media (max-width: 768px) {
-        max-width: 100%;
-        margin-bottom: $spacing-sm;
-        font-size: $font-sm;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 480px) {
-        margin-bottom: $spacing-xs;
-        font-size: $font-sm;
-      }
-
-      @media (max-width: 480px) {
-        font-size: $font-sm;
-        line-height: 1.6;
-        margin-bottom: $spacing-base;
-      }
-
       p {
         margin-bottom: $spacing-base;
-
-        @media (max-width: 480px) {
-          margin-bottom: $spacing-sm;
-        }
       }
 
       .highlight-primary,
@@ -386,16 +290,6 @@
         justify-content: center;
       }
 
-      @media (max-width: 768px) {
-        gap: $spacing-xs;
-        margin-bottom: $spacing-sm;
-      }
-
-      @media (max-width: 480px) {
-        gap: $spacing-xs;
-        margin-bottom: $spacing-sm;
-      }
-
       .badge {
         @include flex-center;
         gap: $spacing-xs;
@@ -406,12 +300,6 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
-
-        @media (max-width: 480px) {
-          font-size: $font-xs;
-          padding: $spacing-xs $spacing-base;
-          gap: 2px;
-        }
 
         &::before {
           content: '';
@@ -430,10 +318,6 @@
 
         &-icon {
           font-size: $font-base;
-
-          @media (max-width: 480px) {
-            font-size: $font-sm;
-          }
         }
 
         &.badge-green {
@@ -465,24 +349,6 @@
       @media (max-width: $breakpoint-lg) {
         justify-content: center;
       }
-
-      @media (max-width: 768px) {
-        gap: $spacing-xs;
-        margin-top: $spacing-sm;
-      }
-
-      @media (max-width: 480px) {
-        gap: $spacing-xs;
-        flex-direction: column;
-        width: 100%;
-
-        .btn {
-          width: 100%;
-          max-width: 240px;
-          padding: $spacing-xs $spacing-sm;
-          font-size: $font-xs;
-        }
-      }
     }
   }
 }
@@ -496,18 +362,6 @@
   border: 1px solid var(--border-color);
   margin: $spacing-4xl 0;
 
-  @media (max-width: 768px) {
-    padding: $spacing-base;
-    margin: $spacing-base 0;
-    border-radius: 12px;
-  }
-
-  @media (max-width: 480px) {
-    padding: $spacing-sm;
-    margin: $spacing-sm 0;
-    border-radius: 12px;
-  }
-
   h3 {
     font-size: $font-2xl;
     font-weight: $font-bold;
@@ -517,11 +371,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-
-    @media (max-width: 480px) {
-      font-size: $font-xl;
-      margin-bottom: $spacing-base;
-    }
   }
 
   p {
@@ -674,90 +523,6 @@
         max-width: 280px;
       }
     }
-  }
-}
-
-// Extra mobile optimizations
-@media (max-width: 480px) {
-  .about-page {
-    .container {
-      padding: 0 $spacing-base;
-    }
-  }
-
-  .profile-hero {
-    padding: $spacing-base;
-
-    &__content {
-      gap: $spacing-lg;
-    }
-
-    .profile-content {
-      h1 {
-        text-align: center;
-      }
-
-      .title {
-        text-align: center;
-      }
-
-      .description {
-        text-align: center;
-      }
-    }
-  }
-}
-
-// Very small screens
-@media (max-width: 320px) {
-  .about-page {
-    padding: $spacing-xs 0;
-  }
-
-  .profile-hero {
-    padding: $spacing-xs;
-    margin-bottom: $spacing-xs;
-
-    &__content {
-      gap: $spacing-xs;
-    }
-
-    .profile-content {
-      h1 {
-        font-size: clamp($font-lg, 6vw, $font-xl);
-      }
-
-      .title {
-        font-size: $font-xs;
-        margin-bottom: $spacing-xs;
-      }
-
-      .description {
-        font-size: $font-xs;
-        margin-bottom: $spacing-xs;
-      }
-    }
-
-    .profile-badges {
-      margin-bottom: $spacing-xs;
-    }
-
-    .profile-actions {
-      .btn {
-        max-width: 200px;
-        padding: $spacing-xs;
-        font-size: $font-xs;
-      }
-    }
-  }
-
-  .gradient-line {
-    margin: $spacing-xs 0;
-  }
-
-  .contact-section {
-    padding: $spacing-xs;
-    margin: $spacing-xs 0;
   }
 }
 
