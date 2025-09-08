@@ -30,6 +30,21 @@ const Hero = () => {
   const [floatingElements, setFloatingElements] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device and optimize accordingly
+  useEffect(() => {
+    const checkMobile = () => {
+      const width = window.innerWidth;
+      const isMobileDevice = width <= 768;
+      setIsMobile(isMobileDevice);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Gentle mouse tracking for subtle 3D effects
   const mouseX = useMotionValue(0);
@@ -102,7 +117,13 @@ const Hero = () => {
 
   // Initialize gentle particle systems
   useEffect(() => {
-    const particleCount = 30; // Reduced from 80
+    // Detect if device is mobile/touch for performance optimization
+    const isMobile = window.innerWidth <= 768;
+    const isLowPerformance = navigator.hardwareConcurrency <= 4 || 
+      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Reduce particle count on mobile devices for better performance
+    const particleCount = isMobile || isLowPerformance ? 12 : 30;
     const newParticles = [];
 
     for (let i = 0; i < particleCount; i++) {
@@ -110,19 +131,19 @@ const Hero = () => {
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 4 + 2, // Slightly larger but fewer
-        speed: Math.random() * 2 + 1, // Slower movement
-        opacity: Math.random() * 0.4 + 0.1, // More subtle
+        size: Math.random() * (isMobile ? 3 : 4) + 2,
+        speed: Math.random() * (isMobile ? 1.5 : 2) + 1,
+        opacity: Math.random() * 0.4 + 0.1,
         direction: Math.random() * 360,
-        color: ["#6366f1", "#8b5cf6", "#ec4899"][Math.floor(Math.random() * 3)], // Reduced colors
-        rotationSpeed: Math.random() * 1 + 0.3, // Slower rotation
+        color: ["#6366f1", "#8b5cf6", "#ec4899"][Math.floor(Math.random() * 3)],
+        rotationSpeed: Math.random() * 1 + 0.3,
       });
     }
 
     setParticles(newParticles);
 
-    // Initialize gentle morphing shapes
-    const shapeCount = 4; // Reduced from 8
+    // Initialize gentle morphing shapes - fewer on mobile
+    const shapeCount = isMobile || isLowPerformance ? 2 : 4;
     const newShapes = [];
 
     for (let i = 0; i < shapeCount; i++) {
@@ -130,17 +151,17 @@ const Hero = () => {
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 80 + 40, // Slightly smaller
+        size: Math.random() * (isMobile ? 60 : 80) + 40,
         rotation: Math.random() * 360,
-        morphSpeed: Math.random() * 1.5 + 0.8, // Slower morphing
-        color: ["#6366f1", "#8b5cf6"][Math.floor(Math.random() * 2)], // Reduced colors
+        morphSpeed: Math.random() * 1.5 + 0.8,
+        color: ["#6366f1", "#8b5cf6"][Math.floor(Math.random() * 2)],
       });
     }
 
     setMorphingShapes(newShapes);
 
-    // Initialize gentle floating elements
-    const floatingCount = 6; // Reduced from 12
+    // Initialize gentle floating elements - fewer on mobile
+    const floatingCount = isMobile || isLowPerformance ? 3 : 6;
     const newFloatingElements = [];
 
     for (let i = 0; i < floatingCount; i++) {
@@ -148,10 +169,10 @@ const Hero = () => {
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        icon: [FiStar, FiZap][Math.floor(Math.random() * 2)], // Reduced icons
-        size: Math.random() * 15 + 12, // Smaller
-        floatSpeed: Math.random() * 2 + 1.5, // Slower
-        rotateSpeed: Math.random() * 0.8 + 0.3, // Much slower rotation
+        icon: [FiStar, FiZap][Math.floor(Math.random() * 2)],
+        size: Math.random() * (isMobile ? 12 : 15) + 12,
+        floatSpeed: Math.random() * 2 + 1.5,
+        rotateSpeed: Math.random() * 0.8 + 0.3,
       });
     }
 
@@ -261,7 +282,7 @@ const Hero = () => {
         transformStyle: "preserve-3d",
       }}
     >
-      {/* Advanced Particle System */}
+      {/* Advanced Particle System - Optimized for mobile */}
       <div className="hero__particles">
         <AnimatePresence>
           {particles.map((particle) => (
@@ -275,7 +296,14 @@ const Hero = () => {
                 scale: 0,
                 rotate: 0,
               }}
-              animate={{
+              animate={isMobile ? {
+                // Simplified animation for mobile
+                x: [`${particle.x}vw`, `${(particle.x + 4) % 100}vw`, `${particle.x}vw`],
+                y: [`${particle.y}vh`, `${(particle.y + 3) % 100}vh`, `${particle.y}vh`],
+                opacity: [0, particle.opacity * 0.8, 0],
+                scale: [0, 1, 0],
+              } : {
+                // Full animation for desktop
                 x: [
                   `${particle.x}vw`,
                   `${(particle.x + 8) % 100}vw`,
@@ -291,10 +319,10 @@ const Hero = () => {
                 rotate: [0, 180, 360],
               }}
               transition={{
-                duration: particle.speed * 8, // Faster cycle
+                duration: isMobile ? particle.speed * 10 : particle.speed * 8,
                 repeat: Infinity,
                 ease: "easeInOut",
-                times: [0, 0.4, 0.8, 1],
+                times: isMobile ? [0, 0.5, 1] : [0, 0.4, 0.8, 1],
               }}
               style={{
                 width: particle.size,
@@ -311,7 +339,7 @@ const Hero = () => {
         </AnimatePresence>
       </div>
 
-      {/* Morphing Background Shapes */}
+      {/* Morphing Background Shapes - Optimized for mobile */}
       <div className="hero__morphing-shapes">
         {morphingShapes.map((shape) => (
           <motion.div
@@ -323,7 +351,14 @@ const Hero = () => {
               rotate: shape.rotation,
               scale: 0,
             }}
-            animate={{
+            animate={isMobile ? {
+              // Simplified animation for mobile
+              x: [`${shape.x}%`, `${(shape.x + 5) % 100}%`, `${shape.x}%`],
+              y: [`${shape.y}%`, `${(shape.y + 4) % 100}%`, `${shape.y}%`],
+              rotate: [shape.rotation, shape.rotation + 180],
+              scale: [0.8, 1],
+            } : {
+              // Full animation for desktop
               x: [`${shape.x}%`, `${(shape.x + 10) % 100}%`, `${shape.x}%`],
               y: [`${shape.y}%`, `${(shape.y + 8) % 100}%`, `${shape.y}%`],
               rotate: [
@@ -335,18 +370,19 @@ const Hero = () => {
               borderRadius: ["30%", "50%", "40%", "30%"],
             }}
             transition={{
-              duration: shape.morphSpeed * 6, // Slower morphing
+              duration: isMobile ? shape.morphSpeed * 8 : shape.morphSpeed * 6,
               repeat: Infinity,
               ease: "easeInOut",
             }}
             style={{
               width: shape.size,
               height: shape.size,
-              background: `linear-gradient(45deg, ${shape.color}20, ${shape.color}10)`,
+              background: `linear-gradient(45deg, ${shape.color}${isMobile ? '15' : '20'}, ${shape.color}${isMobile ? '05' : '10'})`,
               position: "absolute",
               pointerEvents: "none",
-              filter: "blur(1px)",
+              filter: isMobile ? "blur(0.5px)" : "blur(1px)",
               zIndex: 0,
+              opacity: isMobile ? 0.7 : 1,
             }}
           />
         ))}
@@ -505,11 +541,11 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
           style={{
-            rotateX,
-            rotateY,
-            translateX,
-            translateY,
-            transformStyle: "preserve-3d",
+            rotateX: isMobile ? 0 : rotateX,
+            rotateY: isMobile ? 0 : rotateY,
+            translateX: isMobile ? 0 : translateX,
+            translateY: isMobile ? 0 : translateY,
+            transformStyle: isMobile ? "flat" : "preserve-3d",
           }}
         >
           <motion.div
@@ -1002,7 +1038,7 @@ const Hero = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.6 }}
             style={{
-              transformStyle: "preserve-3d",
+              transformStyle: isMobile ? "flat" : "preserve-3d",
             }}
           >
             {techIcons.map((tech, index) => {
@@ -1041,25 +1077,29 @@ const Hero = () => {
                       ease: "linear",
                     },
                   }}
-                  whileHover={{
-                    scale: 1.2,
-                    rotate: 180,
-                    z: 15,
-                    boxShadow: `0 8px 20px ${tech.color}30`,
-                    transition: { duration: 0.4 },
-                  }}
+                  whileHover={
+                    isTouch || isMobile
+                      ? undefined
+                      : {
+                          scale: 1.2,
+                          rotate: 180,
+                          z: 15,
+                          boxShadow: `0 8px 20px ${tech.color}30`,
+                          transition: { duration: 0.4 },
+                        }
+                  }
                 >
                   <motion.div
                     style={{
-                      transformStyle: "preserve-3d",
-                      transform: `translateZ(${
-                        Math.sin((angle * Math.PI) / 180) * 20
-                      }px)`,
+                      transformStyle: isMobile ? "flat" : "preserve-3d",
+                      transform: isMobile 
+                        ? "none" 
+                        : `translateZ(${Math.sin((angle * Math.PI) / 180) * 20}px)`,
                     }}
-                    animate={{
+                    animate={isMobile ? {} : {
                       rotateZ: [0, 360],
                     }}
-                    transition={{
+                    transition={isMobile ? {} : {
                       duration: 8 + index * 0.5,
                       repeat: Infinity,
                       ease: "linear",

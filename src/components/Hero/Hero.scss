@@ -450,12 +450,24 @@
     z-index: 1;
     pointer-events: none;
     transform-style: preserve-3d;
+    
+    // Mobile performance optimization
+    @media (max-width: $breakpoint-md) {
+      will-change: transform;
+      transform: translateZ(0); // Force GPU acceleration
+    }
   }
 
   &__particle {
     position: absolute;
     pointer-events: none;
     will-change: transform, opacity;
+    
+    // Mobile optimization
+    @media (max-width: $breakpoint-md) {
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
   }
 
   &__morphing-shapes {
@@ -467,12 +479,24 @@
     z-index: 0;
     pointer-events: none;
     transform-style: preserve-3d;
+    
+    // Mobile performance optimization
+    @media (max-width: $breakpoint-md) {
+      will-change: transform;
+      transform: translateZ(0);
+    }
   }
 
   &__morphing-shape {
     position: absolute;
     pointer-events: none;
     will-change: transform, border-radius;
+    
+    // Mobile optimization
+    @media (max-width: $breakpoint-md) {
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
   }
 
   &__floating-elements {
@@ -666,44 +690,187 @@
 // Mobile optimizations
 @media (max-width: $breakpoint-md) {
   .hero {
-    min-height: 105vh;
+    min-height: 100vh; // Changed from 105vh to reduce scrolling
+    padding: $spacing-xl 0; // Add vertical padding
 
-    &__container {
-      gap: $spacing-3xl;
+    &__grid {
+      gap: $spacing-2xl; // Reduced gap for mobile
+    }
+
+    &__content {
+      margin-right: 0; // Reset desktop margin
+    }
+
+    &__name {
+      margin-bottom: $spacing-base; // Reduce spacing
+
+      &-text,
+      &-highlight {
+        font-size: clamp($font-2xl, 8vw, $font-4xl); // Smaller on mobile
+        line-height: 1.2;
+      }
+    }
+
+    &__role {
+      font-size: clamp($font-lg, 4vw, $font-xl); // Smaller role text
+      height: auto; // Allow natural height
+      margin-bottom: $spacing-lg;
+    }
+
+    &__description {
+      font-size: $font-sm; // Smaller description
+      margin-bottom: $spacing-lg;
+    }
+
+    &__location {
+      margin-bottom: $spacing-lg; // Reduce spacing
     }
 
     &__avatar {
       &-image {
-        width: 240px;
-        height: 240px;
+        width: 200px; // Smaller avatar on mobile
+        height: 200px;
       }
 
       &-ring {
-        top: -15px;
-        left: -15px;
-        right: -15px;
-        bottom: -15px;
+        top: -10px; // Adjust ring positioning
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+      }
+
+      &-orbital-ring {
+        &--1 {
+          top: -25px; // Smaller orbital rings
+          left: -25px;
+          right: -25px;
+          bottom: -25px;
+        }
+
+        &--2 {
+          top: -35px;
+          left: -35px;
+          right: -35px;
+          bottom: -35px;
+        }
       }
     }
 
     &__tech-stack {
-      width: 320px;
-      height: 320px;
+      width: 280px; // Smaller tech stack
+      height: 280px;
     }
 
     &__tech-icon {
-      width: 45px;
-      height: 45px;
-      font-size: $font-lg;
+      width: 40px; // Smaller tech icons
+      height: 40px;
+      font-size: $font-base;
     }
 
     &__actions {
       flex-direction: column;
+      gap: $spacing-sm;
 
       .btn {
         width: 100%;
         max-width: 280px;
+        padding: $spacing-base $spacing-lg; // Larger touch targets
+        font-size: $font-sm;
       }
+    }
+
+    &__social {
+      margin-top: $spacing-base;
+      
+      &-link {
+        width: 45px; // Larger touch targets
+        height: 45px;
+        font-size: $font-lg;
+      }
+    }
+
+    // Reduce animation intensity on mobile for better performance
+    &__particles {
+      opacity: 0.7; // Make particles more subtle
+    }
+
+    &__morphing-shapes {
+      opacity: 0.5; // Reduce background shapes opacity
+    }
+
+    &__floating-elements {
+      opacity: 0.8; // Slightly reduce floating elements
+    }
+
+    // Disable 3D transforms on mobile for better performance
+    &__avatar,
+    &__tech-stack,
+    &__visual {
+      transform-style: flat !important;
+    }
+  }
+}
+
+// Additional mobile optimizations for smaller screens
+@media (max-width: $breakpoint-sm) {
+  .hero {
+    &__name {
+      &-text,
+      &-highlight {
+        font-size: clamp($font-xl, 9vw, $font-3xl);
+      }
+    }
+
+    &__role {
+      font-size: clamp($font-base, 5vw, $font-lg);
+    }
+
+    &__description {
+      font-size: $font-xs;
+      line-height: 1.6;
+    }
+
+    &__avatar {
+      &-image {
+        width: 180px;
+        height: 180px;
+      }
+    }
+
+    &__tech-stack {
+      width: 240px;
+      height: 240px;
+    }
+
+    &__tech-icon {
+      width: 35px;
+      height: 35px;
+      font-size: $font-sm;
+    }
+
+    &__actions {
+      .btn {
+        max-width: 240px;
+        padding: $spacing-sm $spacing-base;
+      }
+    }
+  }
+}
+
+// Performance optimizations for low-end devices
+@media (max-width: $breakpoint-md) and (prefers-reduced-motion: no-preference) {
+  .hero {
+    // Reduce animation complexity on mobile
+    &__particle {
+      animation-duration: 12s !important; // Slower animations
+    }
+
+    &__morphing-shape {
+      animation-duration: 8s !important;
+    }
+
+    &__floating-element {
+      animation-duration: 6s !important;
     }
   }
 }
@@ -738,6 +905,54 @@
 
     &__background-circle {
       animation: none;
+    }
+
+    // Disable all complex animations for accessibility
+    &__particle,
+    &__morphing-shape,
+    &__floating-element {
+      animation: none !important;
+      transform: none !important;
+    }
+
+    &__tech-icon {
+      transform: none !important;
+    }
+  }
+}
+
+// Battery conservation mode
+@media (prefers-reduced-motion: reduce), (max-width: $breakpoint-sm) {
+  .hero {
+    // Disable most animations on small screens or when reduced motion is preferred
+    &__particles,
+    &__morphing-shapes,
+    &__floating-elements {
+      display: none; // Hide complex animations entirely
+    }
+
+    &__avatar-ring,
+    &__background-circle {
+      animation: none;
+      transform: none;
+    }
+  }
+}
+
+// High performance mode for modern devices
+@media (min-width: $breakpoint-lg) and (prefers-reduced-motion: no-preference) {
+  .hero {
+    // Enable enhanced animations only on larger screens with no motion preference
+    &__particle {
+      animation: particleGlow 4s ease-in-out infinite alternate;
+    }
+
+    &__morphing-shape {
+      animation: morphShape 8s ease-in-out infinite;
+    }
+
+    &__background-circle {
+      animation: floatCircle 20s ease-in-out infinite;
     }
   }
 }
