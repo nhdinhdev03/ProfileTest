@@ -76,7 +76,7 @@
 $font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 $font-mono: 'JetBrains Mono', 'Monaco', 'Cascadia Code', monospace;
 
-// Font Sizes
+// Font Sizes - Consistent scale
 $font-xs: 0.75rem;    // 12px
 $font-sm: 0.875rem;   // 14px
 $font-base: 1rem;     // 16px
@@ -88,12 +88,21 @@ $font-4xl: 2.25rem;   // 36px
 $font-5xl: 3rem;      // 48px
 $font-6xl: 3.75rem;   // 60px
 
-// Font Weights
+// Font Weights - Consistent naming
 $font-light: 300;
 $font-normal: 400;
 $font-medium: 500;
 $font-semibold: 600;
 $font-bold: 700;
+$font-extrabold: 800;
+
+// Line Heights - Consistent scale
+$leading-none: 1;
+$leading-tight: 1.1;
+$leading-snug: 1.2;
+$leading-normal: 1.4;
+$leading-relaxed: 1.6;
+$leading-loose: 1.7;
 
 // Spacing
 $spacing-xs: 0.25rem;   // 4px
@@ -158,6 +167,37 @@ $breakpoint-2xl: 1536px;
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-#{$distance}); }
   }
+}
+
+// Typography mixins for consistency
+@mixin heading-style($size: $font-2xl, $weight: $font-bold) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $leading-snug;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+@mixin body-text($size: $font-base, $weight: $font-normal) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $leading-relaxed;
+  color: var(--text-secondary);
+}
+
+@mixin button-text($size: $font-sm, $weight: $font-medium) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $leading-none;
+  letter-spacing: 0.025em;
+}
+
+@mixin label-text($size: $font-xs, $weight: $font-medium) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $leading-normal;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 @mixin pulse-glow($color: var(--primary-light)) {

@@ -88,8 +88,8 @@
     }
 
     span {
-      font-size: 1.125rem;
-      font-weight: 600;
+      font-size: $font-lg;
+      font-weight: $font-semibold;
       color: var(--text-primary);
       background: var(--gradient-primary);
       -webkit-background-clip: text;
@@ -117,7 +117,7 @@
     border: 1px solid var(--border-color);
     border-radius: 12px;
     color: var(--text-primary);
-    font-size: 1.125rem;
+    font-size: $font-lg;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
@@ -254,8 +254,8 @@
       background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
       border-radius: 50%;
       @include flex-center;
-      font-weight: 700;
-      font-size: 1.125rem;
+      font-weight: $font-bold;
+      font-size: $font-lg;
       color: #ffffff;
       position: relative;
       overflow: hidden;
@@ -302,8 +302,8 @@
     }
 
     &-name {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: $font-xl;
+      font-weight: $font-bold;
       background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
       -webkit-background-clip: text;
 
@@ -313,9 +313,9 @@
     }
 
     &-title {
-      font-size: 0.75rem;
+      font-size: $font-xs;
       color: #64748b;
-      font-weight: 500;
+      font-weight: $font-medium;
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
@@ -423,8 +423,8 @@
     }
 
     &-mobile-title {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: $font-xl;
+      font-weight: $font-bold;
       color: var(--text-primary);
       margin-bottom: 0.5rem;
       background: var(--gradient-primary);
@@ -437,15 +437,15 @@
       
       &::before {
         content: '✨';
-        font-size: 1rem;
+        font-size: $font-base;
         filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.4));
       }
     }
 
     &-mobile-subtitle {
-      font-size: 0.875rem;
+      font-size: $font-sm;
       color: var(--text-secondary);
-      font-weight: 500;
+      font-weight: $font-medium;
       opacity: 0.8;
       letter-spacing: 0.25px;
       display: flex;
@@ -454,7 +454,7 @@
       
       &::before {
         content: '👆';
-        font-size: 0.875rem;
+        font-size: $font-sm;
       }
     }
 
@@ -503,8 +503,8 @@
       border: none;
       border-radius: 12px;
       color: #94a3b8;
-      font-size: 0.875rem;
-      font-weight: 500;
+      font-size: $font-sm;
+      font-weight: $font-medium;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -514,7 +514,7 @@
 
       @media (min-width: $breakpoint-lg) {
         padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
+        font-size: $font-base;
         
       }
 
@@ -629,13 +629,13 @@
     }
 
     &-icon {
-      font-size: 1rem;
+      font-size: $font-base;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       z-index: 1;
 
       @media (min-width: $breakpoint-lg) {
-        font-size: 1.125rem;
+        font-size: $font-lg;
       }
     }
 
@@ -699,7 +699,7 @@
     border: 1px solid var(--border-color);
     border-radius: 14px;
     color: var(--text-primary);
-    font-size: 1.25rem;
+    font-size: $font-xl;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;

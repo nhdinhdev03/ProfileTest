@@ -12,7 +12,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: $leading-relaxed;
   /* Default header height fallback; updated by Header.scss at runtime */
   --header-height: 80px;
   scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
@@ -39,7 +39,7 @@ body {
 // Typography
 h1, h2, h3, h4, h5, h6 {
   font-weight: $font-semibold;
-  line-height: 1.2;
+  line-height: $leading-snug;
   color: var(--text-primary);
 }
 
