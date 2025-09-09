@@ -631,7 +631,7 @@ const About = () => {
               ease: 'linear'
             }}
           >
-            Về Tôi
+            Giới Thiệu
           </motion.h2>
           <motion.p variants={itemVariants}>
             Giới thiệu chi tiết về kinh nghiệm và hành trình phát triển chuyên môn.
