@@ -20,6 +20,7 @@ const Header = ({ theme, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isScrolling, setIsScrolling] = useState(false);
 
   // Get the current header height (includes safe-area padding) for precise offsets
   const getHeaderOffset = () => {
@@ -69,6 +70,7 @@ const Header = ({ theme, toggleTheme }) => {
   const scrollToSection = (sectionId) => {
     // Update active immediately for responsive UI
     setActiveSection(sectionId);
+    setIsScrolling(true);
 
     const element = document.getElementById(sectionId);
     if (element) {
@@ -76,7 +78,40 @@ const Header = ({ theme, toggleTheme }) => {
       const headerOffset = getHeaderOffset();
       const elementTop = element.getBoundingClientRect().top + window.scrollY;
       const targetY = Math.max(0, elementTop - headerOffset);
-      window.scrollTo({ top: targetY, behavior: "smooth" });
+      
+      // Enhanced smooth scrolling with custom easing for better UX
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      const duration = Math.min(Math.abs(distance) / 2, 1000); // Max 1 second, adaptive duration
+      let startTime = null;
+
+      const easeInOutCubic = (t) => {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      };
+
+      const animateScroll = (currentTime) => {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const easedProgress = easeInOutCubic(progress);
+        
+        window.scrollTo(0, startY + distance * easedProgress);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          setIsScrolling(false);
+        }
+      };
+
+      // Fallback to native smooth scroll for browsers that support it well
+      if ('scrollBehavior' in document.documentElement.style && Math.abs(distance) < 2000) {
+        window.scrollTo({ top: targetY, behavior: "smooth" });
+        // Set a timeout to reset scrolling state since we can't track native smooth scroll
+        setTimeout(() => setIsScrolling(false), duration);
+      } else {
+        requestAnimationFrame(animateScroll);
+      }
     }
     setIsMenuOpen(false);
   };
@@ -121,9 +156,21 @@ const Header = ({ theme, toggleTheme }) => {
 
         <motion.div
           className="header__logo"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => scrollToSection("home")}
+          whileHover={{ 
+            scale: 1.02,
+            transition: { duration: 0.2, ease: "easeOut" }
+          }}
+          whileTap={{ 
+            scale: 0.96,
+            transition: { duration: 0.1, ease: "easeInOut" }
+          }}
+          onClick={() => {
+            // Add haptic feedback for mobile devices
+            if (navigator.vibrate) {
+              navigator.vibrate(50);
+            }
+            scrollToSection("home");
+          }}
           animate={{ 
             opacity: isMenuOpen ? 0 : 1,
             x: isMenuOpen ? -30 : 0,
@@ -136,20 +183,37 @@ const Header = ({ theme, toggleTheme }) => {
         >
           <motion.div
             className="header__logo-container"
-            whileHover={{ rotate: 5 }}
+            whileHover={{ 
+              rotate: 5,
+              transition: { type: "spring", stiffness: 400, damping: 25 }
+            }}
+            whileTap={{ 
+              rotate: -2,
+              transition: { duration: 0.1 }
+            }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
             <div className="header__logo-gradient">
               <motion.div
                 className="header__logo-icon"
-                animate={{
+                animate={isScrolling ? {
+                  rotate: [0, 360],
+                  boxShadow: [
+                    "0 0 20px rgba(99, 102, 241, 0.5)",
+                    "0 0 40px rgba(139, 92, 246, 0.7)",
+                    "0 0 20px rgba(99, 102, 241, 0.5)",
+                  ],
+                } : {
                   boxShadow: [
                     "0 0 20px rgba(99, 102, 241, 0.3)",
                     "0 0 30px rgba(139, 92, 246, 0.4)",
                     "0 0 20px rgba(99, 102, 241, 0.3)",
                   ],
                 }}
-                transition={{
+                transition={isScrolling ? {
+                  rotate: { duration: 0.8, ease: "easeInOut" },
+                  boxShadow: { duration: 0.4, repeat: 2, ease: "easeInOut" }
+                } : {
                   duration: 2,
                   repeat: Infinity,
                   ease: "easeInOut",

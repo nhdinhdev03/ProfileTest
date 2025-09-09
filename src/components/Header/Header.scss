@@ -229,11 +229,33 @@
       );
       border-radius: 16px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    &:hover::before {
-      opacity: 1;
+    &:hover {
+      transform: translateY(-1px);
+      
+      &::before {
+        opacity: 1;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.15) 0%,
+          rgba(139, 92, 246, 0.15) 100%
+        );
+      }
+    }
+
+    &:active {
+      transform: translateY(0px);
+      
+      &::before {
+        opacity: 1;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.2) 0%,
+          rgba(139, 92, 246, 0.2) 100%
+        );
+      }
     }
 
     &-container {
