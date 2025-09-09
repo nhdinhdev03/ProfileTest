@@ -29,6 +29,29 @@ const Header = ({ theme, toggleTheme }) => {
     return headerEl.getBoundingClientRect().height;
   };
 
+  // Helper function to get adjacent sections
+  const getAdjacentSections = (currentSectionId) => {
+    const currentIndex = navItems.findIndex(item => item.id === currentSectionId);
+    return {
+      previous: currentIndex > 0 ? navItems[currentIndex - 1].id : null,
+      next: currentIndex < navItems.length - 1 ? navItems[currentIndex + 1].id : null
+    };
+  };
+
+  // Check if two sections are close to each other
+  const areSectionsClose = (sectionId1, sectionId2) => {
+    const el1 = document.getElementById(sectionId1);
+    const el2 = document.getElementById(sectionId2);
+    if (!el1 || !el2) return false;
+    
+    const rect1 = el1.getBoundingClientRect();
+    const rect2 = el2.getBoundingClientRect();
+    const gap = Math.abs(rect1.bottom - rect2.top);
+    
+    // Consider sections close if gap is less than 200px
+    return gap < 200;
+  };
+
   const navItems = [
     { id: "home", label: "Home", icon: FiHome },
     { id: "about", label: "About", icon: FiUser },
@@ -43,29 +66,66 @@ const Header = ({ theme, toggleTheme }) => {
       setIsScrolled(window.scrollY > 50);
     };
 
-  const handleSectionInView = () => {
+    const handleSectionInView = () => {
+      // Don't update active section while programmatically scrolling
+      if (isScrolling) return;
+      
       let current = "home";
+      const viewHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+      const headerOffset = getHeaderOffset();
+      
+      // Find the section that's most visible in the viewport
+      let maxVisibleArea = 0;
+      
       navItems.forEach(({ id }) => {
         const el = document.getElementById(id);
         if (!el) return;
-    const top = el.offsetTop - getHeaderOffset() - 2;
-        const bottom = top + el.offsetHeight;
-        const y = window.scrollY;
-        if (y >= top && y < bottom) {
+        
+        const rect = el.getBoundingClientRect();
+        const elementTop = rect.top + scrollY;
+        const elementBottom = elementTop + rect.height;
+        
+        // Calculate visible area of this section
+        const viewTop = scrollY + headerOffset;
+        const viewBottom = scrollY + viewHeight;
+        
+        const visibleTop = Math.max(elementTop, viewTop);
+        const visibleBottom = Math.min(elementBottom, viewBottom);
+        const visibleArea = Math.max(0, visibleBottom - visibleTop);
+        
+        // Give priority to sections that are positioned at the top of viewport
+        const distanceFromTop = Math.abs(elementTop - viewTop);
+        const topProximityBonus = Math.max(0, (viewHeight * 0.5 - distanceFromTop) / (viewHeight * 0.5));
+        const adjustedVisibleArea = visibleArea * (1 + topProximityBonus * 0.3);
+        
+        if (adjustedVisibleArea > maxVisibleArea) {
+          maxVisibleArea = adjustedVisibleArea;
           current = id;
         }
       });
+      
       setActiveSection(current);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("scroll", handleSectionInView);
+    // Throttle scroll events for better performance
+    let scrollTimeout;
+    const throttledHandleScroll = () => {
+      if (scrollTimeout) return;
+      scrollTimeout = setTimeout(() => {
+        handleScroll();
+        handleSectionInView();
+        scrollTimeout = null;
+      }, 16); // ~60fps
+    };
+
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("scroll", handleSectionInView);
+      window.removeEventListener("scroll", throttledHandleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
     };
-  }, []);
+  }, [isScrolling]);
 
   const scrollToSection = (sectionId) => {
     // Update active immediately for responsive UI
@@ -76,42 +136,72 @@ const Header = ({ theme, toggleTheme }) => {
     if (element) {
       // Account for fixed header height (dynamic, includes safe-area)
       const headerOffset = getHeaderOffset();
-      const elementTop = element.getBoundingClientRect().top + window.scrollY;
-      const targetY = Math.max(0, elementTop - headerOffset);
+      const elementRect = element.getBoundingClientRect();
+      const elementTop = elementRect.top + window.scrollY;
+      let targetY = Math.max(0, elementTop - headerOffset);
       
-      // Enhanced smooth scrolling with custom easing for better UX
+      // Check if we're navigating to adjacent sections
+      const { previous, next } = getAdjacentSections(activeSection);
+      const isAdjacentNavigation = sectionId === previous || sectionId === next;
+      const isCloseSection = areSectionsClose(activeSection, sectionId);
+      
+      // For close/adjacent sections, optimize positioning
+      if (isAdjacentNavigation || isCloseSection) {
+        // Add a smaller buffer for adjacent sections
+        const buffer = Math.min(15, elementRect.height * 0.03);
+        targetY = Math.max(0, elementTop - headerOffset - buffer);
+      } else {
+        // For distant sections, add more spacing
+        const buffer = Math.min(30, elementRect.height * 0.08);
+        targetY = Math.max(0, elementTop - headerOffset - buffer);
+      }
+      
+      // Enhanced smooth scrolling with adaptive duration and easing
       const startY = window.scrollY;
-      const distance = targetY - startY;
-      const duration = Math.min(Math.abs(distance) / 2, 1000); // Max 1 second, adaptive duration
+      const finalDistance = targetY - startY;
+      const distance = Math.abs(finalDistance);
+      
+      // Adaptive duration based on distance and section relationship
+      let baseDuration;
+      if (isAdjacentNavigation && distance < window.innerHeight * 0.8) {
+        // Faster for nearby adjacent sections
+        baseDuration = Math.min(distance / 4, 600);
+      } else if (distance < window.innerHeight) {
+        // Medium speed for sections within viewport
+        baseDuration = Math.min(distance / 2.5, 800);
+      } else {
+        // Longer duration for distant sections, but not too long
+        baseDuration = Math.min(distance / 2, 1200);
+      }
+      
+      const duration = Math.max(250, baseDuration); // Minimum 250ms for smooth feel
       let startTime = null;
 
-      const easeInOutCubic = (t) => {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      // Enhanced easing function for more natural feel
+      const easeInOutQuart = (t) => {
+        return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
       };
 
       const animateScroll = (currentTime) => {
         if (startTime === null) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const easedProgress = easeInOutCubic(progress);
+        const easedProgress = easeInOutQuart(progress);
         
-        window.scrollTo(0, startY + distance * easedProgress);
+        const currentScrollY = startY + finalDistance * easedProgress;
+        window.scrollTo(0, currentScrollY);
         
         if (progress < 1) {
           requestAnimationFrame(animateScroll);
         } else {
           setIsScrolling(false);
+          // Ensure we're exactly at the target position
+          window.scrollTo(0, targetY);
         }
       };
 
-      // Fallback to native smooth scroll for browsers that support it well
-      if ('scrollBehavior' in document.documentElement.style && Math.abs(distance) < 2000) {
-        window.scrollTo({ top: targetY, behavior: "smooth" });
-        // Set a timeout to reset scrolling state since we can't track native smooth scroll
-        setTimeout(() => setIsScrolling(false), duration);
-      } else {
-        requestAnimationFrame(animateScroll);
-      }
+      // Always use custom animation for consistent behavior
+      requestAnimationFrame(animateScroll);
     }
     setIsMenuOpen(false);
   };
@@ -131,7 +221,7 @@ const Header = ({ theme, toggleTheme }) => {
 
   return (
     <motion.header
-      className={`header ${isScrolled ? "header--scrolled" : ""} ${isMenuOpen ? "header--menu-open" : ""}`}
+      className={`header ${isScrolled ? "header--scrolled" : ""} ${isMenuOpen ? "header--menu-open" : ""} ${isScrolling ? "header--scrolling" : ""}`}
       variants={headerVariants}
       initial="hidden"
       animate="visible"

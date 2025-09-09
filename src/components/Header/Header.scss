@@ -9,6 +9,21 @@
   --header-nav-text: #ffffff;
 }
 
+// Scroll progress animation
+@keyframes scrollProgress {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -46,6 +61,24 @@
         rgba(99, 102, 241, 0.08) 0%,
         rgba(139, 92, 246, 0.08) 100%
       );
+    }
+  }
+
+  &--scrolling {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(99, 102, 241, 0.8) 50%,
+        transparent 100%
+      );
+      animation: scrollProgress 0.8s ease-in-out infinite;
     }
   }
 

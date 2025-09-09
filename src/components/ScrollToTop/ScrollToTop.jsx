@@ -23,10 +23,31 @@ const ScrollToTop = () => {
   }, [])
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
+    // Enhanced smooth scroll to top with custom animation
+    const startY = window.scrollY
+    const duration = Math.min(startY / 2, 1000) // Max 1 second
+    let startTime = null
+
+    const easeInOutQuart = (t) => {
+      return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
+    }
+
+    const animateScroll = (currentTime) => {
+      if (startTime === null) startTime = currentTime
+      const timeElapsed = currentTime - startTime
+      const progress = Math.min(timeElapsed / duration, 1)
+      const easedProgress = easeInOutQuart(progress)
+      
+      window.scrollTo(0, startY * (1 - easedProgress))
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll)
+      } else {
+        window.scrollTo(0, 0)
+      }
+    }
+
+    requestAnimationFrame(animateScroll)
   }
 
   return (
