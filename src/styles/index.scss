@@ -16,6 +16,10 @@ html {
   /* Default header height fallback; updated by Header.scss at runtime */
   --header-height: 80px;
   scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  
+  // Tối ưu scroll performance
+  overscroll-behavior: contain;
+  scroll-snap-type: y proximity;
 }
 
 @media (max-width: 768px) {
@@ -34,6 +38,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+  
+  // Tối ưu scroll mượt
+  &.no-scroll {
+    overflow: hidden;
+  }
+  
+  // Cải thiện scroll performance trên mobile
+  -webkit-overflow-scrolling: touch;
 }
 
 // Typography

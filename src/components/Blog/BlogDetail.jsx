@@ -12,6 +12,7 @@ import {
   FiHeart,
   FiList,
 } from "react-icons/fi";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import "./BlogDetail.scss";
 
 const BlogDetail = ({ post, onBack }) => {
@@ -20,15 +21,23 @@ const BlogDetail = ({ post, onBack }) => {
   const [activeSection, setActiveSection] = useState("");
   const contentRef = useRef(null);
   
-  if (!post) return null;
-
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString("vi-VN", options);
-  };
+  // Scroll to top khi blog detail được mở
+  useEffect(() => {
+    if (post) {
+      // Sử dụng requestAnimationFrame để scroll mượt hơn
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+    }
+  }, [post?.id]); // Chỉ scroll khi post.id thay đổi
 
   // Reading progress tracking
   useEffect(() => {
+    if (!post) return;
+    
     const handleScroll = () => {
       if (!contentRef.current) return;
       
@@ -43,10 +52,12 @@ const BlogDetail = ({ post, onBack }) => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [post]);
 
   // Active section tracking for table of contents
   useEffect(() => {
+    if (!post) return;
+    
     const sections = document.querySelectorAll("h2[id], h3[id]");
     
     const observer = new IntersectionObserver(
@@ -65,7 +76,14 @@ const BlogDetail = ({ post, onBack }) => {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, [post.content]);
+  }, [post?.content]);
+  
+  if (!post) return null;
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("vi-VN", options);
+  };
 
   const handleShare = () => {
     if (navigator.share) {
@@ -332,6 +350,9 @@ const BlogDetail = ({ post, onBack }) => {
           <p>Các bài viết liên quan sẽ được hiển thị ở đây...</p>
         </motion.div>
       </div>
+      
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </section>
   );
 };

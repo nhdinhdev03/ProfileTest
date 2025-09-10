@@ -28,6 +28,62 @@ function App() {
     setTimeout(() => setIsLoading(false), 1500);
   }, []);
 
+  // Helper function cho smooth scroll animation
+  const smoothScrollTo = (targetY) => {
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const duration = Math.min(Math.abs(distance) * 0.5, 600); // Giảm duration để mượt hơn
+    let start = null;
+
+    const easeInOutCubic = (t) => {
+      return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+    };
+
+    const animate = (timestamp) => {
+      if (start === null) start = timestamp;
+      const elapsed = timestamp - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeInOutCubic(progress);
+      
+      const currentY = startY + distance * easedProgress;
+      window.scrollTo(0, currentY);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  };
+
+  // Khôi phục vị trí cuộn khi quay lại từ blog detail
+  useEffect(() => {
+    if (currentView === "home") {
+      const savedScrollPosition = sessionStorage.getItem("blogScrollPosition");
+      if (savedScrollPosition) {
+        const restoreScrollPosition = () => {
+          const blogSection = document.getElementById("blog");
+          const savedPos = parseInt(savedScrollPosition);
+          
+          if (blogSection) {
+            const blogSectionTop = blogSection.offsetTop - 80;
+            const targetPosition = savedPos >= blogSectionTop - 100 ? savedPos : blogSectionTop;
+            smoothScrollTo(targetPosition);
+          } else {
+            smoothScrollTo(savedPos);
+          }
+          
+          sessionStorage.removeItem("blogScrollPosition");
+        };
+
+        // Tối ưu timing để giảm giật lag
+        requestAnimationFrame(() => {
+          setTimeout(restoreScrollPosition, 150);
+        });
+      }
+    }
+  }, [currentView]);
+
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
@@ -36,13 +92,37 @@ function App() {
   };
 
   const handleBlogPostSelect = (post) => {
-    setSelectedBlogPost(post);
-    setCurrentView("blog-detail");
+    // Lưu vị trí cuộn hiện tại trước khi chuyển sang blog detail
+    sessionStorage.setItem("blogScrollPosition", window.scrollY.toString());
+    
+    // Smooth transition
+    document.body.style.overflow = 'hidden';
+    
+    // Delay ngắn để tránh flash
+    requestAnimationFrame(() => {
+      setSelectedBlogPost(post);
+      setCurrentView("blog-detail");
+      
+      // Khôi phục scroll behavior
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 50);
+    });
   };
 
   const handleBackToBlog = () => {
-    setSelectedBlogPost(null);
-    setCurrentView("home");
+    // Thêm class transition để smooth hơn
+    document.body.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+      setSelectedBlogPost(null);
+      setCurrentView("home");
+      
+      // Khôi phục scroll sau khi component đã mount
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 100);
+    }, 100);
   };
 
   if (isLoading) {

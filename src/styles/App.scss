@@ -6,6 +6,16 @@
   transition: all 0.3s ease;
   position: relative;
   overflow-x: hidden;
+  
+  // Thêm smooth transition khi chuyển đổi view
+  &.transitioning {
+    pointer-events: none;
+    
+    main {
+      transition: opacity 0.2s ease;
+      opacity: 0.9;
+    }
+  }
 
   // Animated background elements
   &::before {
@@ -38,8 +48,12 @@
   main {
     position: relative;
     z-index: 1;
-  /* Prevent content being hidden under fixed header; include safe area */
-  padding-top: calc(var(--header-height, 80px) + env(safe-area-inset-top, 0px));
+    /* Prevent content being hidden under fixed header; include safe area */
+    padding-top: calc(var(--header-height, 80px) + env(safe-area-inset-top, 0px));
+    
+    // Tối ưu scroll behavior
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
   }
 }
 
