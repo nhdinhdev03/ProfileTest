@@ -1127,7 +1127,6 @@ const Hero = () => {
             })}
           </motion.div>
         </motion.div>
-        </div>
       </div>
 
       {/* Enhanced 3D Background */}
@@ -1209,6 +1208,7 @@ const Hero = () => {
           }}
         />
       </motion.div>
+      </div>
     </motion.section>
   );
 };

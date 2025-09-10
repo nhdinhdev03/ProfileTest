@@ -939,6 +939,83 @@
   }
 }
 
+// Mobile optimization - Hide orbital visual animation
+@media (max-width: $breakpoint-md) {
+  .hero {
+    // Hide the entire orbital/solar system animation on mobile for performance
+    &__visual {
+      display: none !important;
+    }
+    
+    // Optimize layout for mobile
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+      text-align: center;
+    }
+    
+    &__content {
+      text-align: center;
+      margin-right: 0;
+      padding: 0 $spacing-lg;
+    }
+    
+    // Optimize spacing for mobile
+    &__name {
+      margin-bottom: $spacing-base;
+      
+      &-text, &-highlight {
+        font-size: clamp($font-2xl, 8vw, $font-4xl);
+      }
+    }
+    
+    &__role {
+      font-size: clamp($font-lg, 4vw, $font-xl);
+      margin-bottom: $spacing-lg;
+      height: auto;
+    }
+    
+    &__description {
+      font-size: $font-base;
+      margin-bottom: $spacing-lg;
+    }
+    
+    &__cta {
+      flex-direction: column;
+      gap: $spacing-base;
+      align-items: center;
+      
+      &-primary, &-secondary {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+    
+    &__social {
+      margin-top: $spacing-lg;
+      justify-content: center;
+    }
+  }
+}
+
+// Tablet optimization
+@media (min-width: #{$breakpoint-md + 1px}) and (max-width: $breakpoint-lg) {
+  .hero {
+    &__visual {
+      width: 80%;
+      height: auto;
+    }
+    
+    &__avatar {
+      &-image {
+        width: 240px;
+        height: 240px;
+      }
+    }
+  }
+}
+
 // High performance mode for modern devices
 @media (min-width: $breakpoint-lg) and (prefers-reduced-motion: no-preference) {
   .hero {
