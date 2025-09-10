@@ -273,7 +273,7 @@ const ProfileHero = ({ profile, light }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 100 }}
           >
-            <FiCode className="title-icon" />
+       
             Lập Trình Viên & Kỹ Thuật Phần Mềm
           </motion.p>
           

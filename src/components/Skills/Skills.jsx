@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { 
-  FiCode, FiDatabase, FiServer, FiTool, FiTrendingUp,
-  FiAward, FiTarget, FiActivity, FiBarChart, FiLayers
+  FiCode, FiDatabase, FiServer, FiTool, FiLayers
 } from 'react-icons/fi'
 import { 
   SiReact, SiJavascript, SiTypescript, SiNodedotjs, SiPython, SiOpenjdk,
@@ -354,24 +353,19 @@ const Skills = () => {
                         className="skills__item glass-card"
                         variants={skillVariants}
                         whileHover={{
-                          scale: 1.05,
-                          rotateY: 10,
-                          z: 20,
+                          scale: 1.1,
+                          y: -5,
                           transition: { type: 'spring', stiffness: 300, damping: 20 }
                         }}
                         onMouseEnter={() => setHoveredSkill(skill.name)}
                         onMouseLeave={() => setHoveredSkill(null)}
-                        style={{
-                          transformStyle: "preserve-3d"
-                        }}
                       >
-                        {/* Skill Header */}
-                        <div className="skills__item-header">
+                        {/* Simple Skill Display */}
+                        <div className="skills__item-content">
                           <motion.div
                             className="skills__item-icon"
                             style={{
-                              color: skill.color,
-                              transform: "translateZ(10px)"
+                              color: skill.color
                             }}
                             animate={{
                               rotate: hoveredSkill === skill.name ? [0, 360] : 0,
@@ -384,86 +378,7 @@ const Skills = () => {
                           >
                             <IconComponent />
                           </motion.div>
-                          <div className="skills__item-info">
-                            <h4 className="skills__item-name">{skill.name}</h4>
-                            <span className="skills__item-experience">{skill.experience}</span>
-                          </div>
-                          <motion.div
-                            className="skills__item-level-badge"
-                            animate={{
-                              background: [
-                                `linear-gradient(135deg, ${skill.color}20, ${skill.color}40)`,
-                                `linear-gradient(135deg, ${skill.color}40, ${skill.color}20)`,
-                                `linear-gradient(135deg, ${skill.color}20, ${skill.color}40)`
-                              ]
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            {skill.level}%
-                          </motion.div>
-                        </div>
-
-                        {/* Animated Progress Bar */}
-                        <div className="skills__item-progress">
-                          <div className="skills__progress-label">
-                            <span>Thành thạo</span>
-                            <motion.span
-                              className="skills__progress-percentage"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ delay: 0.5 + index * 0.1 }}
-                            >
-                              {skill.level}%
-                            </motion.span>
-                          </div>
-                          <div className="skills__progress-bar">
-                            <motion.div
-                              className="skills__progress-fill"
-                              style={{
-                                background: `linear-gradient(90deg, ${skill.color}, ${skill.color}80)`
-                              }}
-                              initial={{ width: 0 }}
-                              animate={{ width: `${skill.level}%` }}
-                              transition={{
-                                duration: 1.5,
-                                delay: 0.3 + index * 0.1,
-                                ease: "easeOut"
-                              }}
-                            />
-                            <motion.div
-                              className="skills__progress-glow"
-                              style={{
-                                background: `linear-gradient(90deg, transparent, ${skill.color}60, transparent)`
-                              }}
-                              animate={{
-                                x: ['-100%', '100%']
-                              }}
-                              transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                delay: 1 + index * 0.2,
-                                ease: "easeInOut"
-                              }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Project Stats */}
-                        <div className="skills__item-stats">
-                          <div className="skills__stat">
-                            <FiTarget className="skills__stat-icon" />
-                            <span className="skills__stat-value">{skill.projects}</span>
-                            <span className="skills__stat-label">Dự án</span>
-                          </div>
-                          <div className="skills__stat">
-                            <FiTrendingUp className="skills__stat-icon" />
-                            <span className="skills__stat-value">{skill.level}%</span>
-                            <span className="skills__stat-label">Thành thạo</span>
-                          </div>
+                          <h4 className="skills__item-name">{skill.name}</h4>
                         </div>
 
                         {/* Hover Effect Overlay */}
@@ -475,64 +390,12 @@ const Skills = () => {
                             background: `linear-gradient(135deg, ${skill.color}10, ${skill.color}20)`
                           }}
                         />
-
-                        {/* 3D Border Effect */}
-                        <motion.div
-                          className="skills__item-border"
-                          style={{
-                            borderColor: skill.color
-                          }}
-                          animate={{
-                            opacity: hoveredSkill === skill.name ? 1 : 0,
-                            scale: hoveredSkill === skill.name ? [1, 1.02, 1] : 1
-                          }}
-                          transition={{
-                            duration: 0.3
-                          }}
-                        />
                       </motion.div>
                     )
                   })}
                 </motion.div>
 
-                {/* Category Summary */}
-                <motion.div
-                  className="skills__summary"
-                  variants={itemVariants}
-                >
-                  <div className="skills__summary-stats">
-                    <div className="skills__summary-stat">
-                      <FiAward className="skills__summary-icon" />
-                      <div className="skills__summary-info">
-                        <span className="skills__summary-value">
-                          {skillsData[activeCategory].skills.length}
-                        </span>
-                        <span className="skills__summary-label">Công nghệ</span>
-                      </div>
-                    </div>
-                    <div className="skills__summary-stat">
-                      <FiActivity className="skills__summary-icon" />
-                      <div className="skills__summary-info">
-                        <span className="skills__summary-value">
-                          {Math.round(
-                            skillsData[activeCategory].skills.reduce((acc, skill) => acc + skill.level, 0) /
-                            skillsData[activeCategory].skills.length
-                          )}%
-                        </span>
-                        <span className="skills__summary-label">Trung bình</span>
-                      </div>
-                    </div>
-                    <div className="skills__summary-stat">
-                      <FiBarChart className="skills__summary-icon" />
-                      <div className="skills__summary-info">
-                        <span className="skills__summary-value">
-                          {skillsData[activeCategory].skills.reduce((acc, skill) => acc + skill.projects, 0)}
-                        </span>
-                        <span className="skills__summary-label">Dự án</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+
               </motion.div>
             )}
           </AnimatePresence>
