@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer'
 import { FiBriefcase, FiCalendar, FiMapPin } from 'react-icons/fi'
 import './Experience.scss'
 
-const Experience = () => {
+function Experience() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1

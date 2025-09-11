@@ -15,7 +15,7 @@ import {
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import "./BlogDetail.scss";
 
-const BlogDetail = ({ post, onBack }) => {
+function BlogDetail({ post, onBack }) {
   const [readingProgress, setReadingProgress] = useState(0);
   const [showTableOfContents, setShowTableOfContents] = useState(false);
   const [activeSection, setActiveSection] = useState("");
@@ -355,6 +355,6 @@ const BlogDetail = ({ post, onBack }) => {
       <ScrollToTop />
     </section>
   );
-};
+}
 
 export default BlogDetail;

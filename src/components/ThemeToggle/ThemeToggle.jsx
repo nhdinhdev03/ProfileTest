@@ -4,7 +4,7 @@ import { FiSun, FiMoon } from 'react-icons/fi'
 import PropTypes from 'prop-types'
 import './ThemeToggle.scss'
 
-const ThemeToggle = ({ theme, toggleTheme, placement = 'floating' }) => {
+function ThemeToggle({ theme, toggleTheme, placement = 'floating' }) {
   return (
     <motion.button
       className={`theme-toggle ${placement === 'header' ? 'theme-toggle--header' : ''} ${placement === 'mobile' ? 'theme-toggle--mobile' : ''}`}

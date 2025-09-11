@@ -16,7 +16,7 @@ import {
 import "./Header.scss";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
-const Header = ({ theme, toggleTheme }) => {
+function Header({ theme, toggleTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");

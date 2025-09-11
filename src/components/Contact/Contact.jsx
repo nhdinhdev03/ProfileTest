@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fi'
 import './Contact.scss'
 
-const Contact = () => {
+function Contact() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1

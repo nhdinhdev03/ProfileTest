@@ -33,7 +33,7 @@ import {
 import "./Skills.scss";
 import TechMarquee from "../TechMarquee/TechMarquee";
 
-const Skills = () => {
+function Skills() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,

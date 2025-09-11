@@ -21,7 +21,7 @@ import { FaReact, FaJsSquare, FaNodeJs, FaPython } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss } from "react-icons/si";
 import "./Hero.scss";
 
-const Hero = () => {
+function Hero() {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);

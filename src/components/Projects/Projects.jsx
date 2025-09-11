@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer'
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
 import './Projects.scss'
 
-const Projects = () => {
+function Projects() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1

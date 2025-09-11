@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowUp } from 'react-icons/fi'
 import './ScrollToTop.scss'
 
-const ScrollToTop = () => {
+function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {

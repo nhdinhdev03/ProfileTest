@@ -10,7 +10,7 @@ import {
 import "./About.scss";
 
 // Optimized GitHub data hook
-const useGithubData = () => {
+function useGithubData() {
   const [data, setData] = useState({
     profile: null,
     repos: [],
@@ -516,7 +516,7 @@ const ContactSection = ({ profile, light }) => (
 );
 
 // Main About Component
-const About = () => {
+function About() {
   const { profile } = useGithubData();
   const [particles, setParticles] = useState([])
   const aboutRef = useRef(null)
@@ -675,7 +675,6 @@ const About = () => {
 
 export default About;
 
-// PropTypes definitions - fix existing warnings
 
 ContactSection.propTypes = {
   profile: PropTypes.shape({

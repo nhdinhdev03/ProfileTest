@@ -11,7 +11,7 @@ import {
 } from "react-icons/fi";
 import "./Blog.scss";
 
-const Blog = ({ onPostSelect }) => {
+function Blog({ onPostSelect }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -350,7 +350,8 @@ test('search transitions work correctly', async () => {
     },
     {
       id: 2,
-      title: "CSS Grid vs Flexbox: Advanced Layout Strategies & Performance Analysis",
+      title:
+        "CSS Grid vs Flexbox: Advanced Layout Strategies & Performance Analysis",
       excerpt:
         "Deep dive vào CSS Grid và Flexbox với real-world examples, performance benchmarks, và advanced techniques cho responsive design. Bao gồm subgrid, container queries và layout optimization.",
       content: `
@@ -1196,6 +1197,6 @@ function createDynamicGrid(items) {
       </div>
     </section>
   );
-};
+}
 
 export default Blog;

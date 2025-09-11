@@ -17,7 +17,7 @@ import {
 } from 'react-icons/fi'
 import './Footer.scss'
 
-const Footer = () => {
+function Footer() {
   const currentYear = new Date().getFullYear()
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
