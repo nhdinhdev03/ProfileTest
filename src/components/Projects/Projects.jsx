@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
@@ -19,6 +19,7 @@ function Projects() {
   const [viewMode, setViewMode] = useState('grid')
   const [hoveredProject, setHoveredProject] = useState(null)
   const [floatingElements, setFloatingElements] = useState([])
+  const [allProjectsLoaded, setAllProjectsLoaded] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   // Toggle to quickly disable 3D effects globally
   const enable3D = false
@@ -85,8 +86,8 @@ function Projects() {
     setFloatingElements(elements)
   }, [])
 
-  // Memoize project data to avoid re-creating arrays on each render
-  const projects = useMemo(() => [
+  // Memoize featured projects data (load immediately)
+  const featuredProjects = useMemo(() => [
     {
       id: 1,
       title: 'E-Commerce Platform',
@@ -116,7 +117,12 @@ function Projects() {
       year: '2024',
       complexity: 'intermediate',
       performance: 88
-    },
+    }
+  ], [])
+
+  // Lazy load other projects only when needed
+  const getAllProjects = useCallback(() => [
+    ...featuredProjects,
     {
       id: 3,
       title: 'Portfolio Website',
@@ -169,9 +175,25 @@ function Projects() {
       status: 'completed',
       year: '2023'
     }
-  ], [])
+  ], [featuredProjects])
 
-  const getComplexityIcon = (complexity) => {
+  // Current projects state - start with featured only
+  const [currentProjects, setCurrentProjects] = useState(featuredProjects)
+
+  // Load all projects when filter changes to non-featured
+  useEffect(() => {
+    if (filter !== 'featured' && !allProjectsLoaded) {
+      // Simulate async loading (could be real API call)
+      const timer = setTimeout(() => {
+        setCurrentProjects(getAllProjects())
+        setAllProjectsLoaded(true)
+      }, 100) // Small delay to show optimization
+      
+      return () => clearTimeout(timer)
+    }
+  }, [filter, allProjectsLoaded, getAllProjects])
+
+  const getComplexityIcon = useCallback((complexity) => {
     switch (complexity) {
       case 'advanced':
         return '🔥'
@@ -180,27 +202,43 @@ function Projects() {
       default:
         return '💡'
     }
-  }
+  }, [])
 
-  const categories = useMemo(() => ([
-    { id: 'featured', label: 'Nổi bật', count: projects.filter(p => p.featured).length },
-    { id: 'all', label: 'Tất cả', count: projects.length },
-    { id: 'fullstack', label: 'Full Stack', count: projects.filter(p => p.category === 'fullstack').length },
-    { id: 'frontend', label: 'Frontend', count: projects.filter(p => p.category === 'frontend').length },
-    { id: 'mobile', label: 'Mobile', count: projects.filter(p => p.category === 'mobile').length }
-  ]), [projects])
+  // Dynamic categories based on current loaded projects
+  const categories = useMemo(() => {
+    const allProjects = allProjectsLoaded ? currentProjects : featuredProjects
+    return [
+      { id: 'featured', label: 'Nổi bật', count: allProjects.filter(p => p.featured).length },
+      { id: 'all', label: 'Tất cả', count: allProjects.length },
+      { id: 'fullstack', label: 'Full Stack', count: allProjects.filter(p => p.category === 'fullstack').length },
+      { id: 'frontend', label: 'Frontend', count: allProjects.filter(p => p.category === 'frontend').length },
+      { id: 'mobile', label: 'Mobile', count: allProjects.filter(p => p.category === 'mobile').length }
+    ]
+  }, [currentProjects, featuredProjects, allProjectsLoaded])
 
-  // Keep filtered list in state for more predictable re-renders (align with Blog behavior)
-  const [filteredProjects, setFilteredProjects] = useState(projects)
+  // Keep filtered list in state for more predictable re-renders
+  const [filteredProjects, setFilteredProjects] = useState(featuredProjects)
+
+  // Optimized filter handler
+  const handleFilterChange = useCallback((newFilter) => {
+    setFilter(newFilter)
+    
+    // Load all projects if switching from featured
+    if (newFilter !== 'featured' && !allProjectsLoaded) {
+      setCurrentProjects(getAllProjects())
+      setAllProjectsLoaded(true)
+    }
+  }, [allProjectsLoaded, getAllProjects])
 
   useEffect(() => {
-    const next = projects.filter(project => {
+    const projectsToFilter = filter === 'featured' ? featuredProjects : currentProjects
+    const next = projectsToFilter.filter(project => {
       if (filter === 'all') return true
       if (filter === 'featured') return project.featured
       return project.category === filter
     })
     setFilteredProjects(next)
-  }, [filter, projects])
+  }, [filter, currentProjects, featuredProjects])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -296,7 +334,7 @@ function Projects() {
                     <motion.button
                       key={category.id}
                       className={`projects__category ${filter === category.id ? 'projects__category--active' : ''}`}
-                      onClick={() => setFilter(category.id)}
+                      onClick={() => handleFilterChange(category.id)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >

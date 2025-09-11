@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+
 import PageTransition from '../components/PageTransition/PageTransition';
 import '../components/PageTransition/PageTransition.scss';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
 
 const MainLayout = ({ children, theme, toggleTheme }) => {
   return (

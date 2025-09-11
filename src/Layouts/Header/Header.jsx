@@ -15,7 +15,7 @@ import {
   FiMoon,
 } from "react-icons/fi";
 import "./Header.scss";
-import ThemeToggle from "../ThemeToggle/ThemeToggle";
+
 import { ROUTES } from "../../router/routeConstants";
 
 function Header({ theme, toggleTheme }) {
