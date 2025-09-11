@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { smoothScrollTo } from '../../utils/scroll';
 
@@ -6,6 +6,26 @@ import { smoothScrollTo } from '../../utils/scroll';
 function ScrollToTopOnNavigate() {
   const { pathname, hash } = useLocation();
   const lastPathname = useRef(pathname);
+  const scrollTimeoutRef = useRef(null);
+  
+  // Debounced scroll function để tránh multiple calls
+  const debouncedScroll = useCallback((targetPosition = 0) => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (targetPosition === 0) {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        smoothScrollTo(targetPosition);
+      }
+    }, 50); // Debounce delay
+  }, []);
   
   useEffect(() => {
     // Nếu có hash trong URL (ví dụ: /about#section1), không cuộn lên đầu trang
@@ -21,9 +41,8 @@ function ScrollToTopOnNavigate() {
           const elementPosition = element.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
           
-          // Sử dụng hàm smoothScrollTo được cải tiến từ utils/scroll.js
-          smoothScrollTo(offsetPosition);
-        }, 100);
+          debouncedScroll(offsetPosition);
+        }, 150);
       }
       return;
     }
@@ -32,19 +51,21 @@ function ScrollToTopOnNavigate() {
     if (pathname !== lastPathname.current) {
       lastPathname.current = pathname;
       
-      // Sử dụng kết hợp requestAnimationFrame và setTimeout để đảm bảo
-      // rằng cuộn xảy ra sau khi DOM đã render hoàn toàn
+      // Sử dụng requestAnimationFrame để đảm bảo DOM đã render
       requestAnimationFrame(() => {
-        setTimeout(() => {
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-          });
-        }, 100);
+        debouncedScroll(0);
       });
     }
-  }, [pathname, hash]);
+  }, [pathname, hash, debouncedScroll]);
+
+  // Cleanup function
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Component này không render gì cả
   return null;

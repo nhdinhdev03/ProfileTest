@@ -306,7 +306,7 @@ function Header({ theme, toggleTheme }) {
             }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            <div className="header__logo-gradient">
+            <div className="header__logo-gradient" >
               <motion.div
                 className="header__logo-icon"
                 animate={isScrolling ? {

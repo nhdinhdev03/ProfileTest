@@ -7,13 +7,23 @@
   position: relative;
   overflow-x: hidden;
   
+  // Performance optimizations
+
   // Thêm smooth transition khi chuyển đổi view
   &.transitioning {
     pointer-events: none;
     
     main {
-      transition: opacity 0.2s ease;
-      opacity: 0.9;
+      transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0.95;
+    }
+  }
+
+
+  // Global route transition styles
+  &.route-transitioning {
+    main {
+      opacity: 0.95;
     }
   }
 
