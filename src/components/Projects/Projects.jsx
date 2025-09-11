@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
+import useSaveScrollPosition from '../../hooks/useSaveScrollPosition'
 import './Projects.scss'
 
 function Projects() {
@@ -9,6 +10,9 @@ function Projects() {
     triggerOnce: true,
     threshold: 0.1
   })
+  
+  // Sử dụng hook lưu và khôi phục vị trí cuộn
+  useSaveScrollPosition()
   
   // Default to Featured to match the section title "Dự Án Nổi Bật"
   const [filter, setFilter] = useState('featured')

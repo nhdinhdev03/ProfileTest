@@ -7,6 +7,8 @@ import { useTheme } from "./hooks/useTheme";
 import { smoothScrollTo } from "./utils/scroll";
 import { publicRoutes } from "./router";
 import { ROUTES } from "./router/routeConstants";
+import ScrollToTopOnNavigate from "./components/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import "./styles/App.scss";
 
 function App() {
@@ -27,6 +29,10 @@ function App() {
   // Render main portfolio view with React Router
   return (
     <Router>
+      {/* Thêm ScrollToTopOnNavigate component để tự động cuộn lên đầu trang khi chuyển trang */}
+      <ScrollToTopOnNavigate />
+      {/* Thêm ScrollToTop để hiển thị nút cuộn lên đầu trang khi người dùng cuộn xuống */}
+      <ScrollToTop />
       <Suspense
         fallback={
           <div className="loading-section">

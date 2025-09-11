@@ -11,12 +11,16 @@ import {
   FiFilter,
 } from "react-icons/fi";
 import { ROUTES } from "../../router/routeConstants";
+import useSaveScrollPosition from "../../hooks/useSaveScrollPosition";
 import "./Blog.scss";
 
 function Blog() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
+  
+  // Sử dụng hook lưu và khôi phục vị trí cuộn
+  useSaveScrollPosition();
 
   // Professional blog data với nội dung chuyên sâu
   const blogPosts = [

@@ -65,12 +65,15 @@ function BlogDetail() {
       setPost(foundPost);
     }
     
-    // Scroll to top khi blog detail được mở
+    // Scroll to top khi blog detail được mở với hiệu ứng mượt hơn
+    // Sử dụng kết hợp requestAnimationFrame để đảm bảo scroll hoạt động sau khi DOM đã render
     requestAnimationFrame(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }, 100); // Thêm một độ trễ nhỏ để đảm bảo DOM đã render xong
     });
   }, [id]);
 
