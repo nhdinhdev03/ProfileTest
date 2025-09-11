@@ -267,33 +267,38 @@ function Header({ theme, toggleTheme }) {
           <span>Menu</span>
         </motion.div>
 
-        <motion.div
-          className="header__logo"
-          whileHover={{ 
-            scale: 1.02,
-            transition: { duration: 0.2, ease: "easeOut" }
-          }}
-          whileTap={{ 
-            scale: 0.96,
-            transition: { duration: 0.1, ease: "easeInOut" }
-          }}
-          onClick={() => {
-            // Add haptic feedback for mobile devices
-            if (navigator.vibrate) {
-              navigator.vibrate(50);
-            }
-            scrollToSection("home");
-          }}
-          animate={{ 
-            opacity: isMenuOpen ? 0 : 1,
-            x: isMenuOpen ? -30 : 0,
-            scale: isMenuOpen ? 0.9 : 1
-          }}
-          transition={{ 
-            duration: 0.3, 
-            ease: "easeInOut" 
-          }}
+        <Link 
+          to={ROUTES.HOME}
+          className="header__logo-link"
+          aria-label="Navigate to Home"
         >
+          <motion.div
+            className="header__logo"
+            whileHover={{ 
+              scale: 1.02,
+              transition: { duration: 0.2, ease: "easeOut" }
+            }}
+            whileTap={{ 
+              scale: 0.96,
+              transition: { duration: 0.1, ease: "easeInOut" }
+            }}
+            onClick={() => {
+              // Add haptic feedback for mobile devices
+              if (navigator.vibrate) {
+                navigator.vibrate(50);
+              }
+              scrollToSection("home");
+            }}
+            animate={{ 
+              opacity: isMenuOpen ? 0 : 1,
+              x: isMenuOpen ? -30 : 0,
+              scale: isMenuOpen ? 0.9 : 1
+            }}
+            transition={{ 
+              duration: 0.3, 
+              ease: "easeInOut" 
+            }}
+          >
           <motion.div
             className="header__logo-container"
             whileHover={{ 
@@ -355,6 +360,7 @@ function Header({ theme, toggleTheme }) {
             </motion.span>
           </div>
         </motion.div>
+        </Link>
 
   <nav className="header__nav header__nav--desktop">
           <motion.ul

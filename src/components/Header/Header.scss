@@ -226,7 +226,30 @@
     }
   }
 
-  
+  &__logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:focus-visible {
+      outline: 2px solid color-mix(in oklab, var(--primary-light) 60%, transparent);
+      outline-offset: 3px;
+    }
+
+    &:hover {
+      .header__logo {
+        transform: translateY(-1px);
+      }
+    }
+
+    &:active {
+      .header__logo {
+        transform: translateY(0px);
+      }
+    }
+  }
 
   &__logo {
     display: flex;
