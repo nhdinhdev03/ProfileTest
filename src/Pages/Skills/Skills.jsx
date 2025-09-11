@@ -30,8 +30,9 @@ import {
   SiMicrosoftsqlserver,
   SiAngular,
 } from "react-icons/si";
+import TechMarquee from "../../components/TechMarquee/TechMarquee";
 import "./Skills.scss";
-import TechMarquee from "../TechMarquee/TechMarquee";
+
 
 function Skills() {
   const [ref, inView] = useInView({

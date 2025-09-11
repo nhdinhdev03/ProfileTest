@@ -2,30 +2,30 @@ import { lazy } from 'react';
 import MainLayout from '../Layouts/MainLayout';
 import { ROUTES } from './routeConstants';
 
-// Lazy load các component với preloading để tối ưu hiệu suất
+// Lazy load các component từ thư mục Pages để tối ưu hiệu suất
 const About = lazy(() => 
-  import('../components/About/About').then(module => ({ default: module.default }))
+  import('../Pages/About/About').then(module => ({ default: module.default }))
 );
 const Skills = lazy(() => 
-  import('../components/Skills/Skills').then(module => ({ default: module.default }))
+  import('../Pages/Skills/Skills').then(module => ({ default: module.default }))
 );
 const Projects = lazy(() => 
-  import('../components/Projects/Projects').then(module => ({ default: module.default }))
+  import('../Pages/Projects/Projects').then(module => ({ default: module.default }))
 );
 const Blog = lazy(() => 
-  import('../components/Blog/Blog').then(module => ({ default: module.default }))
+  import('../Pages/Blog/Blog').then(module => ({ default: module.default }))
 );
 const BlogDetail = lazy(() => 
-  import('../components/Blog/BlogDetail').then(module => ({ default: module.default }))
+  import('../Pages/Blog/BlogDetail').then(module => ({ default: module.default }))
 );
 const Contact = lazy(() => 
-  import('../components/Contact/Contact').then(module => ({ default: module.default }))
+  import('../Pages/Contact/Contact').then(module => ({ default: module.default }))
 );
 const Experience = lazy(() => 
   import('../components/Experience/Experience').then(module => ({ default: module.default }))
 );
 const Hero = lazy(() => 
-  import('../components/Hero/Hero').then(module => ({ default: module.default }))
+  import('../Pages/Hero/Hero').then(module => ({ default: module.default }))
 );
 
 export const publicRoutes = [
