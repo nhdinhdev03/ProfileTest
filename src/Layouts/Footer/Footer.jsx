@@ -21,6 +21,7 @@ function Footer() {
   const currentYear = new Date().getFullYear()
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const scrollTimeoutRef = useRef(null)
 
   const socialLinks = [
@@ -52,9 +53,12 @@ function Footer() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercent = (scrollTop / docHeight) * 100
       const shouldShow = scrollTop > 300
 
       setShowScrollTop(shouldShow)
+      setScrollProgress(Math.min(100, scrollPercent))
       
       if (shouldShow) {
         setIsScrolling(true)
@@ -330,35 +334,133 @@ function Footer() {
         </motion.div>
       </div>
 
-      {/* Floating Scroll to Top Button */}
+      {/* Enhanced Floating Scroll to Top Button */}
       <AnimatePresence>
-        {showScrollTop && isScrolling && (
-          <motion.button
-            className="footer__scroll-top-floating"
-            onClick={scrollToTop}
+        {showScrollTop && (
+          <motion.div
+            className="footer__scroll-container"
             initial={{ opacity: 0, scale: 0, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0, y: 20 }}
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.95 }}
             transition={{
               type: 'spring',
-              stiffness: 250,
-              damping: 20
+              stiffness: 300,
+              damping: 25
             }}
-            aria-label="Scroll to top"
-            title="Cuộn lên đầu trang"
           >
-            <FiArrowUp />
-            <div className="scroll-progress">
-              <motion.div
-                className="scroll-progress-bar"
+            {/* Progress Ring */}
+            <svg className="footer__scroll-progress-ring" viewBox="0 0 100 100">
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.1)"
+                strokeWidth="2"
+                className="footer__scroll-progress-bg"
+              />
+              <motion.circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="url(#progressGradient)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                className="footer__scroll-progress-fill"
                 style={{
-                  height: `${Math.min(100, (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100)}%`
+                  strokeDasharray: `${2 * Math.PI * 45}`,
+                  strokeDashoffset: `${2 * Math.PI * 45 * (1 - scrollProgress / 100)}`,
+                }}
+                initial={{ strokeDashoffset: `${2 * Math.PI * 45}` }}
+                animate={{ 
+                  strokeDashoffset: `${2 * Math.PI * 45 * (1 - scrollProgress / 100)}`,
+                  rotate: scrollProgress > 0 ? 360 : 0
+                }}
+                transition={{ 
+                  strokeDashoffset: { duration: 0.3, ease: "easeOut" },
+                  rotate: { duration: 8, ease: "linear", repeat: Infinity }
+                }}
+                transformOrigin="50% 50%"
+              />
+              <defs>
+                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8B5CF6" />
+                  <stop offset="50%" stopColor="#6366F1" />
+                  <stop offset="100%" stopColor="#3B82F6" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* Main Button */}
+            <motion.button
+              className="footer__scroll-top-button"
+              onClick={scrollToTop}
+              whileHover={{ 
+                scale: 1.1, 
+                y: -3,
+                boxShadow: "0 20px 40px rgba(99, 102, 241, 0.4)"
+              }}
+              whileTap={{ scale: 0.95 }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 17
+              }}
+              aria-label="Scroll to top"
+              title="Cuộn lên đầu trang"
+            >
+              <motion.div
+                className="footer__scroll-icon-wrapper"
+                animate={{
+                  y: isScrolling ? [-2, 2, -2] : 0,
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: isScrolling ? Infinity : 0,
+                  ease: "easeInOut"
+                }}
+              >
+                <FiArrowUp className="footer__scroll-icon" />
+              </motion.div>
+
+              {/* Ripple Effect */}
+              <motion.div
+                className="footer__scroll-ripple"
+                animate={{
+                  scale: [1, 1.5, 1],
+                  opacity: [0.3, 0, 0.3]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
                 }}
               />
+            </motion.button>
+
+            {/* Floating Particles */}
+            <div className="footer__scroll-particles">
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="footer__scroll-particle"
+                  animate={{
+                    y: [-10, -30, -10],
+                    x: [0, (i - 1) * 5, 0],
+                    opacity: [0, 1, 0],
+                    scale: [0.5, 1, 0.5]
+                  }}
+                  transition={{
+                    duration: 2 + i * 0.3,
+                    repeat: Infinity,
+                    delay: i * 0.4,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
             </div>
-          </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
     </footer>

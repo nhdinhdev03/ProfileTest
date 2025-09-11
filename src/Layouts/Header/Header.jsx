@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -17,18 +17,338 @@ import {
 import "./Header.scss";
 
 import { ROUTES } from "../../router/routeConstants";
+import ThemeToggle from "../../components/ThemeToggle/ThemeToggle.jsx";
+
+// Extract nav items outside component to avoid recreation on each render
+const NAV_ITEMS = [
+  { id: "home", label: "Home", icon: FiHome, path: ROUTES.HOME },
+  { id: "about", label: "About", icon: FiUser, path: ROUTES.ABOUT },
+  { id: "skills", label: "Skills", icon: FiCode, path: ROUTES.SKILLS },
+  { id: "projects", label: "Projects", icon: FiFolder, path: ROUTES.PROJECTS },
+  { id: "blog", label: "Blog", icon: FiBookOpen, path: ROUTES.BLOG },
+  { id: "contact", label: "Contact", icon: FiMail, path: ROUTES.CONTACT },
+];
+
+// Helper utilities (outside component to lower cognitive complexity inside component)
+const getHeaderOffset = () => {
+  const headerEl = document.querySelector('.header');
+  return headerEl ? headerEl.getBoundingClientRect().height : 80;
+};
+
+const areSectionsClose = (sectionId1, sectionId2) => {
+  if (!sectionId1 || !sectionId2) return false;
+  const el1 = document.getElementById(sectionId1);
+  const el2 = document.getElementById(sectionId2);
+  if (!el1 || !el2) return false;
+  const gap = Math.abs(el1.getBoundingClientRect().bottom - el2.getBoundingClientRect().top);
+  return gap < 200; // threshold
+};
+
+const easeInOutQuart = (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2);
+
+const computeTargetY = ({ elementRect, elementTop, headerOffset, isAdjacentNavigation, isCloseSection }) => {
+  let targetY;
+  const baseHeight = elementRect.height;
+  if (isAdjacentNavigation || isCloseSection) {
+    const buffer = Math.min(15, baseHeight * 0.03);
+    targetY = Math.max(0, elementTop - headerOffset - buffer);
+  } else {
+    const buffer = Math.min(30, baseHeight * 0.08);
+    targetY = Math.max(0, elementTop - headerOffset - buffer);
+  }
+  return targetY;
+};
+
+const computeScrollDuration = ({ distance, isAdjacentNavigation }) => {
+  let baseDuration;
+  if (isAdjacentNavigation && distance < window.innerHeight * 0.8) {
+    baseDuration = Math.min(distance / 4, 600);
+  } else if (distance < window.innerHeight) {
+    baseDuration = Math.min(distance / 2.5, 800);
+  } else {
+    baseDuration = Math.min(distance / 2, 1200);
+  }
+  return Math.max(250, baseDuration);
+};
+
+// Presentational: Desktop Navigation
+const DesktopNav = ({ activeSection }) => (
+  <nav className="header__nav header__nav--desktop" aria-label="Primary">
+    <motion.ul
+      className="header__nav-list"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.3 }}
+    >
+      {NAV_ITEMS.map((item, index) => {
+        const Icon = item.icon;
+        return (
+          <motion.li
+            key={item.id}
+            className="header__nav-item"
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: index * 0.08,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+            whileHover={{ y: -2 }}
+          >
+            <Link
+              to={item.path}
+              className={`header__nav-link ${
+                activeSection === item.id ? "header__nav-link--active" : ""
+              }`}
+              aria-label={`Navigate to ${item.label}`}
+            >
+              <motion.div
+                className="header__nav-icon-container"
+                whileHover={{ rotate: 3, scale: 1.05 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 250,
+                  damping: 20,
+                }}
+              >
+                <Icon className="header__nav-icon" />
+              </motion.div>
+              <span className="header__nav-text">{item.label}</span>
+              {activeSection === item.id && (
+                <motion.div
+                  className="header__nav-indicator"
+                  layoutId="activeIndicator"
+                  initial={false}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30,
+                  }}
+                />
+              )}
+              <motion.div
+                className="header__nav-glow"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </Link>
+          </motion.li>
+        );
+      })}
+    </motion.ul>
+  </nav>
+);
+
+// Presentational: Mobile Navigation (inside AnimatePresence)
+const MobileNav = ({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef }) => (
+  <AnimatePresence mode="wait">
+    {isMenuOpen && (
+      <>
+        <motion.div
+          className="header__overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onClick={() => setIsMenuOpen(false)}
+        />
+        <motion.nav
+          id="mobile-navigation"
+          className="header__nav header__nav--mobile"
+          aria-label="Mobile navigation"
+          ref={mobileNavRef}
+          initial={{ x: "100%", opacity: 0 }}
+          animate={{
+            x: 0,
+            opacity: 1,
+            transition: {
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+            },
+          }}
+          exit={{
+            x: "100%",
+            opacity: 0,
+            transition: {
+              duration: 0.3,
+              ease: "easeInOut",
+            },
+          }}
+        >
+          <motion.div
+            className="header__nav-mobile-header"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <div className="header__nav-mobile-title">Navigation</div>
+            <div className="header__nav-mobile-subtitle">Choose your destination</div>
+          </motion.div>
+          <ul className="header__nav-list header__nav-list--mobile">
+            {NAV_ITEMS.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <motion.li
+                  key={item.id}
+                  className="header__nav-item"
+                  initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                    scale: 1,
+                    transition: {
+                      delay: index * 0.1 + 0.2,
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 25,
+                    },
+                  }}
+                  whileHover={{ scale: 1.02, x: 10, transition: { duration: 0.2 } }}
+                >
+                  <Link
+                    to={item.path}
+                    className={`header__nav-link ${activeSection === item.id ? "header__nav-link--active" : ""}`}
+                    onClick={() => setIsMenuOpen(false)}
+                    tabIndex={0}
+                  >
+                    <motion.div
+                      className="header__nav-icon-container"
+                      whileHover={{ rotate: 10, scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    >
+                      <Icon className="header__nav-icon" />
+                    </motion.div>
+                    <span className="header__nav-text">{item.label}</span>
+                    {activeSection === item.id && (
+                      <motion.div
+                        className="header__nav-active-dot"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        layoutId="activeDotMobile"
+                      />
+                    )}
+                  </Link>
+                </motion.li>
+              );
+            })}
+            <motion.li
+              className="header__nav-item header__nav-item--theme"
+              initial={{ opacity: 0, x: 50, scale: 0.9 }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                scale: 1,
+                transition: {
+                  delay: NAV_ITEMS.length * 0.1 + 0.3,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 25,
+                },
+              }}
+            >
+              <div className="header__mobile-theme-toggle">
+                <ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="mobile" />
+              </div>
+            </motion.li>
+          </ul>
+        </motion.nav>
+      </>
+    )}
+  </AnimatePresence>
+);
+
+DesktopNav.propTypes = {
+  activeSection: PropTypes.string.isRequired,
+};
+
+MobileNav.propTypes = {
+  isMenuOpen: PropTypes.bool.isRequired,
+  setIsMenuOpen: PropTypes.func.isRequired,
+  activeSection: PropTypes.string.isRequired,
+  theme: PropTypes.string.isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+  mobileNavRef: PropTypes.object.isRequired,
+};
+
+// Hook: derive active section from route changes
+const useRouteActiveSection = (pathname, getActiveSectionFromPath, setIsMenuOpen) => {
+  const [activeSection, setActiveSection] = useState(getActiveSectionFromPath(pathname));
+  useEffect(() => {
+    setActiveSection(getActiveSectionFromPath(pathname));
+    setIsMenuOpen(false); // close menu on navigation
+  }, [pathname, getActiveSectionFromPath, setIsMenuOpen]);
+  return [activeSection, setActiveSection];
+};
+
+// Hook: scroll spy & header scrolled state
+const useScrollSpy = (isScrolling, setIsScrolled, setActiveSection) => {
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+
+    const handleSectionInView = () => {
+      if (isScrolling) return; // skip while programmatic scroll
+      let current = 'home';
+      const viewHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+      const headerOffset = getHeaderOffset();
+      let maxVisibleArea = 0;
+      NAV_ITEMS.forEach(({ id }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const elementTop = rect.top + scrollY;
+        const elementBottom = elementTop + rect.height;
+        const viewTop = scrollY + headerOffset;
+        const viewBottom = scrollY + viewHeight;
+        const visibleTop = Math.max(elementTop, viewTop);
+        const visibleBottom = Math.min(elementBottom, viewBottom);
+        const visibleArea = Math.max(0, visibleBottom - visibleTop);
+        const distanceFromTop = Math.abs(elementTop - viewTop);
+        const topProximityBonus = Math.max(0, (viewHeight * 0.5 - distanceFromTop) / (viewHeight * 0.5));
+        const adjustedVisibleArea = visibleArea * (1 + topProximityBonus * 0.3);
+        if (adjustedVisibleArea > maxVisibleArea) {
+          maxVisibleArea = adjustedVisibleArea;
+          current = id;
+        }
+      });
+      setActiveSection(current);
+    };
+
+    let scrollTimeout;
+    const throttled = () => {
+      if (scrollTimeout) return;
+      scrollTimeout = setTimeout(() => {
+        handleScroll();
+        handleSectionInView();
+        scrollTimeout = null;
+      }, 16);
+    };
+
+    window.addEventListener('scroll', throttled, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', throttled);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+    };
+  }, [isScrolling, setIsScrolled, setActiveSection]);
+};
 
 function Header({ theme, toggleTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const mobileNavRef = useRef(null);
+  const menuButtonRef = useRef(null);
   
   // React Router location hook
   const location = useLocation();
   const pathname = location.pathname;
   
   // Determine active section based on current route
-  const getActiveSectionFromPath = (path) => {
+  const getActiveSectionFromPath = useCallback((path) => {
     if (path === ROUTES.HOME) return "home";
     if (path === ROUTES.ABOUT) return "about";
     if (path === ROUTES.SKILLS) return "skills";
@@ -36,174 +356,44 @@ function Header({ theme, toggleTheme }) {
     if (path === ROUTES.BLOG || path.includes('/blog/')) return "blog";
     if (path === ROUTES.CONTACT) return "contact";
     return "home";
-  };
+  }, []);
   
-  const [activeSection, setActiveSection] = useState(getActiveSectionFromPath(pathname));
-
-  // Get the current header height (includes safe-area padding) for precise offsets
-  const getHeaderOffset = () => {
-    const headerEl = document.querySelector(".header");
-    if (!headerEl) return 80; // sensible fallback
-    return headerEl.getBoundingClientRect().height;
-  };
+  const [activeSection, setActiveSection] = useRouteActiveSection(pathname, getActiveSectionFromPath, setIsMenuOpen);
 
   // Helper function to get adjacent sections
   const getAdjacentSections = (currentSectionId) => {
-    const currentIndex = navItems.findIndex(item => item.id === currentSectionId);
+    const currentIndex = NAV_ITEMS.findIndex(item => item.id === currentSectionId);
     return {
-      previous: currentIndex > 0 ? navItems[currentIndex - 1].id : null,
-      next: currentIndex < navItems.length - 1 ? navItems[currentIndex + 1].id : null
+      previous: currentIndex > 0 ? NAV_ITEMS[currentIndex - 1].id : null,
+      next: currentIndex < NAV_ITEMS.length - 1 ? NAV_ITEMS[currentIndex + 1].id : null
     };
   };
 
-  // Check if two sections are close to each other
-  const areSectionsClose = (sectionId1, sectionId2) => {
-    const el1 = document.getElementById(sectionId1);
-    const el2 = document.getElementById(sectionId2);
-    if (!el1 || !el2) return false;
-    
-    const rect1 = el1.getBoundingClientRect();
-    const rect2 = el2.getBoundingClientRect();
-    const gap = Math.abs(rect1.bottom - rect2.top);
-    
-    // Consider sections close if gap is less than 200px
-    return gap < 200;
-  };
-
-  const navItems = [
-    { id: "home", label: "Home", icon: FiHome, path: ROUTES.HOME },
-    { id: "about", label: "About", icon: FiUser, path: ROUTES.ABOUT },
-    { id: "skills", label: "Skills", icon: FiCode, path: ROUTES.SKILLS },
-    { id: "projects", label: "Projects", icon: FiFolder, path: ROUTES.PROJECTS },
-    { id: "blog", label: "Blog", icon: FiBookOpen, path: ROUTES.BLOG },
-    { id: "contact", label: "Contact", icon: FiMail, path: ROUTES.CONTACT },
-  ];
-
-  // Update active section when route changes
-  useEffect(() => {
-    setActiveSection(getActiveSectionFromPath(pathname));
-  }, [pathname]);
+  // Scroll spy
+  useScrollSpy(isScrolling, setIsScrolled, setActiveSection);
   
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+  // (Removed inline scroll spy effect - replaced by custom hook)
 
-    const handleSectionInView = () => {
-      // Don't update active section while programmatically scrolling
-      if (isScrolling) return;
-      
-      let current = "home";
-      const viewHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-      const headerOffset = getHeaderOffset();
-      
-      // Find the section that's most visible in the viewport
-      let maxVisibleArea = 0;
-      
-      navItems.forEach(({ id }) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        
-        const rect = el.getBoundingClientRect();
-        const elementTop = rect.top + scrollY;
-        const elementBottom = elementTop + rect.height;
-        
-        // Calculate visible area of this section
-        const viewTop = scrollY + headerOffset;
-        const viewBottom = scrollY + viewHeight;
-        
-        const visibleTop = Math.max(elementTop, viewTop);
-        const visibleBottom = Math.min(elementBottom, viewBottom);
-        const visibleArea = Math.max(0, visibleBottom - visibleTop);
-        
-        // Give priority to sections that are positioned at the top of viewport
-        const distanceFromTop = Math.abs(elementTop - viewTop);
-        const topProximityBonus = Math.max(0, (viewHeight * 0.5 - distanceFromTop) / (viewHeight * 0.5));
-        const adjustedVisibleArea = visibleArea * (1 + topProximityBonus * 0.3);
-        
-        if (adjustedVisibleArea > maxVisibleArea) {
-          maxVisibleArea = adjustedVisibleArea;
-          current = id;
-        }
-      });
-      
-      setActiveSection(current);
-    };
-
-    // Throttle scroll events for better performance
-    let scrollTimeout;
-    const throttledHandleScroll = () => {
-      if (scrollTimeout) return;
-      scrollTimeout = setTimeout(() => {
-        handleScroll();
-        handleSectionInView();
-        scrollTimeout = null;
-      }, 16); // ~60fps
-    };
-
-    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", throttledHandleScroll);
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-    };
-  }, [isScrolling]);
-
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = useCallback((sectionId) => {
     // Update active immediately for responsive UI
     setActiveSection(sectionId);
     setIsScrolling(true);
 
     const element = document.getElementById(sectionId);
     if (element) {
-      // Account for fixed header height (dynamic, includes safe-area)
       const headerOffset = getHeaderOffset();
       const elementRect = element.getBoundingClientRect();
       const elementTop = elementRect.top + window.scrollY;
-      let targetY = Math.max(0, elementTop - headerOffset);
-      
-      // Check if we're navigating to adjacent sections
       const { previous, next } = getAdjacentSections(activeSection);
       const isAdjacentNavigation = sectionId === previous || sectionId === next;
       const isCloseSection = areSectionsClose(activeSection, sectionId);
-      
-      // For close/adjacent sections, optimize positioning
-      if (isAdjacentNavigation || isCloseSection) {
-        // Add a smaller buffer for adjacent sections
-        const buffer = Math.min(15, elementRect.height * 0.03);
-        targetY = Math.max(0, elementTop - headerOffset - buffer);
-      } else {
-        // For distant sections, add more spacing
-        const buffer = Math.min(30, elementRect.height * 0.08);
-        targetY = Math.max(0, elementTop - headerOffset - buffer);
-      }
-      
-      // Enhanced smooth scrolling with adaptive duration and easing
+      const targetY = computeTargetY({ elementRect, elementTop, headerOffset, isAdjacentNavigation, isCloseSection });
+
       const startY = window.scrollY;
       const finalDistance = targetY - startY;
       const distance = Math.abs(finalDistance);
-      
-      // Adaptive duration based on distance and section relationship
-      let baseDuration;
-      if (isAdjacentNavigation && distance < window.innerHeight * 0.8) {
-        // Faster for nearby adjacent sections
-        baseDuration = Math.min(distance / 4, 600);
-      } else if (distance < window.innerHeight) {
-        // Medium speed for sections within viewport
-        baseDuration = Math.min(distance / 2.5, 800);
-      } else {
-        // Longer duration for distant sections, but not too long
-        baseDuration = Math.min(distance / 2, 1200);
-      }
-      
-      const duration = Math.max(250, baseDuration); // Minimum 250ms for smooth feel
+      const duration = computeScrollDuration({ distance, isAdjacentNavigation });
       let startTime = null;
-
-      // Enhanced easing function for more natural feel
-      const easeInOutQuart = (t) => {
-        return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
-      };
 
       const animateScroll = (currentTime) => {
         if (startTime === null) startTime = currentTime;
@@ -227,7 +417,46 @@ function Header({ theme, toggleTheme }) {
       requestAnimationFrame(animateScroll);
     }
     setIsMenuOpen(false);
-  };
+  }, [activeSection, setActiveSection, setIsScrolling]);
+
+  // Body scroll lock when menu open (mobile)
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    return () => document.body.classList.remove('no-scroll');
+  }, [isMenuOpen]);
+
+  // ESC close & focus trap
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+      } else if (e.key === 'Tab') {
+        const focusable = mobileNavRef.current?.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (!focusable || focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    // Focus first link after animation
+    setTimeout(() => {
+      mobileNavRef.current?.querySelector('a')?.focus();
+    }, 120);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMenuOpen]);
 
   const headerVariants = {
     hidden: { y: -100, opacity: 0 },
@@ -249,7 +478,7 @@ function Header({ theme, toggleTheme }) {
       initial="hidden"
       animate="visible"
     >
-  <div className="header__container">
+      <div className="header__container">
         {/* Mobile Menu Title - only visible when menu is open */}
         <motion.div
           className="header__mobile-title"
@@ -362,75 +591,7 @@ function Header({ theme, toggleTheme }) {
         </motion.div>
         </Link>
 
-  <nav className="header__nav header__nav--desktop">
-          <motion.ul
-            className="header__nav-list"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            {navItems.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.li
-                  key={item.id}
-                  className="header__nav-item"
-                  initial={{ opacity: 0, y: -30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: index * 0.08,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 20,
-                  }}
-                  whileHover={{ y: -2 }}
-                >
-                  <Link 
-                    to={item.path}
-                    className={`header__nav-link ${
-                      activeSection === item.id
-                        ? "header__nav-link--active"
-                        : ""
-                    }`}
-                    aria-label={`Navigate to ${item.label}`}
-                  >
-                    <motion.div
-                      className="header__nav-icon-container"
-                      whileHover={{ rotate: 3, scale: 1.05 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 250,
-                        damping: 20,
-                      }}
-                    >
-                      <Icon className="header__nav-icon" />
-                    </motion.div>
-                    <span className="header__nav-text">{item.label}</span>
-                    {activeSection === item.id && (
-                      <motion.div
-                        className="header__nav-indicator"
-                        layoutId="activeIndicator"
-                        initial={false}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <motion.div
-                      className="header__nav-glow"
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </Link>
-                </motion.li>
-              );
-            })}
-          </motion.ul>
-        </nav>
+        <DesktopNav activeSection={activeSection} />
 
         {/* Theme toggle for desktop - compact version */}
         <div className="header__actions">
@@ -451,16 +612,18 @@ function Header({ theme, toggleTheme }) {
           </motion.button>
         </div>
 
-  <motion.button
+        <motion.button
           className={`header__menu-toggle ${
             isMenuOpen ? "header__menu-toggle--open" : ""
           }`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen}
+          aria-controls="mobile-navigation"
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          ref={menuButtonRef}
         >
           <motion.div
             animate={{ rotate: isMenuOpen ? 180 : 0 }}
@@ -470,135 +633,14 @@ function Header({ theme, toggleTheme }) {
           </motion.div>
         </motion.button>
       </div>
-
-      <AnimatePresence mode="wait">
-        {isMenuOpen && (
-          <>
-            <motion.div
-              className="header__overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <motion.nav
-              className="header__nav header__nav--mobile"
-              initial={{ x: "100%", opacity: 0 }}
-              animate={{
-                x: 0,
-                opacity: 1,
-                transition: {
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                },
-              }}
-              exit={{
-                x: "100%",
-                opacity: 0,
-                transition: {
-                  duration: 0.3,
-                  ease: "easeInOut",
-                },
-              }}
-            >
-              <motion.div
-                className="header__nav-mobile-header"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <div className="header__nav-mobile-title">Navigation</div>
-                <div className="header__nav-mobile-subtitle">
-                  Choose your destination
-                </div>
-              </motion.div>
-
-              <ul className="header__nav-list header__nav-list--mobile">
-                {navItems.map((item, index) => {
-                  const Icon = item.icon;
-                  return (
-                    <motion.li
-                      key={item.id}
-                      className="header__nav-item"
-                      initial={{ opacity: 0, x: 50, scale: 0.9 }}
-                      animate={{
-                        opacity: 1,
-                        x: 0,
-                        scale: 1,
-                        transition: {
-                          delay: index * 0.1 + 0.2,
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 25,
-                        },
-                      }}
-                      whileHover={{
-                        scale: 1.02,
-                        x: 10,
-                        transition: { duration: 0.2 },
-                      }}
-                    >
-                      <Link
-                        to={item.path}
-                        className={`header__nav-link ${
-                          activeSection === item.id
-                            ? "header__nav-link--active"
-                            : ""
-                        }`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <motion.div
-                          className="header__nav-icon-container"
-                          whileHover={{ rotate: 10, scale: 1.1 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 400,
-                            damping: 15,
-                          }}
-                        >
-                          <Icon className="header__nav-icon" />
-                        </motion.div>
-                        <span className="header__nav-text">{item.label}</span>
-                        {activeSection === item.id && (
-                          <motion.div
-                            className="header__nav-active-dot"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            layoutId="activeDotMobile"
-                          />
-                        )}
-                      </Link>
-                    </motion.li>
-                  );
-                })}
-
-                {/* Theme Toggle in Mobile Menu */}
-                <motion.li
-                  className="header__nav-item header__nav-item--theme"
-                  initial={{ opacity: 0, x: 50, scale: 0.9 }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                    scale: 1,
-                    transition: {
-                      delay: navItems.length * 0.1 + 0.3,
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 25,
-                    },
-                  }}
-                >
-                  <div className="header__mobile-theme-toggle">
-                    <ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="mobile" />
-                  </div>
-                </motion.li>
-              </ul>
-            </motion.nav>
-          </>
-        )}
-      </AnimatePresence>
+      <MobileNav
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        activeSection={activeSection}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        mobileNavRef={mobileNavRef}
+      />
     </motion.header>
   );
 };
