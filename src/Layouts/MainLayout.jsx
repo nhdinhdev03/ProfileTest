@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
@@ -11,25 +11,10 @@ const MainLayout = ({ children, theme, toggleTheme }) => {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <PageTransition>
-          <Suspense 
-            fallback={
-              <div className="page-loading">
-                <div className="loading-content">
-                  <div className="loading-spinner">
-                    <div className="spinner"></div>
-                  </div>
-                  <div className="loading-text">Đang tải...</div>
-                </div>
-              </div>
-            }
-          >
-            {children}
-          </Suspense>
+          {children}
         </PageTransition>
       </main>
-      <Suspense fallback={<div className="loading-footer">Loading...</div>}>
-        <Footer />
-      </Suspense>
+      <Footer />
     </div>
   );
 };
