@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   FiMenu,
@@ -15,12 +16,29 @@ import {
 } from "react-icons/fi";
 import "./Header.scss";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import { ROUTES } from "../../router/routeConstants";
 
 function Header({ theme, toggleTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const [isScrolling, setIsScrolling] = useState(false);
+  
+  // React Router location hook
+  const location = useLocation();
+  const pathname = location.pathname;
+  
+  // Determine active section based on current route
+  const getActiveSectionFromPath = (path) => {
+    if (path === ROUTES.HOME) return "home";
+    if (path === ROUTES.ABOUT) return "about";
+    if (path === ROUTES.SKILLS) return "skills";
+    if (path === ROUTES.PROJECTS) return "projects";
+    if (path === ROUTES.BLOG || path.includes('/blog/')) return "blog";
+    if (path === ROUTES.CONTACT) return "contact";
+    return "home";
+  };
+  
+  const [activeSection, setActiveSection] = useState(getActiveSectionFromPath(pathname));
 
   // Get the current header height (includes safe-area padding) for precise offsets
   const getHeaderOffset = () => {
@@ -53,14 +71,19 @@ function Header({ theme, toggleTheme }) {
   };
 
   const navItems = [
-    { id: "home", label: "Home", icon: FiHome },
-    { id: "about", label: "About", icon: FiUser },
-    { id: "skills", label: "Skills", icon: FiCode },
-    { id: "projects", label: "Projects", icon: FiFolder },
-    { id: "blog", label: "Blog", icon: FiBookOpen },
-    { id: "contact", label: "Contact", icon: FiMail },
+    { id: "home", label: "Home", icon: FiHome, path: ROUTES.HOME },
+    { id: "about", label: "About", icon: FiUser, path: ROUTES.ABOUT },
+    { id: "skills", label: "Skills", icon: FiCode, path: ROUTES.SKILLS },
+    { id: "projects", label: "Projects", icon: FiFolder, path: ROUTES.PROJECTS },
+    { id: "blog", label: "Blog", icon: FiBookOpen, path: ROUTES.BLOG },
+    { id: "contact", label: "Contact", icon: FiMail, path: ROUTES.CONTACT },
   ];
 
+  // Update active section when route changes
+  useEffect(() => {
+    setActiveSection(getActiveSectionFromPath(pathname));
+  }, [pathname]);
+  
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -356,20 +379,14 @@ function Header({ theme, toggleTheme }) {
                   }}
                   whileHover={{ y: -2 }}
                 >
-                  <motion.button
+                  <Link 
+                    to={item.path}
                     className={`header__nav-link ${
                       activeSection === item.id
                         ? "header__nav-link--active"
                         : ""
                     }`}
-                    onClick={() => scrollToSection(item.id)}
                     aria-label={`Navigate to ${item.label}`}
-                    whileHover={{
-                      scale: 1.02,
-                      backgroundColor: "rgba(99, 102, 241, 0.08)",
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
                   >
                     <motion.div
                       className="header__nav-icon-container"
@@ -402,7 +419,7 @@ function Header({ theme, toggleTheme }) {
                       whileHover={{ opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     />
-                  </motion.button>
+                  </Link>
                 </motion.li>
               );
             })}
@@ -517,14 +534,14 @@ function Header({ theme, toggleTheme }) {
                         transition: { duration: 0.2 },
                       }}
                     >
-                      <motion.button
+                      <Link
+                        to={item.path}
                         className={`header__nav-link ${
                           activeSection === item.id
                             ? "header__nav-link--active"
                             : ""
                         }`}
-                        onClick={() => scrollToSection(item.id)}
-                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         <motion.div
                           className="header__nav-icon-container"
@@ -546,7 +563,7 @@ function Header({ theme, toggleTheme }) {
                             layoutId="activeDotMobile"
                           />
                         )}
-                      </motion.button>
+                      </Link>
                     </motion.li>
                   );
                 })}

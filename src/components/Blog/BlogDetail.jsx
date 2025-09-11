@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   FiCalendar,
   FiClock,
@@ -13,26 +14,65 @@ import {
   FiList,
 } from "react-icons/fi";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import { ROUTES } from "../../router/routeConstants";
 import "./BlogDetail.scss";
 
-function BlogDetail({ post, onBack }) {
+function BlogDetail() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [post, setPost] = useState(null);
   const [readingProgress, setReadingProgress] = useState(0);
   const [showTableOfContents, setShowTableOfContents] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const contentRef = useRef(null);
   
-  // Scroll to top khi blog detail được mở
-  useEffect(() => {
-    if (post) {
-      // Sử dụng requestAnimationFrame để scroll mượt hơn
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-      });
+  // Demo data - trong ứng dụng thực tế sẽ được lấy từ API
+  const blogPosts = [
+    {
+      id: "1",
+      title: "React 18 Concurrent Features: Deep Dive vào Render Behavior",
+      excerpt: "Phân tích sâu về Concurrent Rendering trong React 18",
+      content: `<div>
+        <p>React 18 đánh dấu bước ngoặt lớn với Concurrent Rendering - khả năng React có thể tạm dừng, tiếp tục, hoặc hủy bỏ render work để duy trì responsiveness.</p>
+        <h2>Concurrent Rendering Overview</h2>
+        <p>Đây là một thay đổi cách React xử lý updates.</p>
+      </div>`,
+      author: "Nhật Đình",
+      date: "2023-11-20",
+      readTime: 8,
+      category: "react"
+    },
+    {
+      id: "2",
+      title: "Next.js 13 App Router: Chuyển đổi từ Pages Router",
+      excerpt: "App Router là một thay đổi lớn trong Next.js 13",
+      content: `<div>
+        <p>App Router là một thay đổi lớn trong Next.js 13</p>
+        <h2>Server Components</h2>
+        <p>Một trong những tính năng chính của App Router</p>
+      </div>`,
+      author: "Nhật Đình",
+      date: "2023-11-15",
+      readTime: 6,
+      category: "nextjs"
     }
-  }, [post?.id]); // Chỉ scroll khi post.id thay đổi
+  ];
+
+  // Lấy bài viết dựa trên ID
+  useEffect(() => {
+    const foundPost = blogPosts.find(p => p.id === id);
+    if (foundPost) {
+      setPost(foundPost);
+    }
+    
+    // Scroll to top khi blog detail được mở
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }, [id]);
 
   // Reading progress tracking
   useEffect(() => {
@@ -159,7 +199,7 @@ function BlogDetail({ post, onBack }) {
         >
           <motion.button
             className="blog-detail__back-btn"
-            onClick={onBack}
+            onClick={() => navigate(ROUTES.BLOG)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

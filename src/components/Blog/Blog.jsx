@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   FiCalendar,
   FiClock,
@@ -9,9 +10,10 @@ import {
   FiSearch,
   FiFilter,
 } from "react-icons/fi";
+import { ROUTES } from "../../router/routeConstants";
 import "./Blog.scss";
 
-function Blog({ onPostSelect }) {
+function Blog() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -1037,11 +1039,7 @@ function createDynamicGrid(items) {
     },
   };
 
-  const handlePostClick = (post) => {
-    if (onPostSelect) {
-      onPostSelect(post);
-    }
-  };
+  // Không cần handlePostClick nữa vì sẽ dùng Link component
 
   return (
     <section id="blog" className="blog">
@@ -1131,7 +1129,8 @@ function createDynamicGrid(items) {
                   y: -10,
                   transition: { type: "spring", stiffness: 300, damping: 20 },
                 }}
-                onClick={() => handlePostClick(post)}
+                as={Link}
+                to={`/v1/blog/${post.id}`}
               >
                 <div className="blog__card-image">
                   <img src={post.image} alt={post.title} />
