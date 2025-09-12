@@ -1,24 +1,26 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-
-import PageTransition from '../components/PageTransition/PageTransition';
-import '../components/PageTransition/PageTransition.scss';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 
-const MainLayout = ({ children, theme, toggleTheme }) => {
+const MainLayout = memo(({ children, theme, toggleTheme }) => {
   return (
     <div className="App" data-theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <main>
-        <PageTransition>
-          {children}
-        </PageTransition>
+      <main style={{ 
+        paddingTop: '70px',
+        minHeight: '100vh',
+        paddingLeft: 'env(safe-area-inset-left, 0)',
+        paddingRight: 'env(safe-area-inset-right, 0)'
+      }}>
+        {children}
       </main>
       <Footer />
     </div>
   );
-};
+});
+
+MainLayout.displayName = 'MainLayout';
 
 MainLayout.propTypes = {
   children: PropTypes.node.isRequired,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -13,11 +13,11 @@ import {
   FiMail,
   FiSun,
   FiMoon,
+  FiStar,
 } from "react-icons/fi";
 import "./Header.scss";
 
 import { ROUTES } from "../../router/routeConstants";
-import ThemeToggle from "../../components/ThemeToggle/ThemeToggle.jsx";
 
 // Extract nav items outside component to avoid recreation on each render
 const NAV_ITEMS = [
@@ -71,79 +71,43 @@ const computeScrollDuration = ({ distance, isAdjacentNavigation }) => {
   return Math.max(250, baseDuration);
 };
 
-// Presentational: Desktop Navigation
-const DesktopNav = ({ activeSection }) => (
+// Memoized Desktop Navigation - Simplified and Modern
+const DesktopNav = memo(({ activeSection }) => (
   <nav className="header__nav header__nav--desktop" aria-label="Primary">
-    <motion.ul
-      className="header__nav-list"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.3 }}
-    >
-      {NAV_ITEMS.map((item, index) => {
+    <ul className="header__nav-list">
+      {NAV_ITEMS.map((item) => {
         const Icon = item.icon;
+        const isActive = activeSection === item.id;
         return (
-          <motion.li
-            key={item.id}
-            className="header__nav-item"
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: index * 0.08,
-              type: "spring",
-              stiffness: 200,
-              damping: 20,
-            }}
-            whileHover={{ y: -2 }}
-          >
+          <li key={item.id} className="header__nav-item">
             <Link
               to={item.path}
-              className={`header__nav-link ${
-                activeSection === item.id ? "header__nav-link--active" : ""
-              }`}
+              className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
               aria-label={`Navigate to ${item.label}`}
             >
-              <motion.div
-                className="header__nav-icon-container"
-                whileHover={{ rotate: 3, scale: 1.05 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 250,
-                  damping: 20,
-                }}
-              >
-                <Icon className="header__nav-icon" />
-              </motion.div>
+              <Icon className="header__nav-icon" />
               <span className="header__nav-text">{item.label}</span>
-              {activeSection === item.id && (
+              {isActive && (
                 <motion.div
                   className="header__nav-indicator"
                   layoutId="activeIndicator"
-                  initial={false}
-                  animate={{ scale: 1, opacity: 1 }}
                   transition={{
                     type: "spring",
-                    stiffness: 500,
-                    damping: 30,
+                    stiffness: 400,
+                    damping: 25,
                   }}
                 />
               )}
-              <motion.div
-                className="header__nav-glow"
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
             </Link>
-          </motion.li>
+          </li>
         );
       })}
-    </motion.ul>
+    </ul>
   </nav>
-);
+));
 
-// Presentational: Mobile Navigation (inside AnimatePresence)
-const MobileNav = ({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef }) => (
+// Modern Mobile Navigation with smooth animations
+const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef }) => (
   <AnimatePresence mode="wait">
     {isMenuOpen && (
       <>
@@ -152,7 +116,7 @@ const MobileNav = ({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleThem
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
           onClick={() => setIsMenuOpen(false)}
         />
         <motion.nav
@@ -161,105 +125,117 @@ const MobileNav = ({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleThem
           aria-label="Mobile navigation"
           ref={mobileNavRef}
           initial={{ x: "100%", opacity: 0 }}
-          animate={{
-            x: 0,
+          animate={{ 
+            x: 0, 
             opacity: 1,
             transition: {
               type: "spring",
-              stiffness: 300,
-              damping: 30,
-            },
+              stiffness: 400,
+              damping: 40,
+              mass: 1
+            }
           }}
-          exit={{
-            x: "100%",
+          exit={{ 
+            x: "100%", 
             opacity: 0,
             transition: {
-              duration: 0.3,
-              ease: "easeInOut",
-            },
+              duration: 0.25,
+              ease: "easeIn"
+            }
           }}
         >
-          <motion.div
+          <motion.div 
             className="header__nav-mobile-header"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
           >
-            <div className="header__nav-mobile-title">Navigation</div>
-            <div className="header__nav-mobile-subtitle">Choose your destination</div>
+            <h2 className="header__nav-mobile-title">Navigation</h2>
+            <p className="header__nav-mobile-subtitle">Choose your destination</p>
           </motion.div>
+          
           <ul className="header__nav-list header__nav-list--mobile">
             {NAV_ITEMS.map((item, index) => {
               const Icon = item.icon;
+              const isActive = activeSection === item.id;
               return (
-                <motion.li
-                  key={item.id}
+                <motion.li 
+                  key={item.id} 
                   className="header__nav-item"
-                  initial={{ opacity: 0, x: 50, scale: 0.9 }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                    scale: 1,
-                    transition: {
-                      delay: index * 0.1 + 0.2,
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 25,
-                    },
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ 
+                    delay: 0.1 + (index * 0.05),
+                    duration: 0.3,
+                    ease: "easeOut"
                   }}
-                  whileHover={{ scale: 1.02, x: 10, transition: { duration: 0.2 } }}
                 >
                   <Link
                     to={item.path}
-                    className={`header__nav-link ${activeSection === item.id ? "header__nav-link--active" : ""}`}
-                    onClick={() => setIsMenuOpen(false)}
-                    tabIndex={0}
+                    className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
+                    onClick={() => {
+                      // Add haptic feedback for mobile
+                      if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                      }
+                      setIsMenuOpen(false);
+                    }}
                   >
-                    <motion.div
-                      className="header__nav-icon-container"
-                      whileHover={{ rotate: 10, scale: 1.1 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                    >
+                    <div className="header__nav-icon-wrapper">
                       <Icon className="header__nav-icon" />
-                    </motion.div>
+                    </div>
                     <span className="header__nav-text">{item.label}</span>
-                    {activeSection === item.id && (
+                    {isActive && (
                       <motion.div
                         className="header__nav-active-dot"
+                        layoutId="activeDotMobile"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        layoutId="activeDotMobile"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
                       />
                     )}
                   </Link>
                 </motion.li>
               );
             })}
-            <motion.li
+            
+            <motion.li 
               className="header__nav-item header__nav-item--theme"
-              initial={{ opacity: 0, x: 50, scale: 0.9 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                scale: 1,
-                transition: {
-                  delay: NAV_ITEMS.length * 0.1 + 0.3,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 25,
-                },
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ 
+                delay: 0.1 + (NAV_ITEMS.length * 0.05),
+                duration: 0.3,
+                ease: "easeOut"
               }}
             >
-              <div className="header__mobile-theme-toggle">
-                <ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="mobile" />
-              </div>
+              <button
+                className="header__mobile-theme-btn"
+                onClick={() => {
+                  if (navigator.vibrate) {
+                    navigator.vibrate(10);
+                  }
+                  toggleTheme();
+                }}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              >
+                <div className="header__theme-icon-wrapper">
+                  <motion.div
+                    animate={{ rotate: theme === 'dark' ? 0 : 180 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    {theme === 'dark' ? <FiMoon /> : <FiSun />}
+                  </motion.div>
+                </div>
+                <span>Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
+              </button>
             </motion.li>
           </ul>
         </motion.nav>
       </>
     )}
   </AnimatePresence>
-);
+));
 
 DesktopNav.propTypes = {
   activeSection: PropTypes.string.isRequired,
@@ -458,180 +434,52 @@ function Header({ theme, toggleTheme }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMenuOpen]);
 
-  const headerVariants = {
-    hidden: { y: -100, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-      },
-    },
-  };
-
   return (
-    <motion.header
+    <header
       className={`header ${isScrolled ? "header--scrolled" : ""} ${isMenuOpen ? "header--menu-open" : ""} ${isScrolling ? "header--scrolling" : ""}`}
-      variants={headerVariants}
-      initial="hidden"
-      animate="visible"
     >
       <div className="header__container">
-        {/* Mobile Menu Title - only visible when menu is open */}
-        <motion.div
-          className="header__mobile-title"
-          animate={{ 
-            opacity: isMenuOpen ? 1 : 0,
-            x: isMenuOpen ? 0 : -30,
-            scale: isMenuOpen ? 1 : 0.9
-          }}
-          transition={{ 
-            duration: 0.3, 
-            ease: "easeInOut",
-            delay: isMenuOpen ? 0.1 : 0
-          }}
-        >
-          <span>Menu</span>
-        </motion.div>
 
         <Link 
           to={ROUTES.HOME}
           className="header__logo-link"
           aria-label="Navigate to Home"
+          onClick={() => scrollToSection("home")}
         >
-          <motion.div
-            className="header__logo"
-            whileHover={{ 
-              scale: 1.02,
-              transition: { duration: 0.2, ease: "easeOut" }
-            }}
-            whileTap={{ 
-              scale: 0.96,
-              transition: { duration: 0.1, ease: "easeInOut" }
-            }}
-            onClick={() => {
-              // Add haptic feedback for mobile devices
-              if (navigator.vibrate) {
-                navigator.vibrate(50);
-              }
-              scrollToSection("home");
-            }}
-            animate={{ 
-              opacity: isMenuOpen ? 0 : 1,
-              x: isMenuOpen ? -30 : 0,
-              scale: isMenuOpen ? 0.9 : 1
-            }}
-            transition={{ 
-              duration: 0.3, 
-              ease: "easeInOut" 
-            }}
-          >
-          <motion.div
-            className="header__logo-container"
-            whileHover={{ 
-              rotate: 5,
-              transition: { type: "spring", stiffness: 400, damping: 25 }
-            }}
-            whileTap={{ 
-              rotate: -2,
-              transition: { duration: 0.1 }
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            <div className="header__logo-gradient" >
-              <motion.div
-                className="header__logo-icon"
-                animate={isScrolling ? {
-                  rotate: [0, 360],
-                  boxShadow: [
-                    "0 0 20px rgba(99, 102, 241, 0.5)",
-                    "0 0 40px rgba(139, 92, 246, 0.7)",
-                    "0 0 20px rgba(99, 102, 241, 0.5)",
-                  ],
-                } : {
-                  boxShadow: [
-                    "0 0 20px rgba(99, 102, 241, 0.3)",
-                    "0 0 30px rgba(139, 92, 246, 0.4)",
-                    "0 0 20px rgba(99, 102, 241, 0.3)",
-                  ],
-                }}
-                transition={isScrolling ? {
-                  rotate: { duration: 0.8, ease: "easeInOut" },
-                  boxShadow: { duration: 0.4, repeat: 2, ease: "easeInOut" }
-                } : {
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <span>HD</span>
-              </motion.div>
+          <div className="header__logo">
+            <div className="header__logo-icon">
+              <span>HD</span>
             </div>
-          </motion.div>
-          <div className="header__logo-text">
-            <motion.span
-              className="header__logo-name"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              Hoang Dinh
-            </motion.span>
-            <motion.span
-              className="header__logo-title"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              Full Stack Developer
-            </motion.span>
+            <div className="header__logo-text">
+              <span className="header__logo-name">Hoang Dinh</span>
+              <span className="header__logo-title">Developer</span>
+            </div>
           </div>
-        </motion.div>
         </Link>
 
         <DesktopNav activeSection={activeSection} />
 
-        {/* Theme toggle for desktop - compact version */}
         <div className="header__actions">
-          <motion.button
+          <button
             className="header__theme-toggle"
             onClick={toggleTheme}
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
           >
-            <motion.div
-              animate={{ rotate: theme === 'dark' ? 0 : 180 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              {theme === 'dark' ? <FiMoon /> : <FiSun />}
-            </motion.div>
-          </motion.button>
-        </div>
+            {theme === 'dark' ? <FiMoon /> : <FiSun />}
+          </button>
 
-        <motion.button
-          className={`header__menu-toggle ${
-            isMenuOpen ? "header__menu-toggle--open" : ""
-          }`}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-navigation"
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          ref={menuButtonRef}
-        >
-          <motion.div
-            animate={{ rotate: isMenuOpen ? 180 : 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+          <button
+            className={`header__menu-toggle ${isMenuOpen ? "header__menu-toggle--open" : ""}`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            ref={menuButtonRef}
           >
             {isMenuOpen ? <FiX /> : <FiMenu />}
-          </motion.div>
-        </motion.button>
+          </button>
+        </div>
       </div>
       <MobileNav
         isMenuOpen={isMenuOpen}
@@ -641,7 +489,7 @@ function Header({ theme, toggleTheme }) {
         toggleTheme={toggleTheme}
         mobileNavRef={mobileNavRef}
       />
-    </motion.header>
+    </header>
   );
 };
 

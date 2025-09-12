@@ -1,730 +1,219 @@
 @use '../../styles/variables.scss' as *;
 
 .footer {
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
+  padding: $spacing-6xl 0 $spacing-2xl;
   position: relative;
-  overflow: hidden;
-
-  // Enhanced gradient overlay
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--gradient-primary);
-    opacity: 0.03;
-    z-index: 1;
-  }
-
-  // Animated background pattern
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 25%),
-      radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 25%);
-    animation: backgroundFloat 20s ease-in-out infinite;
-    z-index: 1;
-  }
 
   &__container {
-    position: relative;
-    z-index: 2;
     max-width: 1400px;
     margin: 0 auto;
-    padding: $spacing-6xl $spacing-base $spacing-base;
+    padding: 0 $spacing-base;
 
     @media (min-width: $breakpoint-sm) {
-      padding: $spacing-6xl $spacing-2xl $spacing-2xl;
+      padding: 0 $spacing-2xl;
     }
   }
 
   &__content {
-    margin-bottom: $spacing-4xl;
-  }
-
-  &__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: $spacing-4xl;
+    margin-bottom: $spacing-4xl;
 
     @media (min-width: $breakpoint-md) {
-      grid-template-columns: 1.5fr 1fr;
-      gap: $spacing-5xl;
-    }
-
-    @media (min-width: $breakpoint-lg) {
-      grid-template-columns: 1.8fr 1fr 1fr 1.2fr;
-      gap: $spacing-4xl;
+      grid-template-columns: 2fr 1fr;
+      gap: $spacing-6xl;
     }
   }
 
-  // Brand Section
+  // Main Brand Section
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3xl;
+  }
+
   &__brand {
-    @media (max-width: $breakpoint-lg) {
-      grid-column: 1 / -1;
-      text-align: center;
-      
-      @media (min-width: $breakpoint-md) {
-        text-align: left;
-      }
-    }
+    max-width: 500px;
   }
 
   &__title {
-    @include heading-style($font-4xl, $font-bold);
+    @include heading-style($font-3xl, $font-bold);
     @include gradient-text(var(--gradient-primary));
     margin-bottom: $spacing-sm;
-    line-height: $leading-tight;
   }
 
   &__subtitle {
     @include body-text($font-lg, $font-medium);
     color: var(--text-primary);
     margin-bottom: $spacing-base;
-    opacity: 0.9;
   }
 
   &__description {
     @include body-text($font-base, $font-normal);
-    max-width: 400px;
-    margin: 0 auto $spacing-3xl;
     line-height: $leading-relaxed;
-
-    @media (min-width: $breakpoint-md) {
-      margin: 0 0 $spacing-3xl;
-    }
+    margin-bottom: $spacing-2xl;
   }
 
-  // CTA Buttons
+  // Call to Action Buttons
   &__cta {
     display: flex;
     gap: $spacing-base;
-    flex-direction: column;
-    align-items: center;
-
-    @media (min-width: $breakpoint-sm) {
-      flex-direction: row;
-      justify-content: center;
-    }
-
-    @media (min-width: $breakpoint-md) {
-      justify-content: flex-start;
-    }
-
-    &-btn {
-      @include flex-center;
-      @include button-text($font-sm, $font-medium);
-      gap: $spacing-xs;
-      padding: $spacing-md $spacing-xl;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      min-width: 140px;
-      border: 2px solid transparent;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.5s;
-      }
-
-      &:hover::before {
-        left: 100%;
-      }
-
-      &--primary {
-        background: var(--gradient-primary);
-        color: white;
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-
-        &:hover {
-          box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
-          transform: translateY(-2px);
-        }
-      }
-
-      &--secondary {
-        background: transparent;
-        color: var(--text-primary);
-        border-color: var(--border-color);
-
-        &:hover {
-          background: var(--bg-secondary);
-          border-color: var(--primary-light);
-          box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
-        }
-      }
-    }
-  }
-
-  // Section Styling
-  &__section {
-    &-title {
-      @include heading-style($font-lg, $font-semibold);
-      margin-bottom: $spacing-xl;
-      position: relative;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -$spacing-xs;
-        left: 0;
-        width: 30px;
-        height: 2px;
-        background: var(--gradient-primary);
-        border-radius: 1px;
-      }
-    }
-  }
-
-  // Links
-  &__links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  &__link {
-    @include flex-between;
-    @include body-text($font-sm, $font-normal);
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding: $spacing-sm 0;
-    transition: all 0.3s ease;
-    position: relative;
-
-    &:hover {
-      color: var(--primary-light);
-      transform: translateX(5px);
-    }
-
-    &-icon {
-      width: 14px;
-      height: 14px;
-      opacity: 0.7;
-    }
-  }
-
-  // Skills Section
-  &__skills {
-    display: grid;
-    gap: $spacing-base;
-  }
-
-  &__skill-category {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: $spacing-base;
-    transition: all 0.3s ease;
-
-    &:hover {
-      border-color: var(--primary-light);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.1);
-      transform: translateY(-2px);
-    }
-  }
-
-  &__skill-header {
-    @include flex-center;
-    gap: $spacing-sm;
-    margin-bottom: $spacing-sm;
-    justify-content: flex-start;
-  }
-
-  &__skill-icon {
-    width: 16px;
-    height: 16px;
-    color: var(--primary-light);
-  }
-
-  &__skill-title {
-    @include label-text($font-xs, $font-semibold);
-    color: var(--text-primary);
-  }
-
-  &__skill-tags {
-    display: flex;
     flex-wrap: wrap;
-    gap: $spacing-xs;
   }
 
-  &__skill-tag {
-    @include label-text($font-xs, $font-normal);
-    background: var(--bg-primary);
-    color: var(--text-secondary);
-    padding: $spacing-xs $spacing-sm;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
+  &__cta-btn {
+    @include flex-center;
+    gap: $spacing-xs;
+    padding: $spacing-base $spacing-lg;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: $font-medium;
+    transition: all 0.2s ease;
 
-    &:hover {
-      background: var(--primary-light);
+    &--primary {
+      background: var(--gradient-primary);
       color: white;
-      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+      }
+    }
+
+    &--secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+
+      &:hover {
+        background: var(--bg-quaternary);
+        transform: translateY(-1px);
+      }
     }
   }
 
   // Contact Section
   &__contact {
-    margin-bottom: $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+  }
+
+  &__section-title {
+    @include heading-style($font-lg, $font-semibold);
+    margin-bottom: $spacing-base;
+  }
+
+  &__contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-base;
   }
 
   &__contact-item {
     @include flex-center;
     gap: $spacing-sm;
-    padding: $spacing-sm 0;
-    color: var(--text-secondary);
+    padding: $spacing-sm;
     text-decoration: none;
-    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    border-radius: 6px;
+    transition: all 0.2s ease;
     justify-content: flex-start;
-    border-radius: 8px;
 
     &:hover {
-      color: var(--primary-light);
-      background: var(--bg-secondary);
-      padding-left: $spacing-sm;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      transform: translateX(4px);
     }
   }
 
   &__contact-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+    font-size: $font-base;
+    color: var(--primary-light);
   }
 
   &__contact-text {
-    @include body-text($font-sm, $font-normal);
+    font-size: $font-sm;
   }
 
-  // Social Section
-  &__social-section {
-    border-top: 1px solid var(--border-color);
-    padding-top: $spacing-base;
-  }
-
-  &__social-title {
-    @include label-text($font-xs, $font-semibold);
-    color: var(--text-primary);
-    margin-bottom: $spacing-base;
-  }
-
+  // Social Links
   &__social {
     display: flex;
-    gap: $spacing-sm;
-    flex-wrap: wrap;
+    gap: $spacing-base;
+  }
 
-    &-link {
-      @include flex-center;
-      width: 44px;
-      height: 44px;
-      background: var(--bg-secondary);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+  &__social-link {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
 
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--gradient-primary);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &:hover {
-        border-color: var(--primary-light);
-        color: white;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-
-        &::before {
-          opacity: 1;
-        }
-
-        svg {
-          position: relative;
-          z-index: 1;
-        }
-      }
-
-      svg {
-        width: 18px;
-        height: 18px;
-      }
+    &:hover {
+      background: var(--primary-light);
+      color: white;
+      transform: translateY(-2px);
     }
   }
 
   // Footer Bottom
   &__bottom {
-    border-top: 1px solid var(--border-color);
     padding-top: $spacing-xl;
-    
-    &-content {
-      @include flex-between;
-      flex-direction: column;
-      gap: $spacing-base;
-      text-align: center;
-
-      @media (min-width: $breakpoint-md) {
-        flex-direction: row;
-        text-align: left;
-      }
-    }
+    border-top: 1px solid var(--border-color);
+    text-align: center;
   }
 
   &__copyright {
-    p {
-      @include flex-center;
-      @include body-text($font-sm, $font-normal);
-      gap: $spacing-xs;
-      color: var(--text-tertiary);
-      margin: 0;
-    }
+    @include flex-center;
+    gap: $spacing-xs;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: $font-sm;
   }
 
   &__heart {
     color: #ef4444;
-    animation: heartbeat 2s infinite;
+    animation: heartbeat 2s ease-in-out infinite;
   }
 
-  &__legal {
-    @include flex-center;
-    gap: $spacing-sm;
-    flex-wrap: wrap;
-
-    &-link {
-      @include body-text($font-sm, $font-normal);
-      color: var(--text-tertiary);
-      text-decoration: none;
-      transition: color 0.3s ease;
-
-      &:hover {
-        color: var(--primary-light);
-      }
-    }
-
-    &-divider {
-      color: var(--text-tertiary);
-      opacity: 0.5;
-    }
-  }
-
-  // Enhanced Scroll to Top Container
-  &__scroll-container {
+  // Scroll to Top Button
+  &__scroll-top {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1000;
-    
-    @media (max-width: $breakpoint-sm) {
-      bottom: 20px;
-      right: 20px;
-    }
-  }
-
-  // Progress Ring
-  &__scroll-progress-ring {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    width: 70px;
-    height: 70px;
-    pointer-events: none;
-    transform: rotate(-90deg);
-    
-    @media (max-width: $breakpoint-sm) {
-      width: 65px;
-      height: 65px;
-    }
-  }
-
-  &__scroll-progress-bg {
-    opacity: 0.2;
-  }
-
-  &__scroll-progress-fill {
-    filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.5));
-    animation: progressGlow 2s ease-in-out infinite alternate;
-  }
-
-  // Main Button
-  &__scroll-top-button {
+    bottom: $spacing-2xl;
+    right: $spacing-2xl;
+    width: 50px;
+    height: 50px;
     @include flex-center;
-    position: relative;
-    width: 60px;
-    height: 60px;
     background: var(--gradient-primary);
+    color: white;
     border: none;
     border-radius: 50%;
-    color: white;
     cursor: pointer;
-    box-shadow: 
-      0 8px 25px rgba(99, 102, 241, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    z-index: 100;
+    transition: all 0.2s ease;
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        transparent 50%, 
-        rgba(255, 255, 255, 0.1) 100%);
-      transform: translateX(-100%);
-      transition: transform 0.6s ease;
-    }
-
-    &:hover::before {
-      transform: translateX(100%);
-    }
-
-    &:active {
-      transform: scale(0.95);
-      box-shadow: 
-        0 4px 15px rgba(99, 102, 241, 0.6),
-        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    &:hover {
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
     }
 
     @media (max-width: $breakpoint-sm) {
-      width: 55px;
-      height: 55px;
-    }
-  }
-
-  // Icon Wrapper
-  &__scroll-icon-wrapper {
-    @include flex-center;
-    position: relative;
-    z-index: 2;
-  }
-
-  &__scroll-icon {
-    width: 22px;
-    height: 22px;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
-    
-    @media (max-width: $breakpoint-sm) {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  // Ripple Effect
-  &__scroll-ripple {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    pointer-events: none;
-  }
-
-  // Floating Particles
-  &__scroll-particles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  &__scroll-particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--gradient-primary);
-    border-radius: 50%;
-    box-shadow: 0 0 6px rgba(139, 92, 246, 0.6);
-    
-    &:nth-child(1) {
-      left: -15px;
-      background: linear-gradient(45deg, #8B5CF6, #6366F1);
-    }
-    
-    &:nth-child(2) {
-      left: 0;
-      background: linear-gradient(45deg, #6366F1, #3B82F6);
-    }
-    
-    &:nth-child(3) {
-      left: 15px;
-      background: linear-gradient(45deg, #3B82F6, #10B981);
+      bottom: $spacing-base;
+      right: $spacing-base;
+      width: 45px;
+      height: 45px;
     }
   }
 }
 
 // Animations
 @keyframes heartbeat {
-  0%, 50%, 100% {
-    transform: scale(1);
-  }
-  25%, 75% {
-    transform: scale(1.1);
-  }
-}
-
-@keyframes backgroundFloat {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  33% {
-    transform: translate(10px, -10px) rotate(120deg);
-  }
-  66% {
-    transform: translate(-5px, 5px) rotate(240deg);
-  }
-}
-
-@keyframes progressGlow {
-  0% {
-    filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.5));
-  }
-  100% {
-    filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.8));
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1);
-  }
-}
-
-// Mobile Optimizations
-@media (max-width: $breakpoint-md) {
-  .footer {
-    &__container {
-      padding: $spacing-4xl $spacing-base $spacing-base;
-    }
-
-    &__grid {
-      gap: $spacing-3xl;
-    }
-
-    &__title {
-      font-size: $font-3xl;
-    }
-
-    &__cta {
-      &-btn {
-        width: 100%;
-        max-width: 200px;
-      }
-    }
-
-    &__skills {
-      grid-template-columns: 1fr;
-    }
-
-    &__social {
-      justify-content: center;
-
-      @media (min-width: $breakpoint-sm) {
-        justify-content: flex-start;
-      }
-    }
-  }
-}
-
-// Dark theme enhancements
-[data-theme="dark"] .footer {
-  &::before {
-    opacity: 0.05;
-  }
-
-  &__skill-category {
-    background: rgba(30, 41, 59, 0.5);
-    backdrop-filter: blur(10px);
-
-    &:hover {
-      background: rgba(30, 41, 59, 0.8);
-    }
-  }
-
-  &__social-link {
-    background: rgba(30, 41, 59, 0.5);
-    backdrop-filter: blur(10px);
-
-    &:hover {
-      background: var(--gradient-primary);
-    }
-  }
-
-  &__scroll-top-button {
-    box-shadow: 
-      0 8px 25px rgba(99, 102, 241, 0.6),
-      0 0 0 1px rgba(255, 255, 255, 0.15);
-    
-    &:hover {
-      box-shadow: 
-        0 12px 35px rgba(99, 102, 241, 0.8),
-        0 0 0 1px rgba(255, 255, 255, 0.2);
-    }
-  }
-
-  &__scroll-progress-fill {
-    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.8));
-  }
-}
-
-// Print styles
-@media print {
-  .footer {
-    &__scroll-container {
-      display: none;
-    }
-    
-    &__cta {
-      display: none;
-    }
-    
-    &::before,
-    &::after {
-      display: none;
-    }
-  }
+  0%, 50%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
 }
