@@ -1,7 +1,7 @@
 @use "../../styles/variables.scss" as *;
 
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   position: relative;
@@ -690,7 +690,7 @@
 // Mobile optimizations
 @media (max-width: $breakpoint-md) {
   .hero {
-    min-height: 100vh; // Changed from 105vh to reduce scrolling
+    min-height: 70vh; // Changed from 105vh to reduce scrolling
     padding: $spacing-xl 0; // Add vertical padding
 
     &__grid {
