@@ -2,13 +2,15 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
+import Breadcrumb from './Breadcrumb/Breadcrumb';
 
-const MainLayout = memo(({ children, theme, toggleTheme }) => {
+const MainLayout = memo(({ children, theme, toggleTheme, showBreadcrumb = true }) => {
   return (
     <div className="App" data-theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
+      {showBreadcrumb && <Breadcrumb />}
       <main style={{ 
-        paddingTop: '70px',
+        paddingTop: showBreadcrumb ? '120px' : '70px', // Extra space for breadcrumb
         minHeight: '100vh',
         paddingLeft: 'env(safe-area-inset-left, 0)',
         paddingRight: 'env(safe-area-inset-right, 0)'
@@ -26,6 +28,7 @@ MainLayout.propTypes = {
   children: PropTypes.node.isRequired,
   theme: PropTypes.string.isRequired,
   toggleTheme: PropTypes.func.isRequired,
+  showBreadcrumb: PropTypes.bool,
 };
 
 export default MainLayout;

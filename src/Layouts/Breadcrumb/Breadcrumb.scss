@@ -1,0 +1,223 @@
+@use "../../styles/variables.scss" as *;
+
+.breadcrumb {
+//   background: var(--bg-secondary);
+//   border-bottom: 1px solid var(--border-color);
+  padding: $spacing-base $spacing-xl;
+  position: sticky;
+  top: 70px; // Below header
+  z-index: 100;
+  transition: all 0.3s ease;
+
+  @media (max-width: $breakpoint-sm) {
+    top: 60px; // Mobile header height
+    padding: $spacing-sm $spacing-base;
+  }
+
+  &__list {
+    @include flex-center;
+    justify-content: flex-start;
+    gap: $spacing-xs;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 1324px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+
+    @media (max-width: $breakpoint-sm) {
+      gap: $spacing-xs;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__list-item {
+    @include flex-center;
+    gap: $spacing-xs;
+    white-space: nowrap;
+    position: relative;
+
+    @media (max-width: $breakpoint-sm) {
+      flex-shrink: 0;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: block;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+  }
+
+  &__item {
+    @include flex-center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: 8px;
+    position: relative;
+    transition: all 0.2s ease;
+    background: transparent;
+    cursor: pointer;
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-xs $spacing-sm;
+      gap: $spacing-xs;
+    }
+
+    &:hover {
+      background: var(--bg-tertiary);
+    }
+
+    &--active {
+     
+      color: var(--text-primary);
+      cursor: default;
+
+      &:hover {
+        background: var(--bg-tertiary);
+      }
+    }
+  }
+
+  &__icon-wrapper {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: transparent;
+    transition: all 0.2s ease;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 24px;
+      height: 24px;
+    }
+
+    .breadcrumb__item:hover & {
+      background: rgba(var(--primary-light), 0.1);
+    }
+
+    .breadcrumb__item--active & {
+      background: rgba(var(--primary-light), 0.1);
+    }
+  }
+
+  &__icon {
+    font-size: $font-base;
+    color: var(--primary-light);
+    transition: all 0.2s ease;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-sm;
+    }
+
+    .breadcrumb__item--active & {
+      color: var(--primary-light);
+    }
+  }
+
+  &__label {
+    font-size: $font-sm;
+    font-weight: $font-medium;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    line-height: 1.2;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-xs;
+    }
+
+    @media (max-width: 480px) {
+      display: none; // Hide labels on very small screens, show only icons
+    }
+
+    .breadcrumb__item:hover & {
+      color: var(--text-primary);
+    }
+
+    .breadcrumb__item--active & {
+      color: var(--text-primary);
+      font-weight: $font-semibold;
+    }
+  }
+
+  &__separator {
+    @include flex-center;
+    color: var(--text-tertiary);
+    font-size: $font-sm;
+    margin: 0 $spacing-xs;
+    transition: all 0.2s ease;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-xs;
+      margin: 0 $spacing-xs;
+    }
+  }
+
+  &__active-indicator {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--primary-light);
+    border-radius: 1px;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 16px;
+      height: 2px;
+    }
+  }
+
+  // Responsive enhancements
+  @media (max-width: $breakpoint-md) {
+    &__item {
+      padding: $spacing-xs;
+    }
+
+    &__icon-wrapper {
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  // High contrast mode support
+  @media (prefers-contrast: high) {
+    border-width: 2px;
+    
+    &__item {
+      border: 1px solid var(--border-color);
+      
+      &--active {
+        border-color: var(--primary-light);
+        border-width: 2px;
+      }
+    }
+  }
+
+  // Reduced motion support
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
