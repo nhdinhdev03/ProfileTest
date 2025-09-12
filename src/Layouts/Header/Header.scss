@@ -76,6 +76,14 @@
   &__logo {
     @include flex-center;
     gap: $spacing-md;
+
+    @media (max-width: $breakpoint-sm) {
+      gap: $spacing-sm;
+    }
+
+    @media (max-width: 480px) {
+      gap: $spacing-xs;
+    }
   }
 
   &__logo-icon {
@@ -90,6 +98,20 @@
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     transition: all 0.3s ease;
 
+    @media (max-width: $breakpoint-sm) {
+      width: 36px;
+      height: 36px;
+      font-size: $font-base;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 480px) {
+      width: 32px;
+      height: 32px;
+      font-size: $font-sm;
+      border-radius: 8px;
+    }
+
     &:hover {
       box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
       transform: translateY(-1px);
@@ -102,7 +124,14 @@
     gap: 2px;
 
     @media (max-width: $breakpoint-sm) {
-      display: none;
+      gap: 1px;
+    }
+
+    @media (max-width: 360px) {
+      // Show only Developer text on very small screens (under 360px)
+      .header__logo-name {
+        display: none;
+      }
     }
   }
 
@@ -111,6 +140,20 @@
     font-weight: $font-bold;
     color: var(--text-primary);
     line-height: 1.2;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-base;
+      font-weight: $font-semibold;
+    }
+
+    @media (max-width: 480px) {
+      font-size: $font-sm;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 360px) {
+      display: none;
+    }
   }
 
   &__logo-title {
@@ -118,6 +161,28 @@
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-weight: $font-medium;
+    white-space: nowrap;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 10px;
+      letter-spacing: 0.3px;
+      color: var(--primary-light);
+    }
+
+    @media (max-width: 480px) {
+      font-size: 9px;
+      letter-spacing: 0.2px;
+      font-weight: $font-semibold;
+    }
+
+    @media (max-width: 360px) {
+      font-size: 10px;
+      letter-spacing: 0.3px;
+      // When name is hidden, make Developer more prominent
+      color: var(--text-primary);
+      font-weight: $font-bold;
+    }
   }
 
   // Navigation Styles
