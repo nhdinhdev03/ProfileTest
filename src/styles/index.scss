@@ -41,7 +41,11 @@ body {
   
   // Tối ưu scroll mượt
   &.no-scroll {
-    overflow: hidden;
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
   }
   
   // Cải thiện scroll performance trên mobile

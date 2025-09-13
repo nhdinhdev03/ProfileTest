@@ -340,7 +340,10 @@
     height: 100vh;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 999;
+    pointer-events: all; /* Ensure overlay captures all clicks */
+    touch-action: none; /* Prevent touch events from passing through */
   }
 
   &__nav--mobile {
@@ -355,6 +358,8 @@
     z-index: 1000;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    isolation: isolate; /* Create new stacking context */
+    pointer-events: all; /* Ensure menu captures all clicks */
 
     [data-theme="dark"] & {
       box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);

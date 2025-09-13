@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   FiMenu,
@@ -109,7 +109,22 @@ const DesktopNav = memo(({ activeSection }) => (
 ));
 
 // Modern Mobile Navigation with smooth animations
-const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef }) => (
+const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef }) => {
+  const navigate = useNavigate();
+  
+  const handleLinkClick = (e, path) => {
+    e.preventDefault();
+    if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
+    setIsMenuOpen(false);
+    // Use timeout to wait for the menu close animation
+    setTimeout(() => {
+      navigate(path);
+    }, 300);
+  };
+  
+  return (
   <AnimatePresence mode="wait">
     {isMenuOpen && (
       <>
@@ -175,13 +190,7 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
                   <Link
                     to={item.path}
                     className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
-                    onClick={() => {
-                      // Add haptic feedback for mobile
-                      if (navigator.vibrate) {
-                        navigator.vibrate(10);
-                      }
-                      setIsMenuOpen(false);
-                    }}
+                    onClick={(e) => handleLinkClick(e, item.path)}
                   >
                     <div className="header__nav-icon-wrapper">
                       <Icon className="header__nav-icon" />
@@ -237,7 +246,8 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
       </>
     )}
   </AnimatePresence>
-));
+  );
+});
 
 DesktopNav.propTypes = {
   activeSection: PropTypes.string.isRequired,
