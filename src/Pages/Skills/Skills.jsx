@@ -30,11 +30,13 @@ import {
   SiMicrosoftsqlserver,
   SiAngular,
 } from "react-icons/si";
+import { useTranslation } from "react-i18next";
 import TechMarquee from "../../components/TechMarquee/TechMarquee";
 import "./Skills.scss";
 
 
 function Skills() {
+  const { t } = useTranslation();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -62,11 +64,11 @@ function Skills() {
   const skillCategories = useMemo(
     () => ({
       frontend: {
-        title: "Frontend Development",
+        title: t('skills.categories.frontend.title'),
         icon: FiCode,
         color: "#61DAFB",
         gradient: "linear-gradient(135deg, #61DAFB 0%, #21D4FD 100%)",
-        description: "Tạo ra những giao diện người dùng đẹp mắt và tương tác",
+        description: t('skills.categories.frontend.description'),
         skills: [
           {
             name: "React",
@@ -106,11 +108,11 @@ function Skills() {
         ],
       },
       backend: {
-        title: "Backend Development",
+        title: t('skills.categories.backend.title'),
         icon: FiServer,
         color: "#339933",
         gradient: "linear-gradient(135deg, #339933 0%, #68D391 100%)",
-        description: "Xây dựng API mạnh mẽ và hệ thống backend scalable",
+        description: t('skills.categories.backend.description'),
         skills: [
           {
             name: "Node.js",
@@ -140,11 +142,11 @@ function Skills() {
         ],
       },
       database: {
-        title: "Database & Storage",
+        title: t('skills.categories.database.title'),
         icon: FiDatabase,
         color: "#336791",
         gradient: "linear-gradient(135deg, #336791 0%, #4A90E2 100%)",
-        description: "Thiết kế và quản lý cơ sở dữ liệu hiệu quả",
+        description: t('skills.categories.database.description'),
         skills: [
           {
             name: "MongoDB",
@@ -174,11 +176,11 @@ function Skills() {
         ],
       },
       devops: {
-        title: "DevOps & Tools",
+        title: t('skills.categories.tools.title'),
         icon: FiTool,
         color: "#FF9900",
         gradient: "linear-gradient(135deg, #FF9900 0%, #FF6B6B 100%)",
-        description: "Triển khai và quản lý hạ tầng ứng dụng",
+        description: t('skills.categories.tools.description'),
         skills: [
           {
             name: "Docker",
@@ -198,7 +200,7 @@ function Skills() {
         ],
       },
     }),
-    []
+    [t]
   );
 
   // Initialize particles for background effect
@@ -359,7 +361,7 @@ function Skills() {
               }}
             >
               <span className="skills__title-highlight">
-                Kỹ Năng Chuyên Môn
+                {t('skills.title')}
               </span>
             </motion.h2>
             <motion.p
@@ -384,7 +386,7 @@ function Skills() {
           <motion.div className="skills__categories" variants={itemVariants}>
             <div className="skills__categories-header">
               <FiLayers className="skills__categories-icon" />
-              <h3>Lĩnh Vực Chuyên Môn</h3>
+              <h3>{t('skills.expertise_title')}</h3>
             </div>
             <div className="skills__categories-nav">
               {Object.entries(skillsData).map(([key, category]) => {

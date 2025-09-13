@@ -1,9 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { FiStar, FiHeart, FiUsers } from "react-icons/fi";
 import "./CommunityTestimonials.scss";
 
 const CommunityTestimonials = () => {
+  const { t } = useTranslation();
   const testimonials = [
     
     {
@@ -124,30 +126,28 @@ const CommunityTestimonials = () => {
           className="community-testimonials__header"
           variants={itemVariants}
         >
-          <motion.div 
+          <motion.div
             className="community-testimonials__badge"
             whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
             transition={{ duration: 0.5 }}
           >
             <FiHeart className="community-testimonials__badge-icon" />
-            <span>Loved by the community</span>
+            <span>{t('testimonials.subtitle')}</span>
           </motion.div>
           
           <motion.h2 
             className="community-testimonials__title"
             variants={itemVariants}
           >
-            What People Say
+            {t('testimonials.title')}
           </motion.h2>
           
           <motion.p 
             className="community-testimonials__subtitle"
             variants={itemVariants}
           >
-            Trusted by developers and companies worldwide
-          </motion.p>
-
-          <motion.div 
+            {t('testimonials.description')}
+          </motion.p>          <motion.div 
             className="community-testimonials__stats"
             variants={itemVariants}
           >
@@ -257,7 +257,7 @@ const CommunityTestimonials = () => {
             className="community-testimonials__cta"
             whileHover={{ scale: 1.05 }}
           >
-            Join the community of satisfied clients
+            {t('testimonials.join_community')}
           </motion.p>
         </motion.div>
       </div>

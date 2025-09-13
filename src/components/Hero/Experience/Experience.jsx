@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { useTranslation } from 'react-i18next'
 import { 
   FiCalendar, 
   FiMapPin, 
@@ -13,6 +14,7 @@ import {
 import './Experience.scss'
 
 function Experience() {
+  const { t } = useTranslation()
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -111,10 +113,10 @@ function Experience() {
             className="experience__header"
             variants={cardVariants}
           >
-            <span className="experience__subtitle">Hành trình học tập và phát triển</span>
-            <h2 className="experience__title">Kinh Nghiệm & Học Tập</h2>
+            <span className="experience__subtitle">{t('experience.subtitle')}</span>
+            <h2 className="experience__title">{t('experience.title')}</h2>
             <p className="experience__description">
-              Từ HTML/CSS/JS cơ bản đến Java Swing và Web Development hiện đại
+              {t('experience.description')}
             </p>
           </motion.div>
 

@@ -40,20 +40,20 @@ function Contact() {
       title: 'Email',
       value: 'nhdinhdev03@gmail.com',
       link: 'mailto:nhdinhdev03@gmail.com',
-      description: 'Phản hồi trong vòng 24h',
+      description: t('contact.response_commitment'),
       color: '#EA4335'
     },
     {
       icon: FiPhone,
-      title: 'Điện thoại',
+      title: t('contact.phone'),
       value: '+84 123 456 789',
       link: 'tel:+84123456789',
-      description: 'Sẵn sàng 9:00 - 18:00',
+      description: t('contact.timelines'),
       color: '#34A853'
     },
     {
       icon: FiMapPin,
-      title: 'Địa chỉ',
+      title: t('contact.location'),
       value: 'Hậu Giang, Việt Nam',
       link: 'https://maps.google.com',
       description: 'GMT+7 (ICT)',
@@ -61,10 +61,10 @@ function Contact() {
     },
     {
       icon: FiCalendar,
-      title: 'Lịch hẹn',
-      value: 'Đặt lịch tư vấn',
+      title: t('contact.appointment_schedule'),
+      value: t('contact.book'),
       link: '#',
-      description: 'Tư vấn miễn phí 30 phút',
+      description: t('contact.schedule a consultation'),
       color: '#4285F4'
     }
   ]
@@ -289,9 +289,9 @@ function Contact() {
                 backgroundClip: 'text'
               }}
             >
-              Liên Hệ & Hợp Tác
+              {t('contact.title')}
             </motion.h2>
-            <p>Hãy kết nối với tôi để thảo luận về dự án tiếp theo của bạn</p>
+            <p>{t('contact.description')}</p>
           </motion.div>
 
           <div className="contact__wrapper">
@@ -312,10 +312,9 @@ function Contact() {
                   />
                 </motion.div>
                 <div className="contact__info-intro">
-                  <h3>Thông Tin Liên Hệ</h3>
+                  <h3>{t('contact.info_title')}</h3>
                   <p>
-                    Tôi luôn sẵn sàng lắng nghe những ý tưởng mới và cơ hội hợp tác thú vị. 
-                    Hãy liên hệ với tôi qua các kênh bên dưới!
+                    {t('contact.info_description')}
                   </p>
                 </div>
               </div>
@@ -404,8 +403,8 @@ function Contact() {
                     }}
                   />
                   <div className="contact__status-info">
-                    <span className="contact__status-text">Sẵn sàng cho dự án mới</span>
-                    <span className="contact__status-subtext">Phản hồi trong 24h</span>
+                    <span className="contact__status-text">{t('contact.availability')}</span>
+                    <span className="contact__status-subtext">{t('contact.response_time')}</span>
                   </div>
                 </div>
                 
@@ -443,8 +442,8 @@ function Contact() {
                       </h4>
                       <p>
                         {submitStatus === 'success'
-                          ? 'Cảm ơn bạn đã liên hệ! Tôi sẽ phản hồi sớm nhất có thể.'
-                          : 'Vui lòng thử lại sau hoặc liên hệ trực tiếp qua email.'}
+                          ? t('contact.success_message')
+                          : t('contact.error_message')}
                       </p>
                     </div>
                   </motion.div>
@@ -464,7 +463,7 @@ function Contact() {
                     <FiSend />
                   </motion.div>
                   <div className="contact__form-title">
-                    <h3>Gửi Tin Nhắn</h3>
+                    <h3>{t('contact.form_title')}</h3>
                     <p>Hãy chia sẻ chi tiết về dự án của bạn</p>
                   </div>
                 </div>
@@ -476,7 +475,7 @@ function Contact() {
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
                     <label htmlFor="name">
-                      <FiUser /> Tên của bạn *
+                      <FiUser /> {t('contact.name_required')}
                     </label>
                     <motion.input
                       type="text"
@@ -484,7 +483,7 @@ function Contact() {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder="Nhập tên của bạn"
+                      placeholder={t('contact.name')}
                       className={formErrors.name ? 'error' : ''}
                       whileFocus={{ 
                         borderColor: 'var(--primary-light)',
@@ -512,7 +511,7 @@ function Contact() {
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
                     <label htmlFor="email">
-                      <FiMail /> Email *
+                      <FiMail /> {t('contact.email_required')}
                     </label>
                     <motion.input
                       type="email"
@@ -520,7 +519,7 @@ function Contact() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="your.email@example.com"
+                      placeholder={t('contact.email')}
                       className={formErrors.email ? 'error' : ''}
                       whileFocus={{ 
                         borderColor: 'var(--primary-light)',
@@ -546,7 +545,7 @@ function Contact() {
                 <div className="contact__form-grid">
                   <div className="contact__form-group">
                     <label htmlFor="projectType">
-                      <FiZap /> Loại dự án
+                      <FiZap /> {t('contact.project_type')}
                     </label>
                     <select
                       id="projectType"
@@ -554,7 +553,7 @@ function Contact() {
                       value={formData.projectType}
                       onChange={handleInputChange}
                     >
-                      <option value="">Chọn loại dự án</option>
+                      <option value="">{t('contact.project_type_placeholder')}</option>
                       {projectTypes.map((type, index) => (
                         <option key={index} value={type}>{type}</option>
                       ))}
@@ -563,7 +562,7 @@ function Contact() {
 
                   <div className="contact__form-group">
                     <label htmlFor="budget">
-                      <FiStar /> Ngân sách dự kiến
+                      <FiStar /> {t('contact.budget')}
                     </label>
                     <select
                       id="budget"
@@ -571,7 +570,7 @@ function Contact() {
                       value={formData.budget}
                       onChange={handleInputChange}
                     >
-                      <option value="">Chọn ngân sách</option>
+                      <option value="">{t('contact.budget_placeholder')}</option>
                       {budgetRanges.map((range, index) => (
                         <option key={index} value={range}>{range}</option>
                       ))}
@@ -586,7 +585,7 @@ function Contact() {
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
                     <label htmlFor="subject">
-                      <FiMessageSquare /> Chủ đề *
+                      <FiMessageSquare /> {t('contact.subject_required')}
                     </label>
                     <motion.input
                       type="text"
@@ -594,7 +593,7 @@ function Contact() {
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
-                      placeholder="Chủ đề tin nhắn"
+                      placeholder={t('contact.subject')}
                       className={formErrors.subject ? 'error' : ''}
                       whileFocus={{ 
                         borderColor: 'var(--primary-light)',
@@ -618,7 +617,7 @@ function Contact() {
 
                   <div className="contact__form-group">
                     <label htmlFor="timeline">
-                      <FiCalendar /> Thời gian hoàn thành
+                      <FiCalendar /> {t('contact.timeline')}
                     </label>
                     <select
                       id="timeline"
@@ -626,7 +625,7 @@ function Contact() {
                       value={formData.timeline}
                       onChange={handleInputChange}
                     >
-                      <option value="">Chọn thời gian</option>
+                      <option value="">{t('contact.timeline_placeholder')}</option>
                       {timelines.map((time, index) => (
                         <option key={index} value={time}>{time}</option>
                       ))}
@@ -640,14 +639,14 @@ function Contact() {
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
                   <label htmlFor="message">
-                    <FiMessageSquare /> Chi tiết dự án *
+                    <FiMessageSquare /> {t('contact.message_required')}
                   </label>
                   <motion.textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Hãy chia sẻ chi tiết về dự án hoặc ý tưởng của bạn...\n\n• Mục tiêu của dự án\n• Tính năng chính cần có\n• Đối tượng người dùng\n• Yêu cầu kỹ thuật (nếu có)"
+                    placeholder={t('contact.message')}
                     rows={8}
                     className={formErrors.message ? 'error' : ''}
                     whileFocus={{ 
@@ -658,7 +657,7 @@ function Contact() {
                   />
                   <div className="contact__form-counter">
                     <span className={formData.message.length < 10 ? 'error' : ''}>
-                      {formData.message.length}/1000 ký tự
+                      {formData.message.length}/1000 {t('contact.character_count')}
                     </span>
                   </div>
                   <AnimatePresence>
@@ -703,12 +702,12 @@ function Contact() {
                           >
                             <FiZap />
                           </motion.div>
-                          Đang gửi...
+                          {t('contact.sending')}
                         </>
                       ) : (
                         <>
                           <FiSend />
-                          Gửi Tin Nhắn
+                          {t('contact.send')}
                         </>
                       )}
                     </motion.div>
@@ -734,7 +733,7 @@ function Contact() {
                     transition={{ delay: 0.3 }}
                   >
                     <FiCheck className="contact__form-note-icon" />
-                    <span>Tôi cam kết phản hồi trong vòng 24 giờ</span>
+                    <span>{t('contact.response_commitment')}</span>
                   </motion.div>
                 </motion.div>
               </form>
@@ -746,7 +745,7 @@ function Contact() {
                 initial="hidden"
                 animate="visible"
               >
-                <h4>Hoặc liên hệ nhanh qua:</h4>
+                <h4>{t('contact.quick_contact')}</h4>
                 <div className="contact__quick-links">
                   <motion.a
                     href="mailto:nhdinhdev03@gmail.com"
@@ -764,7 +763,7 @@ function Contact() {
                     whileTap={{ scale: 0.95 }}
                   >
                     <FiPhone />
-                    <span>Điện thoại</span>
+                    <span>{t('contact.phone')}</span>
                   </motion.a>
                   <motion.a
                     href="https://linkedin.com/in/nhdinhdev03"

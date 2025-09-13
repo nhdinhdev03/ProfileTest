@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   FiCalendar,
   FiClock,
@@ -10,11 +11,11 @@ import {
   FiSearch,
   FiFilter,
 } from "react-icons/fi";
-import { ROUTES } from "../../router/routeConstants";
 import useSaveScrollPosition from "../../hooks/useSaveScrollPosition";
 import "./Blog.scss";
 
 function Blog() {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -952,30 +953,30 @@ function createDynamicGrid(items) {
   ];
 
   const categories = [
-    { id: "all", label: "Tất cả", count: blogPosts.length },
+    { id: "all", label: t('blog.filters.all'), count: blogPosts.length },
     {
       id: "react",
-      label: "React",
+      label: t('blog.filters.react'),
       count: blogPosts.filter((p) => p.category === "react").length,
     },
     {
       id: "css",
-      label: "CSS",
+      label: t('blog.filters.css'),
       count: blogPosts.filter((p) => p.category === "css").length,
     },
     {
       id: "nodejs",
-      label: "Node.js",
+      label: t('blog.filters.nodejs'),
       count: blogPosts.filter((p) => p.category === "nodejs").length,
     },
     {
       id: "typescript",
-      label: "TypeScript",
+      label: t('blog.filters.typescript'),
       count: blogPosts.filter((p) => p.category === "typescript").length,
     },
     {
       id: "performance",
-      label: "Performance",
+      label: t('blog.filters.performance'),
       count: blogPosts.filter((p) => p.category === "performance").length,
     },
   ];
@@ -1057,12 +1058,12 @@ function createDynamicGrid(items) {
         >
           <motion.div className="blog__title-section" variants={itemVariants}>
             <h2 className="blog__title">
-              <span className="blog__title-highlight">Blog </span>
+              <span className="blog__title-highlight">{t('blog.title')} </span>
               <span>&</span>
-              <span className="blog__title-highlight"> Insights</span>
+              <span className="blog__title-highlight"> {t('blog.subtitle')}</span>
             </h2>
             <p className="blog__description">
-              Chia sẻ kiến thức, kinh nghiệm và xu hướng công nghệ mới nhất
+              {t('blog.description')}
             </p>
           </motion.div>
 

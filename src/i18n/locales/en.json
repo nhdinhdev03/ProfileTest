@@ -48,35 +48,112 @@
     "cta": "View My Work",
     "contact_me": "Contact Me",
     "download_cv": "Download CV",
-    "view_portfolio": "View Portfolio"
+    "view_portfolio": "View Portfolio",
+    "greeting": "Hello! 👋 I'm",
+    "role_label": "I am a",
+    "contact_button": "Contact me",
+    "download_cv_button": "Download CV"
+  },
+  "experience": {
+    "subtitle": "Learning and development journey",
+    "title": "Experience & Learning",
+    "description": "From basic HTML/CSS/JS to Java Swing and modern Web Development"
+  },
+  "testimonials": {
+    "subtitle": "Loved by the community",
+    "title": "What People Say",
+    "description": "Trusted by developers and companies worldwide",
+    "join_community": "Join the community of satisfied clients"
   },
   "about": {
     "title": "About Me",
     "description": "I am a passionate developer with expertise in modern web technologies",
     "experience": "Experience",
     "education": "Education",
-    "skills": "Skills"
+    "skills": "Skills",
+    "connect_title": "Connect With Me",
+    "connect_description": "I'm always ready to discuss new opportunities and exciting projects. Get in touch if you want to collaborate or just connect!",
+    "dark_mode_active": "🌙 Dark Mode Active",
+    "light_mode_active": "☀️ Light Mode",
+    "job_title": "Developer & Software Engineer",
+    "description_line1": "Turning ideas into refined products",
+    "description_line1_highlight": "full-stack web application development",
+    "description_line1_end": "system performance optimization",
+    "description_line2": "Passionate about learning new technologies",
+    "description_line2_highlight": "optimizing user experience",
+    "description_line3": "When not coding, I explore system design",
+    "default_bio": "Experienced with React, Node.js and cloud technologies with a passion for clean, scalable code.",
+    "badge_available": "Available for Work",
+    "badge_learning": "Always Learning",
+    "badge_coffee": "Coffee Lover",
+    "email": "Email",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "specializing_in": "— specializing in",
+    "and": "and",
+    "connect_devops": ", clean architecture design and",
+    "devops_learning": " and improving DevOps skills. ",
+    "badge_web_dev": "Web Developer", 
+    "badge_system_design": "System Design",
+    "contact_action": "Contact",
+    "download_cv": "Download CV",
+    "view_projects": "View Projects"
   },
   "projects": {
-    "title": "My Projects",
-    "view_project": "View Project",
-    "view_code": "View Code",
-    "technologies": "Technologies Used",
+    "title": "Featured Projects",
+    "subtitle": "Explore the products I've created",
+    "all": "All",
+    "web": "Website",
+    "mobile": "Mobile",
+    "desktop": "Desktop",
+    "ui_ux": "UI/UX",
+    "no_projects": "No projects found",
+    "try_another_category": "Please try another category.",
+    "view_details": "View Details",
     "live_demo": "Live Demo",
-    "source_code": "Source Code"
+    "source_code": "Source Code",
+    "start_project": "Start Project",
+    "cta_title": "Have an exciting idea?",
+    "cta_description": "Let's bring your ideas to life with the latest technology!",
+    "view_reviews": "View Reviews"
   },
   "contact": {
-    "title": "Get In Touch",
+    "title": "Contact & Collaboration",
     "subtitle": "Let's work together!",
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
+    "description": "I'm always ready to discuss new projects and collaboration opportunities",
+    "form_title": "Send a message",
+    "info_title": "Contact Information",
+    "info_description": "Feel free to reach out through the channels below!",
+    "name": "Your name",
+    "name_required": "Your name *",
+    "email": "Your email",
+    "email_required": "Email *",
+    "subject": "Subject",
+    "subject_required": "Subject *",
+    "project_type": "Project type",
+    "project_type_placeholder": "Select project type",
+    "budget": "Estimated budget",
+    "budget_placeholder": "Select budget",
+    "timeline": "Completion time",
+    "timeline_placeholder": "Select timeline",
+    "message": "Your message",
+    "message_required": "Project details *",
+    "character_count": "characters",
     "send": "Send Message",
-    "success_message": "Thank you for your message! I'll get back to you soon.",
-    "error_message": "Sorry, there was an error sending your message. Please try again.",
+    "sending": "Sending...",
+    "success_message": "Thank you for getting in touch! I'll get back to you soon.",
+    "error_message": "Please try again later or contact me directly via email.",
     "get_in_touch": "Get In Touch",
     "phone": "Phone",
-    "location": "Location"
+    "location": "Location",
+    "timelines": "Timelines",
+    "appointment_schedule": "Appointment Schedule",
+    "book": "Book a consultation",
+    "schedule a consultation": "Free 30-minute consultation",
+    "quick_contact": "Or reach out quickly via:",
+    "availability": "Available for new projects",
+    "response_time": "I commit to respond within 24 hours",
+    "response_commitment": "Response within 24h"
   },
   "footer": {
     "brand_name": "Hoang Dinh",
@@ -95,20 +172,58 @@
     "location": "Hau Giang, Vietnam"
   },
   "skills": {
-    "title": "Skills & Technologies",
+    "title": "Professional Skills",
+    "subtitle": "Technologies & Skills",
+    "description": "A comprehensive overview of technologies and skills I use to create high-quality products",
+    "expertise_title": "Areas of Expertise",
     "frontend": "Frontend",
     "backend": "Backend",
     "database": "Database",
     "tools": "Tools",
-    "others": "Others"
+    "others": "Others",
+    "categories": {
+      "frontend": {
+        "title": "Frontend Development",
+        "description": "Building modern and responsive user interfaces"
+      },
+      "backend": {
+        "title": "Backend Development",
+        "description": "Developing APIs and server-side logic"
+      },
+      "database": {
+        "title": "Database & Storage",
+        "description": "Managing and optimizing databases"
+      },
+      "tools": {
+        "title": "Tools & DevOps",
+        "description": "Development and deployment tools"
+      },
+      "mobile": {
+        "title": "Mobile Development",
+        "description": "Cross-platform mobile application development"
+      }
+    }
   },
   "blog": {
     "title": "Blog",
+    "subtitle": "Insights",
+    "description": "Sharing knowledge, experiences and the latest trends in programming",
     "read_more": "Read more",
     "published_on": "Published on",
     "by_author": "by",
     "categories": "Categories",
     "tags": "Tags",
-    "recent_posts": "Recent Posts"
+    "recent_posts": "Recent Posts",
+    "filters": {
+      "all": "All",
+      "react": "React",
+      "css": "CSS",
+      "nodejs": "Node.js",
+      "typescript": "TypeScript",
+      "performance": "Performance"
+    },
+    "search_placeholder": "Search articles...",
+    "no_posts": "No matching articles found",
+    "load_more": "Load more"
   }
 }

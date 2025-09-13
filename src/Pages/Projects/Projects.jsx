@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { useTranslation } from 'react-i18next'
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
 import useSaveScrollPosition from 'hooks/useSaveScrollPosition'
 import './Projects.scss'
 
 function Projects() {
+  const { t } = useTranslation();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -208,13 +210,13 @@ function Projects() {
   const categories = useMemo(() => {
     const allProjects = allProjectsLoaded ? currentProjects : featuredProjects
     return [
-      { id: 'featured', label: 'Nổi bật', count: allProjects.filter(p => p.featured).length },
-      { id: 'all', label: 'Tất cả', count: allProjects.length },
+      { id: 'featured', label: t('projects.filters.featured'), count: allProjects.filter(p => p.featured).length },
+      { id: 'all', label: t('projects.filters.all'), count: allProjects.length },
       { id: 'fullstack', label: 'Full Stack', count: allProjects.filter(p => p.category === 'fullstack').length },
       { id: 'frontend', label: 'Frontend', count: allProjects.filter(p => p.category === 'frontend').length },
       { id: 'mobile', label: 'Mobile', count: allProjects.filter(p => p.category === 'mobile').length }
     ]
-  }, [currentProjects, featuredProjects, allProjectsLoaded])
+  }, [currentProjects, featuredProjects, allProjectsLoaded, t])
 
   // Keep filtered list in state for more predictable re-renders
   const [filteredProjects, setFilteredProjects] = useState(featuredProjects)
@@ -318,11 +320,11 @@ function Projects() {
           <motion.div className="projects__header" variants={itemVariants}>
             <div className="projects__title-section">
               <h2 className="projects__title">
-                <span className="projects__title-text">Dự Án </span>
-                <span className="projects__title-highlight">Nổi Bật</span>
+                <span className="projects__title-text">{t('projects.title')} </span>
+                <span className="projects__title-highlight">{t('projects.subtitle')}</span>
               </h2>
               <p className="projects__description">
-                Những sản phẩm tôi đã tạo ra với đam mê và kỹ năng chuyên môn
+                {t('projects.description')}
               </p>
             </div>
             
@@ -745,16 +747,16 @@ function Projects() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <h3>Không có dự án phù hợp</h3>
-                <p>Hãy chọn danh mục khác.</p>
+                <h3>{t('projects.no_projects')}</h3>
+                <p>{t('projects.try_another_category')}</p>
               </motion.div>
             )}
           </motion.div>
 
           <motion.div className="projects__cta" variants={itemVariants}>
             <div className="projects__cta-content">
-              <h3>Bạn có ý tưởng thú vị?</h3>
-              <p>Hãy cùng nhau biến ý tưởng của bạn thành hiện thực với công nghệ hiện đại nhất!</p>
+              <h3>{t('projects.cta_title')}</h3>
+              <p>{t('projects.cta_description')}</p>
               <div className="projects__cta-actions">
                 <motion.a 
                   href="#contact" 
@@ -762,7 +764,7 @@ function Projects() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Bắt Đầu Dự Án
+                  {t('projects.start_project')}
                 </motion.a>
                 <motion.a 
                   href="#testimonials" 
@@ -770,7 +772,7 @@ function Projects() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Xem Đánh Giá
+                  {t('projects.view_reviews')}
                 </motion.a>
               </div>
             </div>

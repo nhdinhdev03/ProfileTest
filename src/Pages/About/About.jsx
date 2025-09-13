@@ -71,6 +71,7 @@ function useGithubData() {
 };
 
 const ProfileHero = ({ profile, light }) => {
+  const { t } = useTranslation();
   const [particles, setParticles] = useState([])
   const [isHovered, setIsHovered] = useState(false)
   const heroRef = useRef(null)
@@ -235,7 +236,7 @@ const ProfileHero = ({ profile, light }) => {
                   ease: 'easeInOut'
                 }}
               />
-              {light ? "☀️ Light Mode" : "🌙 Dark Mode"}
+              {light ? t('about.light_mode_active') : t('about.dark_mode_active')}
             </motion.span>
           </motion.div>
         </motion.div>
@@ -275,7 +276,7 @@ const ProfileHero = ({ profile, light }) => {
             transition={{ delay: 0.3, type: 'spring', stiffness: 100 }}
           >
        
-            Lập Trình Viên & Kỹ Thuật Phần Mềm
+            {t('about.job_title')}
           </motion.p>
           
           <motion.div 
@@ -289,21 +290,21 @@ const ProfileHero = ({ profile, light }) => {
                 className="highlight-primary"
                 whileHover={{ scale: 1.05, color: 'var(--primary-light)' }}
               >
-          Biến ý tưởng thành những sản phẩm tinh xảo
+                {t('about.description_line1')}
               </motion.span>
-        {" — chuyên về "}
+              {t('about.specializing_in')}
               <motion.span 
                 className="highlight-secondary"
                 whileHover={{ scale: 1.05, color: 'var(--secondary-light)' }}
               >
-          phát triển ứng dụng web full-stack
+                {t('about.description_line1_highlight')}
               </motion.span>
-        {" và "}
+              {" " + t('about.and') + " "}
               <motion.span 
                 className="highlight-accent"
                 whileHover={{ scale: 1.05, color: 'var(--accent-light)' }}
               >
-                tối ưu hóa hiệu suất hệ thống
+                {t('about.description_line1_end')}
               </motion.span>
               .
             </motion.p>
@@ -313,14 +314,14 @@ const ProfileHero = ({ profile, light }) => {
                 className="highlight-primary"
                 whileHover={{ scale: 1.05 }}
               >
-                Đam mê học công nghệ mới
+                {t('about.description_line2')}
               </motion.span>
-        {", thiết kế kiến trúc sạch và "}
+              {t('about.connect_devops') + " "}
               <motion.span 
                 className="highlight-secondary"
                 whileHover={{ scale: 1.05 }}
               >
-          tối ưu hóa trải nghiệm người dùng
+                {t('about.description_line2_highlight')}
               </motion.span>
               .
             </motion.p>
@@ -330,13 +331,12 @@ const ProfileHero = ({ profile, light }) => {
                 className="highlight-accent"
                 whileHover={{ scale: 1.05 }}
               >
-          Khi không lập trình, tôi khám phá thiết kế hệ thống
+                {t('about.description_line3')}
               </motion.span>
-        {" và cải thiện kỹ năng DevOps. "}
-        <span className="italic">
-          {profile?.bio ||
-            "Có kinh nghiệm với React, Node.js và công nghệ đám mây với tâm huyết về code sạch và có thể mở rộng."}
-        </span>
+              {t('about.devops_learning')}
+              <span className="italic">
+                {profile?.bio || t('about.default_bio')}
+              </span>
             </motion.p>
           </motion.div>
           
@@ -352,7 +352,7 @@ const ProfileHero = ({ profile, light }) => {
               whileTap={{ scale: 0.95 }}
             >
               <FiZap className="badge-icon" />
-              Sẵn Sàng Làm Việc
+              {t('about.badge_available')}
             </motion.span>
             <motion.span 
               className="badge badge-blue"
@@ -360,7 +360,7 @@ const ProfileHero = ({ profile, light }) => {
               whileTap={{ scale: 0.95 }}
             >
               <FiCode className="badge-icon" />
-              Web Developer
+              {t('about.badge_web_dev')}
             </motion.span>
             <motion.span 
               className="badge badge-orange"
@@ -368,7 +368,7 @@ const ProfileHero = ({ profile, light }) => {
               whileTap={{ scale: 0.95 }}
             >
               <FiActivity className="badge-icon" />
-              System Design
+              {t('about.badge_system_design')}
             </motion.span>
           </motion.div>
           
@@ -386,7 +386,7 @@ const ProfileHero = ({ profile, light }) => {
               whileTap={{ scale: 0.95 }}
             >
               <FiMail />
-              Liên hệ
+              {t('about.contact_action')}
             </motion.a>
             <motion.a
               href="/resume.pdf"
@@ -396,7 +396,7 @@ const ProfileHero = ({ profile, light }) => {
               download
             >
               <FiDownload />
-              Tải CV
+              {t('about.download_cv')}
             </motion.a>
             <motion.a
               href="#projects"
@@ -405,7 +405,7 @@ const ProfileHero = ({ profile, light }) => {
               whileTap={{ scale: 0.95 }}
             >
               <FiEye />
-              Xem dự án
+              {t('about.view_projects')}
             </motion.a>
           </motion.div>
       </div>
@@ -427,7 +427,10 @@ ProfileHero.propTypes = {
 
 
 // Contact Section
-const ContactSection = ({ profile, light }) => (
+const ContactSection = ({ profile, light }) => {
+  const { t } = useTranslation();
+  
+  return (
   <motion.section 
     className="contact-section"
     initial={{ opacity: 0, y: 30 }}
@@ -443,15 +446,14 @@ const ContactSection = ({ profile, light }) => (
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, type: 'spring', stiffness: 120 }}
     >
-      Kết Nối Với Tôi
+      {t('about.connect_title')}
     </motion.h3>
     <motion.p
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, type: 'spring', stiffness: 120 }}
     >
-      Tôi luôn sẵn sàng thảo luận về những cơ hội mới và các dự án thú vị.
-      Hãy liên hệ nếu bạn muốn hợp tác hoặc đơn giản chỉ muốn kết nối!
+      {t('about.connect_description')}
     </motion.p>
     <motion.div 
       className="contact-actions"
@@ -466,7 +468,7 @@ const ContactSection = ({ profile, light }) => (
         whileTap={{ scale: 0.95 }}
       >
         <FiMail style={{ marginRight: '8px' }} />
-        Email
+        {t('about.email')}
       </motion.a>
       <motion.a
         href={profile?.html_url}
@@ -477,7 +479,7 @@ const ContactSection = ({ profile, light }) => (
         whileTap={{ scale: 0.95 }}
       >
         <FiGithub style={{ marginRight: '8px' }} />
-        GitHub
+        {t('about.github')}
       </motion.a>
       <motion.a
         href="https://linkedin.com/in/nhdinhdev03"
@@ -488,7 +490,7 @@ const ContactSection = ({ profile, light }) => (
         whileTap={{ scale: 0.95 }}
       >
         <FiLinkedin style={{ marginRight: '8px' }} />
-        LinkedIn
+        {t('about.linkedin')}
       </motion.a>
     </motion.div>
     <motion.div 
@@ -509,12 +511,13 @@ const ContactSection = ({ profile, light }) => (
         }}
       >
         {light
-          ? "☀️ Chế Độ Sáng Đang Hoạt Động"
-          : "🌙 Chế Độ Tối Đang Hoạt Động"}
+          ? t('about.light_mode_active')
+          : t('about.dark_mode_active')}
       </motion.div>
     </motion.div>
   </motion.section>
-);
+  );
+};
 
 // Main About Component
 function About() {

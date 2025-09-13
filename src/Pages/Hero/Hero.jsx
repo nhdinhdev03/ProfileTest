@@ -19,11 +19,13 @@ import {
 } from "react-icons/fi";
 import { FaReact, FaJsSquare, FaNodeJs, FaPython } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss } from "react-icons/si";
+import { useTranslation } from "react-i18next";
 import "./Hero.scss";
 import Experience from "components/Hero/Experience/Experience";
 import CommunityTestimonials from "components/Hero/CommunityTestimonials/CommunityTestimonials";
 
 function Hero() {
+  const { t } = useTranslation();
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -519,7 +521,7 @@ function Hero() {
               animate="visible"
             >
               <motion.div className="hero__greeting" variants={itemVariants}>
-                <span className="hero__greeting-text">Xin chào! 👋 Tôi là</span>
+                <span className="hero__greeting-text">{t('hero.greeting')}</span>
               </motion.div>
 
               <motion.h1 className="hero__name" variants={itemVariants}>
@@ -528,7 +530,7 @@ function Hero() {
               </motion.h1>
 
               <motion.div className="hero__role" variants={itemVariants}>
-                <span className="hero__role-label">Tôi là một </span>
+                <span className="hero__role-label">{t('hero.role_label')} </span>
                 <span className="hero__role-dynamic">
                   {displayText}
                   <span className="hero__cursor">|</span>
@@ -554,7 +556,7 @@ function Hero() {
                   whileTap={isTouch ? undefined : { scale: 0.95 }}
                 >
                   <FiMail />
-                  Liên hệ với tôi
+                  {t('hero.contact_button')}
                 </motion.a>
                 <motion.a
                   href="/resume.pdf"
@@ -564,7 +566,7 @@ function Hero() {
                   download
                 >
                   <FiDownload />
-                  Tải CV
+                  {t('hero.download_cv_button')}
                 </motion.a>
               </motion.div>
 
