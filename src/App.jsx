@@ -35,7 +35,8 @@ function App() {
             <LoadingSpinner 
               message="Loading page..." 
               size="medium" 
-              variant="truck" 
+              variant="truck"
+              mobileOptimized={true}
             />
           </div>
         }

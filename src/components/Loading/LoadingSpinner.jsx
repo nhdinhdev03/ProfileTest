@@ -1,12 +1,21 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./LoadingSpinner.scss";
 
 const LoadingSpinner = ({ 
   message = "Loading...", 
   size = "medium",
-  variant = "truck" 
+  variant = "truck",
+  mobileOptimized = true // New prop for mobile optimization
 }) => {
-  if (variant === "simple") {
+  // Detect mobile screen size for automatic optimization
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  
+  // Use simple variant on very small screens for better performance
+  const shouldUseSimple = mobileOptimized && isMobile && window.innerWidth <= 360;
+  const effectiveVariant = shouldUseSimple ? "simple" : variant;
+  
+  if (effectiveVariant === "simple") {
     return (
       <div className={`loading-spinner loading-spinner--${size}`}>
         <div className="loading-spinner__circle">
@@ -152,6 +161,13 @@ const LoadingSpinner = ({
       </div>
     </div>
   );
+};
+
+LoadingSpinner.propTypes = {
+  message: PropTypes.string,
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  variant: PropTypes.oneOf(['simple', 'truck']),
+  mobileOptimized: PropTypes.bool
 };
 
 export default LoadingSpinner;
