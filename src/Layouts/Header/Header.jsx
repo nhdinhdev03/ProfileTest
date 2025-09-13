@@ -474,7 +474,6 @@ function Header({ theme, toggleTheme }) {
             <img
               width={50}
               height={50}
-              loading="lazy"
               decoding="async"
               src={theme === 'dark' ? img.Logo2 : img.Logo}
               alt="Nhdinh Portfolio Logo"
