@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
-import MainLayout from "./Layouts/MainLayout";
-import { useTheme } from "./hooks/useTheme";
-import { publicRoutes } from "./router";
-import { ROUTES } from "./router/routeConstants";
-import ScrollToTopOnNavigate from "./components/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import "./styles/App.scss";
+import LoadingScreen from "components/LoadingScreen/LoadingScreen";
+import MainLayout from "layouts/MainLayout";
+import { useTheme } from "hooks/useTheme";
+import { publicRoutes } from "router";
+import { ROUTES } from "router/routeConstants";
+import ScrollToTopOnNavigate from "components/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
+import ScrollToTop from "components/ScrollToTop/ScrollToTop";
+import "styles/App.scss";
 
 function App() {
   const [theme, toggleTheme] = useTheme("dark");

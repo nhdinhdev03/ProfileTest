@@ -15,9 +15,11 @@ import {
   FiMoon,
   FiStar,
 } from "react-icons/fi";
+import { ROUTES } from "router/routeConstants";
+import img from "assets/Img";
 import "./Header.scss";
 
-import { ROUTES } from "../../router/routeConstants";
+
 
 // Extract nav items outside component to avoid recreation on each render
 const NAV_ITEMS = [
@@ -448,11 +450,18 @@ function Header({ theme, toggleTheme }) {
         >
           <div className="header__logo">
             <div className="header__logo-icon">
-              <span>HD</span>
-            </div>
+            <img
+              width={50}
+              height={50}
+              loading="lazy"
+              decoding="async"
+              src={theme === 'dark' ? img.Logo2 : img.Logo}
+              alt="Nhdinh Portfolio Logo"
+            />
+          </div>
             <div className="header__logo-text">
-              <span className="header__logo-name">Hoang Dinh</span>
-              <span className="header__logo-title">Developer</span>
+              <span className="header__logo-name">Nhdinh</span>
+              <span className="header__logo-title">Web Developer</span>
             </div>
           </div>
         </Link>

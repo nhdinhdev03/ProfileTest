@@ -1,6 +1,6 @@
 import { lazy } from 'react';
-import MainLayout from '../Layouts/MainLayout';
-import { ROUTES, ROUTE_METADATA } from './routeConstants';
+import MainLayout from 'layouts/MainLayout';
+import { ROUTES, ROUTE_METADATA } from 'router/routeConstants';
 
 // Lazy load các component từ thư mục Pages để tối ưu hiệu suất
 const About = lazy(() => 

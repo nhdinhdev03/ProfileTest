@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList, FiStar, FiZap } from 'react-icons/fi'
-import useSaveScrollPosition from '../../hooks/useSaveScrollPosition'
+import useSaveScrollPosition from 'hooks/useSaveScrollPosition'
 import './Projects.scss'
 
 function Projects() {
