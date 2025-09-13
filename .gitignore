@@ -65,7 +65,11 @@ coverage
 
 # dotenv environment variables file
 .env
+.env.*
 .env.test
+.env.development
+.env.production
+.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -117,7 +121,3 @@ dist-ssr
 /jsconfig.json
 
 /netlify.toml
-
-.env.development
-/.env.production
-/.env.test
