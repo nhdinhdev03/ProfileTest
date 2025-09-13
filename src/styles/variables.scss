@@ -8,45 +8,80 @@
   --secondary-dark: #059669;
   --accent-light: #f59e0b;
   --accent-dark: #d97706;
-  
+
   // Background Colors - Enhanced depth
   --bg-primary-light: #ffffff;
   --bg-secondary-light: #f8fafc;
   --bg-tertiary-light: #f1f5f9;
   --bg-quaternary-light: #e2e8f0;
-  
+
   --bg-primary-dark: #0f172a;
   --bg-secondary-dark: #1e293b;
   --bg-tertiary-dark: #334155;
   --bg-quaternary-dark: #475569;
-  
+
   // Text Colors
   --text-primary-light: #1e293b;
   --text-secondary-light: #64748b;
   --text-tertiary-light: #94a3b8;
-  
+
   --text-primary-dark: #f8fafc;
   --text-secondary-dark: #cbd5e1;
   --text-tertiary-dark: #94a3b8;
-  
+
   // Border Colors
   --border-light: #e2e8f0;
   --border-dark: #475569;
-  
+
   // Shadow Colors
   --shadow-light: rgba(15, 23, 42, 0.1);
   --shadow-dark: rgba(0, 0, 0, 0.3);
-  
+
   // Enhanced Gradient Colors
-  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-  --gradient-secondary: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #3b82f6 100%);
-  --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #ec4899 100%);
-  --gradient-dark: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
-  --gradient-rainbow: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #f59e0b 75%, #10b981 100%);
-  
+  --gradient-primary: linear-gradient(
+    135deg,
+    #6366f1 0%,
+    #8b5cf6 50%,
+    #ec4899 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    #10b981 0%,
+    #06b6d4 50%,
+    #3b82f6 100%
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    #f59e0b 0%,
+    #ef4444 50%,
+    #ec4899 100%
+  );
+  --gradient-dark: linear-gradient(
+    135deg,
+    #1e293b 0%,
+    #334155 50%,
+    #475569 100%
+  );
+  --gradient-rainbow: linear-gradient(
+    135deg,
+    #6366f1 0%,
+    #8b5cf6 25%,
+    #ec4899 50%,
+    #f59e0b 75%,
+    #10b981 100%
+  );
+
   // Glass morphism gradients
-  --glass-gradient-light: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --glass-gradient-dark: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%);
+  --glass-gradient-light: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  --glass-gradient-dark: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
 }
 
 // Theme Variables
@@ -73,20 +108,21 @@
 }
 
 // Typography
-$font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-$font-mono: 'JetBrains Mono', 'Monaco', 'Cascadia Code', monospace;
+$font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  sans-serif;
+$font-mono: "JetBrains Mono", "Monaco", "Cascadia Code", monospace;
 
-// Font Sizes - Consistent scale
-$font-xs: 0.75rem;    // 12px
-$font-sm: 0.875rem;   // 14px
-$font-base: 1rem;     // 16px
-$font-lg: 1.125rem;   // 18px
-$font-xl: 1.25rem;    // 20px
-$font-2xl: 1.5rem;    // 24px
-$font-3xl: 1.875rem;  // 30px
-$font-4xl: 2.25rem;   // 36px
-$font-5xl: 3rem;      // 48px
-$font-6xl: 3.75rem;   // 60px
+// Font Sizes - Responsive scale với clamp()
+$font-xs: clamp(0.7rem, 0.5vw + 0.6rem, 0.75rem); // 11px - 12px
+$font-sm: clamp(0.8rem, 0.7vw + 0.7rem, 0.875rem); // 13px - 14px
+$font-base: clamp(0.9rem, 1vw + 0.8rem, 1rem); // 14px - 16px
+$font-lg: clamp(1rem, 1.2vw + 0.9rem, 1.125rem); // 16px - 18px
+$font-xl: clamp(1.1rem, 1.5vw + 1rem, 1.25rem); // 18px - 20px
+$font-2xl: clamp(1.3rem, 2vw + 1.1rem, 1.5rem); // 21px - 24px
+$font-3xl: clamp(1.6rem, 2.5vw + 1.3rem, 1.875rem); // 26px - 30px
+$font-4xl: clamp(1.9rem, 3vw + 1.5rem, 2.25rem); // 30px - 36px
+$font-5xl: clamp(2.4rem, 4vw + 2rem, 3rem); // 38px - 48px
+$font-6xl: clamp(3rem, 5vw + 2.5rem, 3.75rem); // 48px - 60px
 
 // Font Weights - Consistent naming
 $font-light: 300;
@@ -105,24 +141,27 @@ $leading-relaxed: 1.6;
 $leading-loose: 1.7;
 
 // Spacing
-$spacing-xs: 0.25rem;   // 4px
-$spacing-sm: 0.5rem;    // 8px
-$spacing-md: 0.75rem;   // 12px
-$spacing-base: 1rem;    // 16px
-$spacing-lg: 1.25rem;   // 20px
-$spacing-xl: 1.5rem;    // 24px
-$spacing-2xl: 2rem;     // 32px
-$spacing-3xl: 2.5rem;   // 40px
-$spacing-4xl: 3rem;     // 48px
-$spacing-5xl: 4rem;     // 64px
-$spacing-6xl: 5rem;     // 80px
+// Spacing - Enhanced với micro spacing cho mobile
+$spacing-xxs: 0.125rem;  // 2px
+$spacing-xs: 0.25rem;    // 4px
+$spacing-sm: 0.5rem;     // 8px
+$spacing-md: 0.75rem;    // 12px
+$spacing-base: 1rem;     // 16px
+$spacing-lg: 1.25rem;    // 20px
+$spacing-xl: 1.5rem;     // 24px
+$spacing-2xl: 2rem;      // 32px
+$spacing-3xl: 2.5rem;    // 40px
+$spacing-4xl: 3rem;      // 48px
+$spacing-5xl: 4rem;      // 64px
+$spacing-6xl: 5rem;      // 80px
 
-// Breakpoints - Enhanced mobile-first approach
-$breakpoint-xs: 360px;   // Extra small mobile
-$breakpoint-sm: 640px;   // Small mobile
-$breakpoint-md: 768px;   // Tablet portrait
-$breakpoint-lg: 1024px;  // Tablet landscape / Small desktop
-$breakpoint-xl: 1280px;  // Desktop
+// Breakpoints - Enhanced mobile-first approach với support cho màn hình rất nhỏ
+$breakpoint-xxs: 320px; // Very small mobile (iPhone SE, old Android)
+$breakpoint-xs: 360px; // Extra small mobile
+$breakpoint-sm: 640px; // Small mobile
+$breakpoint-md: 768px; // Tablet portrait
+$breakpoint-lg: 1024px; // Tablet landscape / Small desktop
+$breakpoint-xl: 1280px; // Desktop
 $breakpoint-2xl: 1536px; // Large desktop
 $breakpoint-3xl: 1920px; // Ultra-wide
 
@@ -148,7 +187,7 @@ $breakpoint-3xl: 1920px; // Ultra-wide
 
 @mixin hover-scale($scale: 1.05) {
   transition: transform 0.3s ease;
-  
+
   &:hover {
     transform: scale($scale);
   }
@@ -164,14 +203,50 @@ $breakpoint-3xl: 1920px; // Ultra-wide
 // Advanced animation mixins
 @mixin float-animation($duration: 6s, $distance: 20px) {
   animation: float #{$duration} ease-in-out infinite;
-  
+
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-#{$distance}); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-#{$distance});
+    }
   }
 }
 
-// Typography mixins for consistency
+// Container Queries - Modern responsive approach
+@mixin container-xs {
+  @container (min-width: 320px) {
+    @content;
+  }
+}
+
+@mixin container-sm {
+  @container (min-width: 640px) {
+    @content;
+  }
+}
+
+@mixin container-md {
+  @container (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin container-lg {
+  @container (min-width: 1024px) {
+    @content;
+  }
+}
+
+// Responsive container setup
+.responsive-container {
+  container-type: inline-size;
+  container-name: responsive-section;
+}
+
+// Typography mixins for consistency với responsive font sizing
 @mixin heading-style($size: $font-2xl, $weight: $font-bold) {
   font-size: $size;
   font-weight: $weight;
@@ -204,10 +279,14 @@ $breakpoint-3xl: 1920px; // Ultra-wide
 
 @mixin pulse-glow($color: var(--primary-light)) {
   animation: pulse-glow 2s ease-in-out infinite alternate;
-  
+
   @keyframes pulse-glow {
-    from { box-shadow: 0 0 5px #{$color}; }
-    to { box-shadow: 0 0 20px #{$color}, 0 0 30px #{$color}; }
+    from {
+      box-shadow: 0 0 5px #{$color};
+    }
+    to {
+      box-shadow: 0 0 20px #{$color}, 0 0 30px #{$color};
+    }
   }
 }
 
@@ -219,9 +298,27 @@ $breakpoint-3xl: 1920px; // Ultra-wide
   display: inline-block;
 }
 
-// Mobile-specific mixins
+// Mobile-specific mixins với breakpoint chi tiết hơn
+@mixin mobile-xxs-only {
+  @media (max-width: #{$breakpoint-xxs - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile-xs-only {
+  @media (max-width: #{$breakpoint-xs - 1px}) {
+    @content;
+  }
+}
+
 @mixin mobile-only {
   @media (max-width: #{$breakpoint-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile-xs-up {
+  @media (min-width: $breakpoint-xs) {
     @content;
   }
 }
@@ -248,13 +345,36 @@ $breakpoint-3xl: 1920px; // Ultra-wide
   min-width: $size;
   min-height: $size;
   padding: $spacing-sm;
+
+  // Tăng touch area cho các thiết bị có màn hình nhỏ
+  @include mobile-xxs-only {
+    min-width: 48px;
+    min-height: 48px;
+    padding: $spacing-md;
+  }
+
+  // Ensure proper spacing for accessibility
+  margin: $spacing-xs;
+
+  // Improve tap response
+  @include touch-device {
+    &:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
+    // Remove hover effects on touch devices
+    &:hover {
+      transform: none;
+    }
+  }
 }
 
 @mixin mobile-scroll-snap {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  
+
   > * {
     scroll-snap-align: start;
   }
@@ -262,9 +382,9 @@ $breakpoint-3xl: 1920px; // Ultra-wide
 
 @mixin morphing-border($color: var(--primary-light)) {
   position: relative;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -2px;
     left: -2px;
@@ -276,7 +396,7 @@ $breakpoint-3xl: 1920px; // Ultra-wide
     opacity: 0;
     transition: opacity 0.3s ease;
   }
-  
+
   &:hover::before {
     opacity: 1;
   }
@@ -284,7 +404,7 @@ $breakpoint-3xl: 1920px; // Ultra-wide
 
 @mixin card-shadow {
   box-shadow: 0 4px 6px -1px var(--shadow-color),
-              0 2px 4px -1px var(--shadow-color);
+    0 2px 4px -1px var(--shadow-color);
 }
 
 // Animations

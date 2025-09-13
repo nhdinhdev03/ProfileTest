@@ -11,7 +11,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px); // Responsive base font size
   line-height: $leading-relaxed;
   /* Default header height fallback; updated by Header.scss at runtime */
   --header-height: 80px;
@@ -20,6 +20,12 @@ html {
   // Tối ưu scroll performance
   overscroll-behavior: contain;
   scroll-snap-type: y proximity;
+  
+  // Support for very small screens
+  @include mobile-xxs-only {
+    font-size: clamp(12px, 3vw, 14px);
+    --header-height: 56px;
+  }
 }
 
 // Mobile header height optimization
@@ -386,22 +392,19 @@ a {
   color: white;
 }
 
-// Focus Styles
+// Focus Styles - Enhanced for responsive accessibility
 *:focus {
   outline: 2px solid var(--primary-light);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 // Mobile Performance Optimizations
 @include mobile-only {
-  // Disable complex animations on mobile for better performance
+  // Disable complex animations and optimize performance
   * {
     animation-duration: 0.3s !important;
     transition-duration: 0.3s !important;
-  }
-  
-  // Optimize scrolling performance
-  * {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
@@ -463,5 +466,142 @@ a {
   .parallax, .floating, .morphing {
     transform: none !important;
     animation: none !important;
+  }
+}
+
+// Responsive Image Utilities
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  
+  // Lazy loading optimization
+  &[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    
+    &.loaded {
+      opacity: 1;
+    }
+  }
+  
+  // Aspect ratio containers
+  &.aspect-video {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  
+  &.aspect-square {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  
+  &.aspect-portrait {
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+}
+
+// Responsive video
+.responsive-video {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+// Responsive iframe (for embeds)
+.responsive-iframe {
+  width: 100%;
+  border: none;
+  aspect-ratio: 16 / 9;
+}
+
+// Responsive grid utilities
+.responsive-grid {
+  display: grid;
+  gap: $spacing-base;
+  grid-template-columns: 1fr;
+  
+  @include mobile-xs-up {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include tablet-up {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+  }
+  
+  @include desktop-up {
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-xl;
+  }
+}
+
+// Responsive flexbox utilities
+.responsive-flex {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-base;
+  
+  @include tablet-up {
+    flex-direction: row;
+    gap: $spacing-lg;
+  }
+}
+
+// Responsive text alignment
+.text-responsive {
+  text-align: center;
+  
+  @include tablet-up {
+    text-align: left;
+  }
+}
+
+// Accessibility Improvements for Responsive Design
+// Improve contrast for better readability
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary-light: #000000;
+    --text-secondary-light: #333333;
+    --bg-primary-light: #ffffff;
+    --border-light: #000000;
+  }
+  
+  [data-theme="dark"] {
+    --text-primary-dark: #ffffff;
+    --text-secondary-dark: #cccccc;
+    --bg-primary-dark: #000000;
+    --border-dark: #ffffff;
+  }
+}
+
+// Large text mode support
+@media (prefers-contrast: high) and (min-resolution: 192dpi) {
+  html {
+    font-size: clamp(18px, 3vw, 20px);
+  }
+  
+  .btn {
+    min-height: 56px;
+    padding: $spacing-lg $spacing-2xl;
+    font-size: $font-lg;
+  }
+}
+
+// Responsive spacing utilities
+.spacing-responsive {
+  padding: $spacing-base;
+  
+  @include mobile-xs-up {
+    padding: $spacing-lg;
+  }
+  
+  @include tablet-up {
+    padding: $spacing-xl;
+  }
+  
+  @include desktop-up {
+    padding: $spacing-2xl;
   }
 }

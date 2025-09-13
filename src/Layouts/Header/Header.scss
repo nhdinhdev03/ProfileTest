@@ -24,10 +24,15 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   -webkit-backdrop-filter: blur(20px); // Safari support
 
-  // Mobile optimizations
+  // Mobile optimizations với support màn hình rất nhỏ
   @media (max-width: $breakpoint-sm) {
     height: 60px;
     padding: 0 env(safe-area-inset-left, 0) 0 env(safe-area-inset-right, 0);
+  }
+  
+  @include mobile-xxs-only {
+    height: 56px;
+    padding: 0 $spacing-xs;
   }
 
   [data-theme="dark"] & {
@@ -53,9 +58,22 @@
     margin: 0 auto;
     padding: 0 $spacing-base;
     height: 100%;
-
-    @media (min-width: $breakpoint-sm) {
+    
+    // Better responsive padding
+    @include mobile-xs-up {
+      padding: 0 $spacing-lg;
+    }
+    
+    @include tablet-up {
+      padding: 0 $spacing-xl;
+    }
+    
+    @include desktop-up {
       padding: 0 $spacing-2xl;
+    }
+    
+    @include mobile-xxs-only {
+      padding: 0 $spacing-sm;
     }
   }
 
@@ -216,15 +234,31 @@
     border-radius: 8px;
     position: relative;
     transition: all 0.2s ease;
-
+    
+    // Improved touch targets
+    @include mobile-touch-target(44px);
+    
     &:hover {
       color: var(--text-primary);
       background: var(--bg-secondary);
+      transform: translateY(-1px);
+      
+      @include touch-device {
+        transform: none;
+      }
+    }
+    
+    &:active {
+      @include touch-device {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+      }
     }
 
     &--active {
-      // color: var(--primary-light);
       background: rgba(99, 102, 241, 0.1);
+      color: var(--primary-light);
+      font-weight: $font-semibold;
     }
   }
 

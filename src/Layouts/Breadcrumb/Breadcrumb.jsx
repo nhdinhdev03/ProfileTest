@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
@@ -189,11 +189,45 @@ const BreadcrumbItem = memo(({ item, isLast, index }) => {
 
 const Breadcrumb = memo(({ className = '', showOnHome = false }) => {
   const location = useLocation();
+  const breadcrumbListRef = useRef(null);
   
   const breadcrumbs = useMemo(() => 
     generateBreadcrumbs(location.pathname), 
     [location.pathname]
   );
+
+  // Handle scroll indicator
+  useEffect(() => {
+    const listElement = breadcrumbListRef.current;
+    if (!listElement) return;
+
+    const handleScroll = () => {
+      const { scrollWidth, clientWidth } = listElement;
+      const isScrollable = scrollWidth > clientWidth;
+      
+      if (isScrollable) {
+        listElement.classList.add('scrollable');
+      } else {
+        listElement.classList.remove('scrollable');
+      }
+    };
+
+    const handleResize = () => {
+      handleScroll();
+    };
+
+    // Initial check
+    handleScroll();
+
+    // Add event listeners
+    listElement.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      listElement.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [breadcrumbs]);
 
   // Don't show breadcrumb on home page unless explicitly requested
   if (location.pathname === ROUTES.HOME && !showOnHome) {
@@ -230,6 +264,7 @@ const Breadcrumb = memo(({ className = '', showOnHome = false }) => {
         key={location.pathname} // Force re-animation on route change
       >
         <motion.ol 
+          ref={breadcrumbListRef}
           className="breadcrumb__list"
           variants={containerVariants}
         >
