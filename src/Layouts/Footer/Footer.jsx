@@ -1,21 +1,18 @@
-import React, { useState, useEffect, useRef, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { memo } from 'react'
 import { 
   FiHeart, 
   FiGithub, 
   FiLinkedin, 
   FiMail, 
-  FiArrowUp,
   FiPhone,
   FiMapPin,
   FiDownload
 } from 'react-icons/fi'
+import ScrollToTop from 'components/ScrollToTop/ScrollToTop'
 import './Footer.scss'
 
 const Footer = memo(() => {
   const currentYear = new Date().getFullYear()
-  const [showScrollTop, setShowScrollTop] = useState(false)
-  const scrollTimeoutRef = useRef(null)
 
   const socialLinks = [
     { icon: FiGithub, url: 'https://github.com', label: 'GitHub' },
@@ -28,30 +25,6 @@ const Footer = memo(() => {
     { icon: FiPhone, text: '+84 123 456 789', href: 'tel:+84123456789' },
     { icon: FiMapPin, text: 'Hậu Giang, Việt Nam', href: '#' }
   ]
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const shouldShow = window.pageYOffset > 300
-      setShowScrollTop(shouldShow)
-      
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current)
-      }
-    }
-  }, [])
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   return (
     <footer className="footer">
@@ -135,23 +108,8 @@ const Footer = memo(() => {
         </div>
       </div>
 
-      {/* Scroll to Top Button */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            className="footer__scroll-top"
-            onClick={scrollToTop}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Scroll to top"
-          >
-            <FiArrowUp />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* Scroll to Top Component */}
+      <ScrollToTop />
     </footer>
   )
 })

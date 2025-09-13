@@ -1,36 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowUp } from 'react-icons/fi'
 import './ScrollToTop.scss'
 
 function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
-  useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true)
+  // Memoize easing function
+  const easeInOutQuart = useMemo(() => {
+    return (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
+  }, [])
+
+  // Throttled scroll handler cho performance tốt hơn
+  const handleScroll = useCallback(() => {
+    const scrolled = window.pageYOffset
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+    const progress = Math.min(scrolled / maxScroll, 1)
+    
+    setIsVisible(scrolled > 300)
+    setScrollProgress(progress)
+  }, [])
+
+  // Throttle function để giảm số lần gọi
+  const throttle = useCallback((func, delay) => {
+    let timeoutId
+    let lastExecTime = 0
+    return function (...args) {
+      const currentTime = Date.now()
+      
+      if (currentTime - lastExecTime > delay) {
+        func.apply(this, args)
+        lastExecTime = currentTime
       } else {
-        setIsVisible(false)
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          func.apply(this, args)
+          lastExecTime = Date.now()
+        }, delay - (currentTime - lastExecTime))
       }
-    }
-
-    window.addEventListener('scroll', toggleVisibility)
-
-    return () => {
-      window.removeEventListener('scroll', toggleVisibility)
     }
   }, [])
 
-  const scrollToTop = () => {
+  // Memoize throttled scroll handler
+  const throttledScrollHandler = useMemo(
+    () => throttle(handleScroll, 16), // ~60fps
+    [handleScroll, throttle]
+  )
+
+  useEffect(() => {
+    window.addEventListener('scroll', throttledScrollHandler, { passive: true })
+    
+    return () => {
+      window.removeEventListener('scroll', throttledScrollHandler)
+    }
+  }, [throttledScrollHandler])
+
+  const scrollToTop = useCallback(() => {
     // Enhanced smooth scroll to top with custom animation
     const startY = window.scrollY
     const duration = Math.min(startY / 2, 1000) // Max 1 second
     let startTime = null
-
-    const easeInOutQuart = (t) => {
-      return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
-    }
 
     const animateScroll = (currentTime) => {
       if (startTime === null) startTime = currentTime
@@ -48,7 +78,7 @@ function ScrollToTop() {
     }
 
     requestAnimationFrame(animateScroll)
-  }
+  }, [easeInOutQuart])
 
   return (
     <AnimatePresence>
@@ -74,9 +104,11 @@ function ScrollToTop() {
             <motion.div
               className="scroll-to-top__progress-bar"
               style={{
-                pathLength: typeof window !== 'undefined' ? 
-                  window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight) : 0
+                scaleY: scrollProgress
               }}
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: scrollProgress }}
+              transition={{ duration: 0.1 }}
             />
           </div>
         </motion.button>

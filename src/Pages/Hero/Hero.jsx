@@ -1215,6 +1215,8 @@ function Hero() {
       </div>
     </motion.section>
     <Experience />
+     <Experience />
+      <Experience />
     </>
   );
    
