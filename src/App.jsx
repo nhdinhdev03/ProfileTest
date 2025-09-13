@@ -22,15 +22,15 @@ function App() {
         <Routes>
           {publicRoutes.map((route, index) => {
             const Page = route.component;
-            const Layout = route.layout || MainLayout;
+            const LayoutComponent = route.layout ?? MainLayout; // fallback
             return (
               <Route
                 key={index}
                 path={route.path}
                 element={
-                  <Layout theme={theme} toggleTheme={toggleTheme}>
+                  <LayoutComponent theme={theme} toggleTheme={toggleTheme}>
                     <Page />
-                  </Layout>
+                  </LayoutComponent>
                 }
               />
             );
