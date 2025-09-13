@@ -21,6 +21,7 @@ import { FaReact, FaJsSquare, FaNodeJs, FaPython } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss } from "react-icons/si";
 import "./Hero.scss";
 import Experience from "components/Hero/Experience/Experience";
+import CommunityTestimonials from "components/Hero/CommunityTestimonials/CommunityTestimonials";
 
 
 function Hero() {
@@ -1214,8 +1215,9 @@ function Hero() {
       </motion.div>
       </div>
     </motion.section>
+   
     <Experience />
-
+ <CommunityTestimonials />
     </>
   );
    
