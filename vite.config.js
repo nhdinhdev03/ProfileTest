@@ -39,7 +39,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    minify: 'terser',
+    // Using default esbuild minifier (removed explicit 'terser' to avoid optional dependency build error)
     rollupOptions: {
       output: {
         manualChunks: {
