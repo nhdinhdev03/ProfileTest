@@ -1,9 +1,14 @@
 @use "../../styles/variables.scss" as *;
 
 @keyframes slideInOut {
-  0% { transform: translateX(-100%); }
-  50% { transform: translateX(0); }
-  100% { transform: translateX(100%); }
+  0% { 
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% { 
+    transform: scaleX(1);
+    opacity: 1;
+  }
 }
 
 .header {
@@ -40,16 +45,7 @@
     }
   }
 
-  &--scrolling::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--gradient-primary);
-    animation: slideInOut 1s ease-in-out;
-  }
+
 
   &__container {
     @include flex-between;
