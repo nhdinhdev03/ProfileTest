@@ -87,16 +87,16 @@
     "badge_learning": "Luôn Học Hỏi",
     "badge_coffee": "Yêu Thích Cà Phê",
     "email": "Email",
-    "github": "GitHub", 
+    "github": "GitHub",
     "linkedin": "LinkedIn",
     "specializing_in": "— chuyên về",
-    "and": "và", 
+    "and": "và",
     "connect_devops": ", thiết kế kiến trúc sạch và",
     "devops_learning": " và cải thiện kỹ năng DevOps. ",
     "badge_web_dev": "Web Developer",
     "badge_system_design": "System Design",
     "contact_action": "Liên hệ",
-    "download_cv": "Tải CV", 
+    "download_cv": "Tải CV",
     "view_projects": "Xem dự án"
   },
   "projects": {
@@ -187,7 +187,7 @@
         "description": "Xây dựng giao diện người dùng hiện đại và responsive"
       },
       "backend": {
-        "title": "Backend Development", 
+        "title": "Backend Development",
         "description": "Phát triển API và xử lý logic phía server"
       },
       "database": {
