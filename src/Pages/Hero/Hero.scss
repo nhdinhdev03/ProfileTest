@@ -814,44 +814,114 @@
 // Additional mobile optimizations for smaller screens
 @media (max-width: $breakpoint-sm) {
   .hero {
+    min-height: 100vh;
+    padding: $spacing-base 0;
+    
+    &__grid {
+      gap: $spacing-2xl;
+      padding: 0 $spacing-sm;
+    }
+    
     &__name {
+      margin-bottom: $spacing-base;
+      
       &-text,
       &-highlight {
-        font-size: clamp($font-xl, 9vw, $font-3xl);
+        font-size: clamp($font-2xl, 10vw, $font-4xl);
+        line-height: 1.1;
       }
     }
 
     &__role {
-      font-size: clamp($font-base, 5vw, $font-lg);
+      font-size: clamp($font-base, 5vw, $font-xl);
+      margin-bottom: $spacing-lg;
+      min-height: 50px;
     }
 
     &__description {
-      font-size: $font-xs;
+      font-size: $font-sm;
       line-height: 1.6;
+      margin-bottom: $spacing-lg;
+      padding: 0;
+    }
+    
+    &__location {
+      margin-bottom: $spacing-lg;
+      font-size: $font-xs;
     }
 
-    &__avatar {
-      &-image {
-        width: 180px;
-        height: 180px;
+    &__visual {
+      margin-bottom: $spacing-xl;
+      
+      .hero__avatar {
+        &-image {
+          width: 160px;
+          height: 160px;
+          border-width: 2px;
+        }
       }
     }
 
-    &__tech-stack {
-      width: 240px;
-      height: 240px;
+    &__actions {
+      margin-bottom: $spacing-lg;
+      
+      .btn {
+        max-width: 280px;
+        padding: $spacing-sm $spacing-lg;
+        font-size: $font-sm;
+        min-height: 44px;
+      }
     }
-
-    &__tech-icon {
-      width: 35px;
-      height: 35px;
-      font-size: $font-sm;
+    
+    &__social {
+      gap: $spacing-base;
+      
+      &-link {
+        width: 45px;
+        height: 45px;
+        font-size: $font-lg;
+        min-height: 45px;
+      }
     }
+  }
+}
 
+// Extra small mobile devices
+@media (max-width: 360px) {
+  .hero {
+    &__grid {
+      padding: 0 $spacing-xs;
+    }
+    
+    &__name {
+      &-text,
+      &-highlight {
+        font-size: clamp($font-xl, 11vw, $font-3xl);
+      }
+    }
+    
+    &__role {
+      font-size: clamp($font-sm, 6vw, $font-lg);
+    }
+    
+    &__description {
+      font-size: $font-xs;
+    }
+    
+    &__visual {
+      .hero__avatar {
+        &-image {
+          width: 140px;
+          height: 140px;
+        }
+      }
+    }
+    
     &__actions {
       .btn {
-        max-width: 240px;
-        padding: $spacing-sm $spacing-base;
+        max-width: 260px;
+        padding: $spacing-xs $spacing-base;
+        font-size: $font-xs;
       }
     }
   }
@@ -939,62 +1009,118 @@
   }
 }
 
-// Mobile optimization - Hide orbital visual animation
+// Mobile optimization - Enhanced mobile experience
 @media (max-width: $breakpoint-md) {
   .hero {
-    // Hide the entire orbital/solar system animation on mobile for performance
-    &__visual {
-      display: none !important;
-    }
+    min-height: 100vh; // Full viewport height for better mobile experience
+    padding: $spacing-lg 0;
     
     // Optimize layout for mobile
     &__grid {
       grid-template-columns: 1fr;
-      gap: $spacing-2xl;
+      gap: $spacing-3xl;
       text-align: center;
+      padding: 0 $spacing-base;
     }
     
     &__content {
       text-align: center;
       margin-right: 0;
-      padding: 0 $spacing-lg;
+      padding: 0;
+      order: 2; // Content comes after visual on mobile
+    }
+    
+    &__visual {
+      order: 1; // Visual comes first on mobile
+      margin-bottom: $spacing-2xl;
+      
+      // Simplified visual for mobile
+      .hero__avatar {
+        &-image {
+          width: 180px;
+          height: 180px;
+          border-width: 3px;
+        }
+        
+        &-ring {
+          display: none; // Hide complex rings on mobile
+        }
+        
+        &-orbital-ring {
+          display: none; // Hide orbital rings on mobile
+        }
+      }
+      
+      .hero__tech-stack {
+        display: none; // Hide tech stack on mobile for cleaner look
+      }
     }
     
     // Optimize spacing for mobile
     &__name {
-      margin-bottom: $spacing-base;
+      margin-bottom: $spacing-lg;
       
       &-text, &-highlight {
-        font-size: clamp($font-2xl, 8vw, $font-4xl);
+        font-size: clamp($font-3xl, 9vw, $font-5xl);
+        line-height: 1.1;
+        margin-bottom: $spacing-sm;
       }
     }
     
     &__role {
-      font-size: clamp($font-lg, 4vw, $font-xl);
-      margin-bottom: $spacing-lg;
+      font-size: clamp($font-lg, 4.5vw, $font-2xl);
+      margin-bottom: $spacing-xl;
       height: auto;
+      min-height: 60px; // Ensure consistent height
     }
     
     &__description {
       font-size: $font-base;
-      margin-bottom: $spacing-lg;
+      line-height: 1.6;
+      margin-bottom: $spacing-xl;
+      max-width: 100%;
+      padding: 0 $spacing-sm;
     }
     
-    &__cta {
+    &__location {
+      margin-bottom: $spacing-xl;
+      font-size: $font-sm;
+    }
+    
+    &__actions {
       flex-direction: column;
       gap: $spacing-base;
       align-items: center;
+      margin-bottom: $spacing-xl;
       
-      &-primary, &-secondary {
+      .btn {
         width: 100%;
-        max-width: 280px;
-        justify-content: center;
+        max-width: 300px;
+        padding: $spacing-base $spacing-xl;
+        font-size: $font-base;
+        min-height: 48px; // Better touch target
       }
     }
     
     &__social {
       margin-top: $spacing-lg;
       justify-content: center;
+      gap: $spacing-lg;
+      
+      &-link {
+        width: 50px;
+        height: 50px;
+        font-size: $font-xl;
+        min-height: 50px; // Better touch target
+      }
+    }
+    
+    // Hide complex animations on mobile
+    &__particles,
+    &__morphing-shapes,
+    &__floating-elements,
+    &__background {
+      display: none;
     }
   }
 }

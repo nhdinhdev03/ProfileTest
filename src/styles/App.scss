@@ -150,11 +150,72 @@ html {
   }
 }
 
-// Responsive design adjustments
-@media (max-width: $breakpoint-md) {
+// Mobile optimizations
+@include mobile-only {
+  .App {
+    // Disable complex background animations on mobile
+    &::before {
+      display: none;
+    }
+    
+    // Optimize main content padding
+    main {
+      padding-top: calc(var(--header-height, 60px) + env(safe-area-inset-top, 0px));
+    }
+  }
+  
+  // Hide particles on mobile for better performance
+  .particles {
+    display: none;
+  }
+  
+  // Optimize button sizes for touch
+  .btn {
+    @include mobile-touch-target(48px);
+    padding: $spacing-base $spacing-lg;
+    font-size: $font-base;
+    min-height: 48px;
+    
+    // Disable hover effects on touch devices
+    @include touch-device {
+      &:hover {
+        transform: none;
+        box-shadow: none;
+      }
+      
+      &:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+      }
+    }
+  }
+  
+  // Optimize glass card for mobile
+  .glass-card {
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    
+    // Reduce complexity on mobile
+    &::before {
+      display: none;
+    }
+  }
+}
+
+// Tablet optimizations
+@include tablet-up {
   .App {
     &::before {
-      animation-duration: 30s;
+      animation-duration: 25s;
+    }
+  }
+}
+
+// Desktop optimizations
+@include desktop-up {
+  .App {
+    &::before {
+      animation-duration: 20s;
     }
   }
 }

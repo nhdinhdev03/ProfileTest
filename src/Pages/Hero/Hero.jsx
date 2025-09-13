@@ -48,6 +48,21 @@ function Hero() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Enhanced mobile detection for better performance
+  useEffect(() => {
+    const isLowEndDevice = 
+      navigator.hardwareConcurrency <= 4 ||
+      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      window.innerWidth <= 480;
+    
+    if (isLowEndDevice) {
+      // Disable complex animations on low-end devices
+      setParticles([]);
+      setMorphingShapes([]);
+      setFloatingElements([]);
+    }
+  }, []);
+
   // Gentle mouse tracking for subtle 3D effects
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);

@@ -132,12 +132,16 @@
     
     @media (max-width: 768px) {
       gap: clamp(1rem, 4vw, 2rem);
+      margin-top: 1.5rem;
     }
     
     @media (max-width: 480px) {
-      flex-direction: column;
-      gap: 1.5rem;
+      flex-direction: row;
+      gap: 1rem;
       align-items: center;
+      justify-content: space-around;
+      margin-top: 1rem;
+      padding: 0 $spacing-base;
     }
   }
 
@@ -150,9 +154,10 @@
     flex: 0 1 auto;
     
     @media (max-width: 480px) {
-      flex: none;
-      width: 100%;
-      max-width: 200px;
+      flex: 1;
+      min-width: 0;
+      max-width: none;
+      gap: 0.25rem;
     }
     
     .stat-icon {
@@ -199,20 +204,24 @@
     
     // Tablet landscape (768px - 1023px)
     @media (max-width: 1023px) and (min-width: 768px) {
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
     }
     
     // Tablet portrait (481px - 767px)
     @media (max-width: 767px) and (min-width: 481px) {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: 1fr;
       gap: 1.25rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
     
     // Mobile (up to 480px)
     @media (max-width: 480px) {
       grid-template-columns: 1fr;
       gap: 1rem;
+      max-width: 100%;
     }
   }
 
@@ -264,9 +273,15 @@
     @media (max-width: 480px) {
       padding: 1.25rem;
       border-radius: 16px;
+      min-height: 200px; // Ensure consistent card height
       
       &:hover {
-        transform: translateY(-4px) scale(1.01);
+        transform: translateY(-2px) scale(1.005);
+      }
+      
+      &:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
       }
     }
     
@@ -277,7 +292,21 @@
       }
       
       &:active {
-        transform: scale(0.98);
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+      }
+    }
+    
+    // Enhanced touch feedback
+    @media (max-width: 768px) {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      
+      &:active {
+        background: rgba(255, 255, 255, 0.9);
+        transform: scale(0.97);
+        transition: all 0.1s ease;
       }
     }
 

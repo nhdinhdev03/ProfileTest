@@ -117,12 +117,14 @@ $spacing-4xl: 3rem;     // 48px
 $spacing-5xl: 4rem;     // 64px
 $spacing-6xl: 5rem;     // 80px
 
-// Breakpoints
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
-$breakpoint-2xl: 1536px;
+// Breakpoints - Enhanced mobile-first approach
+$breakpoint-xs: 360px;   // Extra small mobile
+$breakpoint-sm: 640px;   // Small mobile
+$breakpoint-md: 768px;   // Tablet portrait
+$breakpoint-lg: 1024px;  // Tablet landscape / Small desktop
+$breakpoint-xl: 1280px;  // Desktop
+$breakpoint-2xl: 1536px; // Large desktop
+$breakpoint-3xl: 1920px; // Ultra-wide
 
 // Mixins
 @mixin flex-center {
@@ -215,6 +217,47 @@ $breakpoint-2xl: 1536px;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline-block;
+}
+
+// Mobile-specific mixins
+@mixin mobile-only {
+  @media (max-width: #{$breakpoint-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin touch-device {
+  @media (hover: none), (pointer: coarse) {
+    @content;
+  }
+}
+
+@mixin mobile-touch-target($size: 44px) {
+  min-width: $size;
+  min-height: $size;
+  padding: $spacing-sm;
+}
+
+@mixin mobile-scroll-snap {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  > * {
+    scroll-snap-align: start;
+  }
 }
 
 @mixin morphing-border($color: var(--primary-light)) {

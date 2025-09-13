@@ -22,7 +22,17 @@ html {
   scroll-snap-type: y proximity;
 }
 
-@media (max-width: 768px) {
+// Mobile header height optimization
+@include mobile-only {
+  html {
+    --header-height: 60px;
+    scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    font-size: 14px; // Slightly smaller base font for mobile
+  }
+}
+
+// Tablet header height
+@include tablet-up {
   html {
     --header-height: 70px;
     scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
@@ -62,32 +72,64 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: clamp($font-3xl, 4vw, $font-6xl);
   font-weight: $font-bold;
+  
+  @include mobile-only {
+    font-size: clamp($font-2xl, 8vw, $font-4xl);
+    line-height: 1.1;
+  }
 }
 
 h2 {
   font-size: clamp($font-2xl, 3vw, $font-5xl);
+  
+  @include mobile-only {
+    font-size: clamp($font-xl, 6vw, $font-3xl);
+    line-height: 1.2;
+  }
 }
 
 h3 {
   font-size: clamp($font-xl, 2.5vw, $font-4xl);
+  
+  @include mobile-only {
+    font-size: clamp($font-lg, 5vw, $font-2xl);
+  }
 }
 
 h4 {
   font-size: clamp($font-lg, 2vw, $font-3xl);
+  
+  @include mobile-only {
+    font-size: clamp($font-base, 4vw, $font-xl);
+  }
 }
 
 h5 {
   font-size: clamp($font-base, 1.5vw, $font-2xl);
+  
+  @include mobile-only {
+    font-size: clamp($font-sm, 3vw, $font-lg);
+  }
 }
 
 h6 {
   font-size: clamp($font-sm, 1.2vw, $font-xl);
+  
+  @include mobile-only {
+    font-size: clamp($font-xs, 2.5vw, $font-base);
+  }
 }
 
 p {
   color: var(--text-secondary);
   margin-bottom: $spacing-base;
   font-size: clamp($font-sm, 1.1vw, $font-lg);
+  
+  @include mobile-only {
+    font-size: $font-sm;
+    line-height: 1.6;
+    margin-bottom: $spacing-sm;
+  }
 }
 
 a {
@@ -106,6 +148,11 @@ a {
   margin: 0 auto;
   padding: 0 $spacing-base;
 
+  @include mobile-only {
+    padding: 0 $spacing-sm;
+    max-width: 100%;
+  }
+
   @media (min-width: $breakpoint-sm) {
     padding: 0 $spacing-2xl;
   }
@@ -117,6 +164,10 @@ a {
 
 .section {
   padding: $spacing-5xl 0;
+
+  @include mobile-only {
+    padding: $spacing-3xl 0;
+  }
 
   @media (min-width: $breakpoint-md) {
     padding: $spacing-6xl 0;
@@ -158,6 +209,13 @@ a {
   position: relative;
   overflow: hidden;
 
+  @include mobile-only {
+    @include mobile-touch-target(48px);
+    padding: $spacing-base $spacing-lg;
+    font-size: $font-sm;
+    border-radius: 0.75rem;
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -171,6 +229,19 @@ a {
 
   &:hover::before {
     left: 100%;
+  }
+
+  // Disable hover effects on touch devices
+  @include touch-device {
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    &:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
   }
 
   &.btn-primary {
@@ -217,6 +288,12 @@ a {
   position: relative;
   overflow: hidden;
 
+  @include mobile-only {
+    padding: $spacing-lg;
+    border-radius: 0.75rem;
+    margin-bottom: $spacing-base;
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -235,6 +312,18 @@ a {
 
     &::before {
       transform: scaleX(1);
+    }
+  }
+
+  // Mobile touch interactions
+  @include mobile-only {
+    &:hover {
+      transform: none;
+    }
+    
+    &:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
     }
   }
 }
@@ -301,4 +390,78 @@ a {
 *:focus {
   outline: 2px solid var(--primary-light);
   outline-offset: 2px;
+}
+
+// Mobile Performance Optimizations
+@include mobile-only {
+  // Disable complex animations on mobile for better performance
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+  
+  // Optimize scrolling performance
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  // Disable hover effects that can cause performance issues
+  *:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  // Optimize images for mobile
+  img {
+    max-width: 100%;
+    height: auto;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  
+  // Improve touch scrolling
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+// Touch device optimizations
+@include touch-device {
+  // Improve touch targets
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  // Disable text selection on interactive elements
+  button, a {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  
+  // Improve tap highlighting
+  * {
+    -webkit-tap-highlight-color: rgba(99, 102, 241, 0.1);
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  // Disable parallax and complex animations
+  .parallax, .floating, .morphing {
+    transform: none !important;
+    animation: none !important;
+  }
 }
