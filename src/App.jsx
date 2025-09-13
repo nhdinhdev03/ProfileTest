@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import MainLayout from "layouts/MainLayout";
 import { useTheme } from "hooks/useTheme";
+import { useLoadingManager } from "hooks/useLoadingManager";
 import { publicRoutes } from "router";
 import { ROUTES } from "router/routeConstants";
 import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
@@ -11,15 +12,68 @@ import "styles/App.scss";
 
 function App() {
   const [theme, toggleTheme] = useTheme("dark");
-  const [isLoading, setIsLoading] = useState(true);
+  
+  // Define loading tasks for the portfolio
+  const loadingTasks = [
+    { id: 'theme', name: 'Theme', description: 'Loading theme settings...' },
+    { id: 'components', name: 'Components', description: 'Loading components...' },
+    { id: 'routes', name: 'Routes', description: 'Preparing routes...' },
+    { id: 'assets', name: 'Assets', description: 'Loading assets...' },
+    { id: 'finalize', name: 'Finalize', description: 'Finalizing portfolio...' }
+  ];
+
+  const {
+    isLoading,
+    progress,
+    currentTask,
+    completeTask,
+    updateTaskProgress
+  } = useLoadingManager(loadingTasks);
 
   useEffect(() => {
-    // Shorter loading time for better UX
-    setTimeout(() => setIsLoading(false), 1200);
-  }, []);
+    if (!isLoading) return;
+
+    const loadSequentially = async () => {
+      // Load theme
+      updateTaskProgress('theme', 100);
+      await new Promise(resolve => setTimeout(resolve, 200));
+      completeTask('theme');
+
+      // Load components
+      updateTaskProgress('components', 50);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      updateTaskProgress('components', 100);
+      completeTask('components');
+
+      // Prepare routes
+      updateTaskProgress('routes', 100);
+      await new Promise(resolve => setTimeout(resolve, 200));
+      completeTask('routes');
+
+      // Load assets
+      updateTaskProgress('assets', 70);
+      await new Promise(resolve => setTimeout(resolve, 250));
+      updateTaskProgress('assets', 100);
+      completeTask('assets');
+
+      // Finalize
+      updateTaskProgress('finalize', 100);
+      await new Promise(resolve => setTimeout(resolve, 150));
+      completeTask('finalize');
+    };
+
+    loadSequentially();
+  }, [isLoading, completeTask, updateTaskProgress]);
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return (
+      <LoadingScreen 
+        isLoading={isLoading}
+        progress={progress}
+        currentTask={currentTask}
+        onComplete={() => console.log('Portfolio loaded successfully!')}
+      />
+    );
   }
 
   // Render main portfolio view with React Router

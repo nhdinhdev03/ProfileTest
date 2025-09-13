@@ -5,6 +5,7 @@ import "./CommunityTestimonials.scss";
 
 const CommunityTestimonials = () => {
   const testimonials = [
+    
     {
       id: 1,
       name: "Sarah Chen",
