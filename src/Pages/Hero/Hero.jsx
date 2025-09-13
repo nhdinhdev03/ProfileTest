@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   motion,
   useMotionValue,
@@ -23,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import "./Hero.scss";
 import Experience from "components/Hero/Experience/Experience";
 import CommunityTestimonials from "components/Hero/CommunityTestimonials/CommunityTestimonials";
+import { ROUTES } from "router/routeConstants";
 
 function Hero() {
   const { t } = useTranslation();
@@ -52,11 +54,13 @@ function Hero() {
 
   // Enhanced mobile detection for better performance
   useEffect(() => {
-    const isLowEndDevice = 
+    const isLowEndDevice =
       navigator.hardwareConcurrency <= 4 ||
-      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) ||
       window.innerWidth <= 480;
-    
+
     if (isLowEndDevice) {
       // Disable complex animations on low-end devices
       setParticles([]);
@@ -521,7 +525,9 @@ function Hero() {
               animate="visible"
             >
               <motion.div className="hero__greeting" variants={itemVariants}>
-                <span className="hero__greeting-text">{t('hero.greeting')}</span>
+                <span className="hero__greeting-text">
+                  {t("hero.greeting")}
+                </span>
               </motion.div>
 
               <motion.h1 className="hero__name" variants={itemVariants}>
@@ -530,7 +536,9 @@ function Hero() {
               </motion.h1>
 
               <motion.div className="hero__role" variants={itemVariants}>
-                <span className="hero__role-label">{t('hero.role_label')} </span>
+                <span className="hero__role-label">
+                  {t("hero.role_label")}{" "}
+                </span>
                 <span className="hero__role-dynamic">
                   {displayText}
                   <span className="hero__cursor">|</span>
@@ -549,15 +557,17 @@ function Hero() {
               </motion.div>
 
               <motion.div className="hero__actions" variants={itemVariants}>
-                <motion.a
-                  href="#contact"
-                  className="btn btn-primary"
-                  whileHover={isTouch ? undefined : { scale: 1.05 }}
-                  whileTap={isTouch ? undefined : { scale: 0.95 }}
-                >
-                  <FiMail />
-                  {t('hero.contact_button')}
-                </motion.a>
+                <Link to={ROUTES.CONTACT} style={{ textDecoration: "none" }}>
+                  <motion.button
+                    className="btn btn-primary"
+                    whileHover={isTouch ? undefined : { scale: 1.05 }}
+                    whileTap={isTouch ? undefined : { scale: 0.95 }}
+                  >
+                    <FiMail />
+                    {t("hero.contact_button")}
+                  </motion.button>
+                </Link>
+
                 <motion.a
                   href="/resume.pdf"
                   className="btn btn-outline"
@@ -566,7 +576,7 @@ function Hero() {
                   download
                 >
                   <FiDownload />
-                  {t('hero.download_cv_button')}
+                  {t("hero.download_cv_button")}
                 </motion.a>
               </motion.div>
 
@@ -1317,7 +1327,7 @@ function Hero() {
       </motion.section>
 
       <Experience />
-  
+
       <CommunityTestimonials />
     </>
   );
