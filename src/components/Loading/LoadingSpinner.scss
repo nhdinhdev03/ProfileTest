@@ -1,4 +1,27 @@
-// LoadingSpinner styles - Optimized for smooth animations
+// LoadingSpinner styles - Optimized for dark mode and smooth animations
+:root {
+  // Light theme colors for truck loader
+  --truck-primary: #f83d3d;
+  --truck-secondary: #7d7c7c;
+  --truck-accent: #fff3ab;
+  --truck-stroke: #2d3748;
+  --truck-body: #e2e8f0;
+  --truck-road: #4a5568;
+  --truck-road-line: #ffffff;
+}
+
+[data-theme="dark"] {
+  // Dark theme colors for truck loader
+  --truck-primary: #ef4444;
+  --truck-secondary: #6b7280;
+  --truck-accent: #fbbf24;
+  --truck-stroke: #e2e8f0;
+  --truck-body: #374151;
+  --truck-road: #9ca3af;
+  --truck-road-line: #f3f4f6;
+}
+
+// Simple spinner styles
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -58,7 +81,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  background: var(--primary-color, #3b82f6);
+  background: var(--primary-light, #6366f1);
   border-radius: 50%;
   animation: pulse 1.5s ease-in-out infinite;
   
@@ -93,6 +116,175 @@
   opacity: 0.8;
 }
 
+// Truck loader styles
+.truck-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  
+  &--small {
+    .truck-loader__wrapper {
+      width: 150px;
+      height: 75px;
+    }
+    
+    .truck-loader__body {
+      width: 100px;
+    }
+    
+    .truck-loader__tires {
+      width: 100px;
+    }
+    
+    .truck-loader__tire {
+      width: 18px;
+    }
+    
+    .truck-loader__lamp-post {
+      height: 60px;
+    }
+    
+    .truck-loader__message {
+      font-size: 0.8rem;
+    }
+  }
+  
+  &--medium {
+    .truck-loader__wrapper {
+      width: 200px;
+      height: 100px;
+    }
+  }
+  
+  &--large {
+    .truck-loader__wrapper {
+      width: 250px;
+      height: 125px;
+    }
+    
+    .truck-loader__body {
+      width: 160px;
+    }
+    
+    .truck-loader__tires {
+      width: 160px;
+    }
+    
+    .truck-loader__tire {
+      width: 30px;
+    }
+    
+    .truck-loader__lamp-post {
+      height: 110px;
+    }
+    
+    .truck-loader__message {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.truck-loader__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.truck-loader__wrapper {
+  width: 200px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: flex-end;
+  overflow-x: hidden;
+}
+
+.truck-loader__body {
+  width: 130px;
+  height: fit-content;
+  margin-bottom: 6px;
+  animation: truck-motion 1s linear infinite;
+  will-change: transform;
+}
+
+.truck-loader__svg {
+  width: 100%;
+  height: auto;
+}
+
+.truck-loader__tires {
+  width: 130px;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px 0px 15px;
+  position: absolute;
+  bottom: 0;
+}
+
+.truck-loader__tire {
+  width: 24px;
+  height: auto;
+}
+
+.truck-loader__road {
+  width: 100%;
+  height: 1.5px;
+  background-color: var(--truck-road);
+  position: relative;
+  bottom: 0;
+  align-self: flex-end;
+  border-radius: 3px;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    background-color: var(--truck-road);
+    right: -50%;
+    border-radius: 3px;
+    animation: road-animation 1.4s linear infinite;
+    border-left: 10px solid var(--truck-road-line);
+  }
+  
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    background-color: var(--truck-road);
+    right: -65%;
+    border-radius: 3px;
+    animation: road-animation 1.4s linear infinite;
+    border-left: 4px solid var(--truck-road-line);
+  }
+}
+
+.truck-loader__lamp-post {
+  position: absolute;
+  bottom: 0;
+  right: -90%;
+  height: 90px;
+  animation: road-animation 1.4s linear infinite;
+  fill: var(--truck-stroke);
+}
+
+.truck-loader__message {
+  color: var(--text-secondary, #64748b);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+  opacity: 0.8;
+}
+
 // Keyframe animations
 @keyframes rotate {
   to {
@@ -111,14 +303,46 @@
   }
 }
 
+@keyframes truck-motion {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes road-animation {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-350px);
+  }
+}
+
 // Dark theme support
-[data-theme="dark"] .loading-spinner__message {
-  color: var(--text-secondary-dark, #94a3b8);
+[data-theme="dark"] {
+  .loading-spinner__message,
+  .truck-loader__message {
+    color: var(--text-secondary-dark, #cbd5e1);
+  }
+  
+  .loading-spinner__dot {
+    background: var(--primary-dark, #4f46e5);
+  }
 }
 
 // Reduce motion for accessibility
 @media (prefers-reduced-motion: reduce) {
-  .loading-spinner__circle {
+  .loading-spinner__circle,
+  .truck-loader__body,
+  .truck-loader__lamp-post,
+  .truck-loader__road::before,
+  .truck-loader__road::after {
     animation: none;
   }
   

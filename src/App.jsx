@@ -30,9 +30,13 @@ function App() {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            background: 'var(--background-primary)' 
+            background: 'var(--bg-primary)' 
           }}>
-            <LoadingSpinner message="Loading page..." />
+            <LoadingSpinner 
+              message="Loading page..." 
+              size="medium" 
+              variant="truck" 
+            />
           </div>
         }
       >
