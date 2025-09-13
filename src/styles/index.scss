@@ -1,6 +1,7 @@
 @use 'variables' as *;
+@use 'responsive-performance'; // Import enhanced performance optimizations
 
-// CSS Reset & Base Styles
+// Enhanced CSS Reset & Base Styles with Complete Responsive Support
 *,
 *::before,
 *::after {
@@ -11,37 +12,41 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: clamp(14px, 2vw, 16px); // Responsive base font size
+  font-size: clamp(14px, 1.75vw, 18px); // Enhanced responsive base font size
   line-height: $leading-relaxed;
-  /* Default header height fallback; updated by Header.scss at runtime */
-  --header-height: 80px;
+  /* Enhanced header height with device-specific optimization */
+  --header-height: 70px;
   scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
   
-  // Tối ưu scroll performance
+  // Enhanced scroll performance for all devices
   overscroll-behavior: contain;
   scroll-snap-type: y proximity;
+  -webkit-overflow-scrolling: touch;
   
-  // Support for very small screens
+  // Device-specific optimizations
   @include mobile-xxs-only {
     font-size: clamp(12px, 3vw, 14px);
+    --header-height: 52px;
+  }
+  
+  @include mobile-xs-only {
+    font-size: clamp(13px, 2.5vw, 15px);
     --header-height: 56px;
   }
-}
-
-// Mobile header height optimization
-@include mobile-only {
-  html {
+  
+  @include mobile-sm-only {
+    font-size: clamp(14px, 2vw, 16px);
     --header-height: 60px;
-    scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
-    font-size: 14px; // Slightly smaller base font for mobile
   }
-}
-
-// Tablet header height
-@include tablet-up {
-  html {
+  
+  @include tablet-up {
+    font-size: clamp(15px, 1.5vw, 17px);
     --header-height: 70px;
-    scroll-padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  }
+  
+  @include desktop-up {
+    font-size: clamp(16px, 1.25vw, 18px);
+    --header-height: 75px;
   }
 }
 

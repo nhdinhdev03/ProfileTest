@@ -24,15 +24,32 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   -webkit-backdrop-filter: blur(20px); // Safari support
 
-  // Mobile optimizations với support màn hình rất nhỏ
-  @media (max-width: $breakpoint-sm) {
-    height: 60px;
-    padding: 0 env(safe-area-inset-left, 0) 0 env(safe-area-inset-right, 0);
+  // Enhanced mobile optimizations
+  @include mobile-xxs-only {
+    height: 52px;
+    padding: 0 env(safe-area-inset-left, $spacing-xs) 0 env(safe-area-inset-right, $spacing-xs);
+  }
+  
+  @include mobile-xs-only {
+    height: 56px;
+    padding: 0 env(safe-area-inset-left, $spacing-sm) 0 env(safe-area-inset-right, $spacing-sm);
   }
 
-  @include mobile-xxs-only {
-    height: 56px;
-    padding: 0 $spacing-xs;
+  @include mobile-sm-only {
+    height: 60px;
+    padding: 0 env(safe-area-inset-left, $spacing-base) 0 env(safe-area-inset-right, $spacing-base);
+  }
+
+  @include mobile-only {
+    height: 60px;
+  }
+  
+  @include tablet-up {
+    height: 70px;
+  }
+  
+  @include desktop-up {
+    height: 75px;
   }
 
   [data-theme="dark"] & {
@@ -54,24 +71,32 @@
     @include flex-between;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 $spacing-base;
+    padding: 0 $spacing-sm;
     height: 100%;
 
-    // Better responsive padding
+    // Enhanced responsive padding with safe area support
+    @include mobile-xxs-only {
+      padding: 0 max($spacing-xs, env(safe-area-inset-left, 0)) 0 max($spacing-xs, env(safe-area-inset-right, 0));
+    }
+    
     @include mobile-xs-up {
-      padding: 0 $spacing-lg;
+      padding: 0 max($spacing-base, env(safe-area-inset-left, 0)) 0 max($spacing-base, env(safe-area-inset-right, 0));
+    }
+
+    @include mobile-sm-up {
+      padding: 0 max($spacing-lg, env(safe-area-inset-left, 0)) 0 max($spacing-lg, env(safe-area-inset-right, 0));
     }
 
     @include tablet-up {
       padding: 0 $spacing-xl;
     }
 
-    @include desktop-up {
+    @include tablet-landscape-up {
       padding: 0 $spacing-2xl;
     }
 
-    @include mobile-xxs-only {
-      padding: 0 $spacing-sm;
+    @include desktop-up {
+      padding: 0 $spacing-3xl;
     }
   }
 
@@ -100,41 +125,59 @@
 
   &__logo {
     @include flex-center;
-    gap: $spacing-md;
+    gap: $spacing-sm;
 
-    @media (max-width: $breakpoint-sm) {
+    @include mobile-xxs-only {
+      gap: $spacing-xs;
+    }
+
+    @include mobile-xs-up {
       gap: $spacing-sm;
     }
 
-    @media (max-width: 480px) {
-      gap: $spacing-xs;
+    @include tablet-up {
+      gap: $spacing-md;
     }
   }
 
   &__logo-icon {
     @include flex-center;
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 32px;
     background: var(--gradient-primary);
-    border-radius: 12px;
+    border-radius: 8px;
     color: white;
     font-weight: $font-bold;
-    font-size: $font-lg;
+    font-size: $font-sm;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     transition: all 0.3s ease;
 
-    @media (max-width: $breakpoint-sm) {
+    @include mobile-xs-up {
       width: 36px;
       height: 36px;
       font-size: $font-base;
       border-radius: 10px;
     }
 
-    @media (max-width: 480px) {
-      width: 32px;
-      height: 32px;
-      font-size: $font-sm;
-      border-radius: 8px;
+    @include mobile-sm-up {
+      width: 40px;
+      height: 40px;
+      font-size: $font-lg;
+      border-radius: 12px;
+    }
+
+    @include tablet-up {
+      width: 42px;
+      height: 42px;
+      font-size: $font-lg;
+      border-radius: 12px;
+    }
+
+    @include desktop-up {
+      width: 45px;
+      height: 45px;
+      font-size: $font-xl;
+      border-radius: 14px;
     }
 
     &:hover {

@@ -10,14 +10,22 @@ const MainLayout = memo(({ children, theme, toggleTheme, showBreadcrumb = true }
       <Header theme={theme} toggleTheme={toggleTheme} />
       {showBreadcrumb && <Breadcrumb />}
       <main style={{ 
-        paddingTop: showBreadcrumb ? '120px' : '70px', // Extra space for breadcrumb
+        // Enhanced responsive padding
+        paddingTop: showBreadcrumb ? 'clamp(100px, 15vh, 140px)' : 'clamp(60px, 10vh, 80px)',
         minHeight: '100vh',
-        paddingLeft: 'env(safe-area-inset-left, 0)',
-        paddingRight: 'env(safe-area-inset-right, 0)',
+        // Enhanced safe area insets for modern devices
+        paddingLeft: 'max(env(safe-area-inset-left, 0), 0px)',
+        paddingRight: 'max(env(safe-area-inset-right, 0), 0px)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0)',
         // Performance optimizations
         willChange: 'contents',
         transform: 'translateZ(0)', // Force hardware acceleration
         contain: 'layout style paint', // CSS containment for better performance
+        // Enhanced responsive behavior
+        width: '100%',
+        overflowX: 'hidden', // Prevent horizontal scroll
+        position: 'relative',
+        isolation: 'isolate', // Create stacking context
       }}>
         {children}
       </main>

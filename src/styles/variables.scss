@@ -155,15 +155,24 @@ $spacing-4xl: 3rem;      // 48px
 $spacing-5xl: 4rem;      // 64px
 $spacing-6xl: 5rem;      // 80px
 
-// Breakpoints - Enhanced mobile-first approach với support cho màn hình rất nhỏ
-$breakpoint-xxs: 320px; // Very small mobile (iPhone SE, old Android)
-$breakpoint-xs: 360px; // Extra small mobile
-$breakpoint-sm: 640px; // Small mobile
-$breakpoint-md: 768px; // Tablet portrait
-$breakpoint-lg: 1024px; // Tablet landscape / Small desktop
-$breakpoint-xl: 1280px; // Desktop
-$breakpoint-2xl: 1536px; // Large desktop
-$breakpoint-3xl: 1920px; // Ultra-wide
+// Enhanced Breakpoints - Optimized for all target devices
+$breakpoint-xxs: 320px;  // Very small mobile (iPhone SE, old Android)
+$breakpoint-xs: 375px;   // Standard mobile (iPhone, Android phones)
+$breakpoint-sm: 480px;   // Large mobile (iPhone Plus, large Android)
+$breakpoint-md: 768px;   // Tablet portrait (iPad, Android tablets)
+$breakpoint-lg: 1024px;  // Tablet landscape / Small laptop
+$breakpoint-xl: 1280px;  // Standard laptop
+$breakpoint-2xl: 1440px; // Large laptop / Small desktop
+$breakpoint-3xl: 1920px; // Desktop / Large monitor
+$breakpoint-4xl: 2560px; // Ultra-wide / 4K monitors
+
+// Device-specific breakpoints for better targeting
+$mobile-portrait: 479px;    // Mobile portrait max
+$mobile-landscape: 768px;   // Mobile landscape max  
+$tablet-portrait: 1023px;   // Tablet portrait max
+$tablet-landscape: 1279px;  // Tablet landscape max
+$laptop-small: 1439px;      // Small laptop max
+$desktop-standard: 1919px;  // Standard desktop max
 
 // Mixins
 @mixin flex-center {
@@ -298,7 +307,7 @@ $breakpoint-3xl: 1920px; // Ultra-wide
   display: inline-block;
 }
 
-// Mobile-specific mixins với breakpoint chi tiết hơn
+// Enhanced Responsive Mixins - Optimized for all devices
 @mixin mobile-xxs-only {
   @media (max-width: #{$breakpoint-xxs - 1px}) {
     @content;
@@ -307,6 +316,12 @@ $breakpoint-3xl: 1920px; // Ultra-wide
 
 @mixin mobile-xs-only {
   @media (max-width: #{$breakpoint-xs - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile-sm-only {
+  @media (max-width: #{$breakpoint-sm - 1px}) {
     @content;
   }
 }
@@ -323,14 +338,75 @@ $breakpoint-3xl: 1920px; // Ultra-wide
   }
 }
 
+@mixin mobile-sm-up {
+  @media (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
 @mixin tablet-up {
   @media (min-width: $breakpoint-md) {
     @content;
   }
 }
 
-@mixin desktop-up {
+@mixin tablet-landscape-up {
   @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin laptop-up {
+  @media (min-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $breakpoint-2xl) {
+    @content;
+  }
+}
+
+@mixin large-desktop-up {
+  @media (min-width: $breakpoint-3xl) {
+    @content;
+  }
+}
+
+// Device-specific mixins
+@mixin mobile-portrait {
+  @media (max-width: $mobile-portrait) and (orientation: portrait) {
+    @content;
+  }
+}
+
+@mixin mobile-landscape {
+  @media (max-width: $mobile-landscape) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin tablet-portrait {
+  @media (min-width: $breakpoint-md) and (max-width: $tablet-portrait) and (orientation: portrait) {
+    @content;
+  }
+}
+
+@mixin tablet-landscape {
+  @media (min-width: $breakpoint-lg) and (max-width: $tablet-landscape) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin laptop-small {
+  @media (min-width: $breakpoint-xl) and (max-width: $laptop-small) {
+    @content;
+  }
+}
+
+@mixin desktop-standard {
+  @media (min-width: $breakpoint-2xl) and (max-width: $desktop-standard) {
     @content;
   }
 }
@@ -341,22 +417,40 @@ $breakpoint-3xl: 1920px; // Ultra-wide
   }
 }
 
+@mixin hover-device {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
 @mixin mobile-touch-target($size: 44px) {
   min-width: $size;
   min-height: $size;
   padding: $spacing-sm;
 
-  // Tăng touch area cho các thiết bị có màn hình nhỏ
+  // Enhanced touch targets for different device sizes
   @include mobile-xxs-only {
     min-width: 48px;
     min-height: 48px;
     padding: $spacing-md;
   }
 
+  @include mobile-xs-up {
+    min-width: 44px;
+    min-height: 44px;
+    padding: $spacing-sm;
+  }
+
+  @include tablet-up {
+    min-width: 40px;
+    min-height: 40px;
+    padding: $spacing-xs;
+  }
+
   // Ensure proper spacing for accessibility
   margin: $spacing-xs;
 
-  // Improve tap response
+  // Improve tap response on touch devices
   @include touch-device {
     &:active {
       transform: scale(0.95);
@@ -366,6 +460,14 @@ $breakpoint-3xl: 1920px; // Ultra-wide
     // Remove hover effects on touch devices
     &:hover {
       transform: none;
+    }
+  }
+
+  // Enhanced hover effects for devices with hover capability
+  @include hover-device {
+    &:hover {
+      transform: translateY(-1px);
+      transition: transform 0.2s ease;
     }
   }
 }
