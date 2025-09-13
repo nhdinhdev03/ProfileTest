@@ -113,3 +113,5 @@ ehthumbs.db
 # Vite
 dist-ssr
 *.local
+
+/jsconfig.json

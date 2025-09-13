@@ -20,7 +20,8 @@ import {
 import { FaReact, FaJsSquare, FaNodeJs, FaPython } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss } from "react-icons/si";
 import "./Hero.scss";
-import Experience from "../../components/Experience/Experience";
+import Experience from "components/Hero/Experience/Experience";
+
 
 function Hero() {
   const [displayText, setDisplayText] = useState("");

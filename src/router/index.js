@@ -4,28 +4,28 @@ import { ROUTES, ROUTE_METADATA } from 'router/routeConstants';
 
 // Lazy load các component từ thư mục Pages để tối ưu hiệu suất
 const About = lazy(() => 
-  import('../Pages/About/About').then(module => ({ default: module.default }))
+  import('pages/About/About').then(module => ({ default: module.default }))
 );
 const Skills = lazy(() => 
-  import('../Pages/Skills/Skills').then(module => ({ default: module.default }))
+  import('pages/Skills/Skills').then(module => ({ default: module.default }))
 );
 const Projects = lazy(() => 
-  import('../Pages/Projects/Projects').then(module => ({ default: module.default }))
+  import('pages/Projects/Projects').then(module => ({ default: module.default }))
 );
 const Blog = lazy(() => 
-  import('../Pages/Blog/Blog').then(module => ({ default: module.default }))
+  import('pages/Blog/Blog').then(module => ({ default: module.default }))
 );
 const BlogDetail = lazy(() => 
-  import('../Pages/Blog/BlogDetail').then(module => ({ default: module.default }))
+  import('pages/Blog/BlogDetail').then(module => ({ default: module.default }))
 );
 const Contact = lazy(() => 
-  import('../Pages/Contact/Contact').then(module => ({ default: module.default }))
+  import('pages/Contact/Contact').then(module => ({ default: module.default }))
 );
 const Experience = lazy(() => 
-  import('../components/Experience/Experience').then(module => ({ default: module.default }))
+  import('components/Hero/Experience/Experience').then(module => ({ default: module.default }))
 );
 const Hero = lazy(() => 
-  import('../Pages/Hero/Hero').then(module => ({ default: module.default }))
+  import('pages/Hero/Hero').then(module => ({ default: module.default }))
 );
 
 export const publicRoutes = [
