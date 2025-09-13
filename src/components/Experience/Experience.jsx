@@ -1,7 +1,15 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FiBriefcase, FiCalendar, FiMapPin } from 'react-icons/fi'
+import { 
+  FiCalendar, 
+  FiMapPin, 
+  FiCode,
+  FiTrendingUp,
+  FiZap,
+  FiStar,
+  FiArrowRight
+} from 'react-icons/fi'
 import './Experience.scss'
 
 function Experience() {
@@ -12,43 +20,55 @@ function Experience() {
 
   const experiences = [
     {
-      title: 'Senior Full Stack Developer',
-      company: 'Tech Innovation Corp',
-      period: '2022 - Hiện tại',
-      location: 'Hà Nội, Việt Nam',
-      description: 'Phát triển và duy trì các ứng dụng web quy mô lớn sử dụng React, Node.js và MongoDB. Quản lý team 5 developers và tham gia vào việc thiết kế kiến trúc hệ thống.',
+      id: 1,
+      title: 'Web Developer',
+      company: 'Freelance Projects',
+      period: '2023 - Hiện tại',
+      location: 'Hậu Giang, Việt Nam',
+      description: 'Phát triển các website và ứng dụng web sử dụng công nghệ hiện đại. Chuyên về React, java và các framework JavaScript. Tham gia xây dựng các dự án từ nhỏ đến trung bình.',
       achievements: [
-        'Cải thiện hiệu suất ứng dụng lên 40%',
-        'Triển khai CI/CD pipeline giảm thời gian deploy 60%',
-        'Mentor cho 3 junior developers'
+        'Hoàn thành 10+ dự án web thành công',
+        'Thực hiện React, Java và SQL Server',
+        'Triển khai website với responsive design 100%'
       ],
-      technologies: ['React', 'Node.js', 'MongoDB', 'AWS', 'Docker']
+      technologies: ['React', 'java', 'JavaScript', 'HTML5', 'CSS3', 'SQL Server'],
+      icon: FiCode,
+      color: '#6366f1',
+      bgColor: '#f0f9ff'
     },
     {
-      title: 'Full Stack Developer',
-      company: 'Digital Solutions Ltd',
-      period: '2021 - 2022',
-      location: 'Hà Nội, Việt Nam',
-      description: 'Phát triển các tính năng mới cho nền tảng e-commerce, tối ưu hóa database và triển khai các API RESTful. Làm việc trực tiếp với khách hàng để hiểu yêu cầu.',
+      id: 2,
+      title: 'Java Desktop Developer',
+      company: 'Personal Projects',
+      period: '2023 - 2024',
+      location: 'Hậu Giang, Việt Nam',
+      description: 'Phát triển các ứng dụng desktop bằng Java Swing. Tạo ra các phần mềm quản lý và ứng dụng tiện ích với giao diện người dùng thân thiện và hiệu quả.',
       achievements: [
-        'Phát triển 15+ tính năng mới',
-        'Tối ưu database queries giảm 50% thời gian load',
-        'Tăng conversion rate 25% thông qua UX improvements'
+        'Phát triển 5+ ứng dụng Java Swing hoàn chỉnh',
+        'Thiết kế UI/UX cho desktop applications',
+        'Tích hợp database với ứng dụng Java'
       ],
-      technologies: ['Vue.js', 'Express.js', 'PostgreSQL', 'Redis']
+      technologies: ['Java', 'Swing', 'MySQL', 'NetBeans', 'Eclipse'],
+      icon: FiTrendingUp,
+      color: '#ec4899',
+      bgColor: '#fdf2f8'
     },
     {
-      title: 'Frontend Developer',
-      company: 'StartUp Hub',
-      period: '2020 - 2021',
-      location: 'Hà Nội, Việt Nam',
-      description: 'Tham gia phát triển các ứng dụng web responsive, tương tác với team design để implement UI/UX designs và optimize performance.',
+      id: 3,
+      title: 'Frontend Foundation',
+      company: 'Self-taught Learning',
+      period: '2022 - 2023',
+      location: 'Hậu Giang, Việt Nam',
+      description: 'Bắt đầu hành trình lập trình với việc tìm hiểu HTML, CSS và JavaScript. Xây dựng nền tảng vững chắc về frontend development và responsive web design.',
       achievements: [
-        'Xây dựng component library được sử dụng trong 5+ projects',
-        'Cải thiện Core Web Vitals scores lên 90+',
-        'Implement responsive design cho 10+ landing pages'
+        'Nắm vững HTML5, CSS3 và JavaScript ES6+',
+        'Tạo ra các website static responsive',
+        'Hiểu sâu về DOM manipulation và Events'
       ],
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Jest']
+      technologies: ['HTML5', 'CSS3', 'JavaScript', 'Bootstrap', 'jQuery'],
+      icon: FiZap,
+      color: '#06b6d4',
+      bgColor: '#f0fdfa'
     }
   ]
 
@@ -57,27 +77,27 @@ function Experience() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.2
+        staggerChildren: 0.2,
+        delayChildren: 0.1
       }
     }
   }
 
-  const itemVariants = {
-    hidden: { x: -50, opacity: 0 },
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
     visible: {
-      x: 0,
       opacity: 1,
+      y: 0,
       transition: {
         type: 'spring',
         stiffness: 100,
-        damping: 12
+        damping: 15
       }
     }
   }
 
   return (
-    <section id="experience" className="experience section">
+    <section id="experience" className="experience">
       <div className="container">
         <motion.div
           ref={ref}
@@ -86,54 +106,89 @@ function Experience() {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          <motion.div className="section-title" variants={itemVariants}>
-            <h2>Kinh Nghiệm Làm Việc</h2>
-            <p>Hành trình phát triển chuyên môn và những thành tựu đã đạt được</p>
+          {/* Section Header */}
+          <motion.div 
+            className="experience__header"
+            variants={cardVariants}
+          >
+            <span className="experience__subtitle">Hành trình học tập và phát triển</span>
+            <h2 className="experience__title">Kinh Nghiệm & Học Tập</h2>
+            <p className="experience__description">
+              Từ HTML/CSS/JS cơ bản đến Java Swing và Web Development hiện đại
+            </p>
           </motion.div>
 
-          <div className="experience__timeline">
+          {/* Experience Cards */}
+          <div className="experience__grid">
             {experiences.map((exp, index) => (
               <motion.div
-                key={index}
-                className="experience__item"
-                variants={itemVariants}
+                key={exp.id}
+                className="experience__card"
+                variants={cardVariants}
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="experience__marker">
-                  <FiBriefcase />
+                {/* Card Header */}
+                <div className="experience__card-header">
+                  <div className="experience__icon-wrapper" style={{ backgroundColor: exp.bgColor }}>
+                    <exp.icon 
+                      className="experience__icon"
+                      style={{ color: exp.color }}
+                    />
+                  </div>
+                  <div className="experience__period">
+                    <FiCalendar className="experience__period-icon" />
+                    <span>{exp.period}</span>
+                  </div>
                 </div>
-                
-                <div className="experience__content-card card">
-                  <div className="experience__header">
-                    <h3 className="experience__title">{exp.title}</h3>
-                    <div className="experience__meta">
-                      <div className="experience__company">{exp.company}</div>
-                      <div className="experience__details">
-                        <span className="experience__period">
-                          <FiCalendar /> {exp.period}
-                        </span>
-                        <span className="experience__location">
-                          <FiMapPin /> {exp.location}
-                        </span>
-                      </div>
-                    </div>
+
+                {/* Job Info */}
+                <div className="experience__job-info">
+                  <h3 className="experience__job-title">{exp.title}</h3>
+                  <div 
+                    className="experience__company"
+                    style={{ backgroundColor: exp.color }}
+                  >
+                    {exp.company}
                   </div>
-
-                  <p className="experience__description">{exp.description}</p>
-
-                  <div className="experience__achievements">
-                    <h4>Thành tựu chính:</h4>
-                    <ul>
-                      {exp.achievements.map((achievement, i) => (
-                        <li key={i}>{achievement}</li>
-                      ))}
-                    </ul>
+                  <div className="experience__location">
+                    <FiMapPin className="experience__location-icon" />
+                    <span>{exp.location}</span>
                   </div>
+                </div>
 
-                  <div className="experience__technologies">
-                    {exp.technologies.map((tech, i) => (
-                      <span key={i} className="experience__tech-tag">{tech}</span>
+                {/* Description */}
+                <p className="experience__job-description">
+                  {exp.description}
+                </p>
+
+                {/* Achievements */}
+                <div className="experience__achievements">
+                  <h4 className="experience__achievements-title">
+                    <FiStar className="experience__achievements-icon" />
+                    Thành tựu chính
+                  </h4>
+                  <ul className="experience__achievements-list">
+                    {exp.achievements.map((achievement, i) => (
+                      <li key={i} className="experience__achievement">
+                        <FiArrowRight className="experience__achievement-icon" />
+                        {achievement}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
+                </div>
+
+                {/* Technologies */}
+                <div className="experience__technologies">
+                  {exp.technologies.map((tech, i) => (
+                    <span 
+                      key={i} 
+                      className="experience__tech-tag"
+                      style={{ borderColor: exp.color }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </motion.div>
             ))}

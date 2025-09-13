@@ -20,6 +20,7 @@ import {
 import { FaReact, FaJsSquare, FaNodeJs, FaPython } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss } from "react-icons/si";
 import "./Hero.scss";
+import Experience from "../../components/Experience/Experience";
 
 function Hero() {
   const [displayText, setDisplayText] = useState("");
@@ -272,6 +273,7 @@ function Hero() {
   };
 
   return (
+    <>
     <motion.section
       id="home"
       className="hero"
@@ -1207,10 +1209,14 @@ function Hero() {
             transform: `translateZ(-300px)`,
           }}
         />
+   
       </motion.div>
       </div>
     </motion.section>
+    <Experience />
+    </>
   );
+   
 };
 
 export default Hero;

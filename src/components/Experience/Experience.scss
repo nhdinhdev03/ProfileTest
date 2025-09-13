@@ -1,47 +1,279 @@
 @use '../../styles/variables.scss' as *;
 
 .experience {
-  background: var(--bg-secondary);
+  padding: clamp($spacing-4xl, 8vw, $spacing-6xl) 0;
+  background: var(--bg-primary);
   position: relative;
+  overflow: hidden;
 
-  &__timeline {
-    position: relative;
-    max-width: 800px;
+  // Subtle background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.03) 0%, transparent 25%),
+      radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.03) 0%, transparent 25%);
+    pointer-events: none;
+  }
+
+  &__content {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 clamp($spacing-base, 4vw, $spacing-lg);
+  }
 
+  // Section Header - Fully Responsive
+  &__header {
+    text-align: center;
+    margin-bottom: clamp($spacing-4xl, 8vw, $spacing-6xl);
+    max-width: clamp(300px, 90vw, 600px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__subtitle {
+    display: inline-block;
+    color: var(--primary-light);
+    font-size: clamp($font-xs, 2.5vw, $font-sm);
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: clamp($spacing-xs, 2vw, $spacing-base);
+    padding: clamp($spacing-xs, 1.5vw, $spacing-xs) clamp($spacing-base, 3vw, $spacing-lg);
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 50px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  &__title {
+    font-size: clamp($font-2xl, 6vw, $font-5xl);
+    font-weight: $font-bold;
+    color: var(--text-primary);
+    margin-bottom: clamp($spacing-base, 3vw, $spacing-lg);
+    line-height: 1.2;
+  }
+
+  &__description {
+    font-size: clamp($font-sm, 3vw, $font-lg);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  // Grid Layout - Enhanced Responsive
+  &__grid {
+    display: grid;
+    gap: clamp($spacing-xl, 4vw, $spacing-4xl);
+    
+    // Mobile: 1 column
+    grid-template-columns: 1fr;
+    
+    // Tablet: 2 columns for medium screens
+    @media (min-width: $breakpoint-md) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: clamp($spacing-2xl, 3vw, $spacing-3xl);
+    }
+    
+    // Desktop: Up to 3 columns but flexible
+    @media (min-width: $breakpoint-lg) {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: $spacing-3xl;
+    }
+    
+    // Large desktop: Ensure cards don't get too wide
+    @media (min-width: $breakpoint-2xl) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  // Experience Cards - Fully Responsive
+  &__card {
+    background: var(--bg-secondary);
+    border-radius: clamp(16px, 2vw, 24px);
+    padding: clamp($spacing-xl, 5vw, $spacing-3xl);
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+
+    // Subtle gradient overlay
     &::before {
       content: '';
       position: absolute;
-      left: 30px;
       top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--gradient-primary);
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #6366f1, #ec4899, #06b6d4);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-      @media (min-width: $breakpoint-md) {
-        left: 50%;
-        transform: translateX(-50%);
+    &:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+      box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        0 0 0 1px rgba(99, 102, 241, 0.05);
+
+      &::before {
+        opacity: 1;
       }
     }
   }
 
-  &__item {
-    position: relative;
-    margin-bottom: $spacing-4xl;
-    padding-left: 80px;
+  // Card Header - Enhanced Mobile Layout
+  &__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: clamp($spacing-base, 4vw, $spacing-xl);
+    flex-wrap: wrap;
+    gap: $spacing-base;
+    
+    // Stack on very small screens
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+    }
+  }
 
-    @media (min-width: $breakpoint-md) {
-      width: 50%;
-      padding-left: 0;
+  &__icon-wrapper {
+    width: clamp(40px, 8vw, 60px);
+    height: clamp(40px, 8vw, 60px);
+    border-radius: clamp(12px, 2vw, 16px);
+    @include flex-center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
 
-      &:nth-child(even) {
-        margin-left: 50%;
-        padding-left: $spacing-3xl;
-      }
+  &__icon {
+    font-size: clamp($font-lg, 4vw, $font-2xl);
+    transition: all 0.3s ease;
+  }
 
-      &:nth-child(odd) {
-        padding-right: $spacing-3xl;
-      }
+  &__period {
+    display: flex;
+    align-items: center;
+    gap: clamp($spacing-xs, 1.5vw, $spacing-sm);
+    color: var(--text-tertiary);
+    font-size: clamp($font-xs, 2.5vw, $font-sm);
+    font-weight: $font-medium;
+    padding: clamp($spacing-xs, 1.5vw, $spacing-sm) clamp($spacing-sm, 2.5vw, $spacing-base);
+    background: var(--bg-primary);
+    border-radius: clamp(8px, 1.5vw, 12px);
+    border: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+
+  &__period-icon {
+    font-size: clamp($font-xs, 2vw, $font-sm);
+    flex-shrink: 0;
+  }
+
+  // Job Information - Responsive Typography
+  &__job-info {
+    margin-bottom: clamp($spacing-base, 4vw, $spacing-xl);
+  }
+
+  &__job-title {
+    font-size: clamp($font-lg, 4vw, $font-2xl);
+    font-weight: $font-bold;
+    color: var(--text-primary);
+    margin-bottom: clamp($spacing-xs, 2vw, $spacing-base);
+    line-height: 1.3;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  &__company {
+    display: inline-block;
+    color: white;
+    font-size: clamp($font-sm, 3vw, $font-base);
+    font-weight: $font-bold;
+    padding: clamp($spacing-xs, 2vw, $spacing-sm) clamp($spacing-base, 3vw, $spacing-lg);
+    border-radius: clamp(8px, 1.5vw, 12px);
+    margin-bottom: clamp($spacing-xs, 2vw, $spacing-base);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  &__location {
+    display: flex;
+    align-items: center;
+    gap: clamp($spacing-xs, 1.5vw, $spacing-sm);
+    color: var(--text-tertiary);
+    font-size: clamp($font-xs, 2.5vw, $font-sm);
+    flex-wrap: wrap;
+  }
+
+  &__location-icon {
+    font-size: clamp($font-xs, 2vw, $font-sm);
+    flex-shrink: 0;
+  }
+
+  // Job Description - Optimized Reading
+  &__job-description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: clamp($spacing-base, 4vw, $spacing-xl);
+    font-size: clamp($font-sm, 3vw, $font-base);
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  // Achievements - Mobile Optimized
+  &__achievements {
+    margin-bottom: clamp($spacing-base, 4vw, $spacing-xl);
+  }
+
+  &__achievements-title {
+    display: flex;
+    align-items: center;
+    gap: clamp($spacing-xs, 2vw, $spacing-sm);
+    font-size: clamp($font-base, 3.5vw, $font-lg);
+    font-weight: $font-bold;
+    color: var(--text-primary);
+    margin-bottom: clamp($spacing-sm, 3vw, $spacing-lg);
+    flex-wrap: wrap;
+  }
+
+  &__achievements-icon {
+    color: var(--primary-light);
+    font-size: clamp($font-sm, 3vw, $font-base);
+    flex-shrink: 0;
+  }
+
+  &__achievements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__achievement {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp($spacing-xs, 2vw, $spacing-sm);
+    margin-bottom: clamp($spacing-xs, 2vw, $spacing-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    font-size: clamp($font-sm, 2.8vw, $font-base);
+    word-wrap: break-word;
+    hyphens: auto;
+
+    &:hover {
+      color: var(--text-primary);
+      transform: translateX(4px);
     }
 
     &:last-child {
@@ -49,168 +281,247 @@
     }
   }
 
-  &__marker {
-    position: absolute;
-    left: 15px;
-    top: $spacing-lg;
-    width: 30px;
-    height: 30px;
-    @include flex-center;
-    background: var(--gradient-primary);
-    border-radius: 50%;
-    color: white;
-    font-size: $font-base;
-    z-index: 2;
-
-    @media (min-width: $breakpoint-md) {
-      left: 50%;
-      transform: translateX(-50%);
-    }
-  }
-
-  &__content-card {
-    position: relative;
-    padding: $spacing-2xl;
-
-    @media (min-width: $breakpoint-md) {
-      &::before {
-        content: '';
-        position: absolute;
-        top: $spacing-2xl;
-        width: 0;
-        height: 0;
-        border: 10px solid transparent;
-      }
-
-      .experience__item:nth-child(odd) &::before {
-        right: -20px;
-        border-left-color: var(--bg-secondary);
-      }
-
-      .experience__item:nth-child(even) &::before {
-        left: -20px;
-        border-right-color: var(--bg-secondary);
-      }
-    }
-  }
-
-  &__header {
-    margin-bottom: $spacing-base;
-  }
-
-  &__title {
-    color: var(--text-primary);
-    margin-bottom: $spacing-sm;
-    font-size: $font-xl;
-  }
-
-  &__company {
+  &__achievement-icon {
     color: var(--primary-light);
-    font-weight: $font-semibold;
-    font-size: $font-lg;
-    margin-bottom: $spacing-sm;
+    margin-top: 2px;
+    flex-shrink: 0;
+    font-size: clamp($font-xs, 2.5vw, $font-sm);
   }
 
-  &__details {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xs;
-
-    @media (min-width: $breakpoint-sm) {
-      flex-direction: row;
-      gap: $spacing-lg;
-    }
-  }
-
-  &__period,
-  &__location {
-    @include flex-center;
-    gap: $spacing-xs;
-    color: var(--text-tertiary);
-    font-size: $font-sm;
-
-    @media (min-width: $breakpoint-sm) {
-      justify-content: flex-start;
-    }
-  }
-
-  &__description {
-    margin-bottom: $spacing-lg;
-    line-height: 1.6;
-  }
-
-  &__achievements {
-    margin-bottom: $spacing-lg;
-
-    h4 {
-      color: var(--text-primary);
-      margin-bottom: $spacing-sm;
-      font-size: $font-base;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-
-      li {
-        position: relative;
-        padding-left: $spacing-lg;
-        margin-bottom: $spacing-xs;
-        color: var(--text-secondary);
-
-        &::before {
-          content: '▸';
-          position: absolute;
-          left: 0;
-          color: var(--primary-light);
-          font-weight: $font-bold;
-        }
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
+  // Technologies - Fully Responsive Grid
   &__technologies {
     display: flex;
     flex-wrap: wrap;
-    gap: $spacing-sm;
+    gap: clamp($spacing-xs, 1.5vw, $spacing-sm);
+    justify-content: flex-start;
+    
+    // Center on very small screens
+    @media (max-width: 320px) {
+      justify-content: center;
+    }
   }
 
   &__tech-tag {
-    padding: $spacing-xs $spacing-sm;
+    padding: clamp($spacing-xs, 1.5vw, $spacing-sm) clamp($spacing-sm, 2.5vw, $spacing-base);
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 0.25rem;
-    color: var(--primary-light);
-    font-size: $font-xs;
+    border-radius: clamp(6px, 1vw, 8px);
+    color: var(--text-secondary);
+    font-size: clamp($font-xs, 2.2vw, $font-xs);
     font-weight: $font-medium;
     transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
     &:hover {
-      background: var(--primary-light);
       color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   }
 }
 
-@media (max-width: $breakpoint-md) {
+// Enhanced Mobile Optimizations
+@media (max-width: $breakpoint-sm) {
   .experience {
-    &__item {
-      padding-left: 60px;
+    padding: $spacing-3xl 0;
+
+    &__content {
+      padding: 0 $spacing-base;
     }
 
-    &__marker {
-      left: 10px;
-      width: 25px;
-      height: 25px;
-      font-size: $font-sm;
+    &__header {
+      margin-bottom: $spacing-3xl;
     }
 
-    &__timeline::before {
-      left: 22px;
+    &__card {
+      padding: $spacing-lg;
+    }
+
+    &__card-header {
+      margin-bottom: $spacing-base;
+    }
+
+    &__job-info {
+      margin-bottom: $spacing-base;
+    }
+
+    &__achievements,
+    &__job-description {
+      margin-bottom: $spacing-base;
+    }
+
+    &__technologies {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+}
+
+// Extra small devices (phones in portrait, 320px and down)
+@media (max-width: 320px) {
+  .experience {
+    &__title {
+      font-size: $font-xl;
+    }
+
+    &__card {
+      padding: $spacing-base;
+    }
+
+    &__job-title {
+      font-size: $font-base;
+    }
+
+    &__company {
+      font-size: $font-xs;
+      padding: $spacing-xs $spacing-sm;
+    }
+
+    &__icon-wrapper {
+      width: 35px;
+      height: 35px;
+    }
+
+    &__icon {
+      font-size: $font-base;
+    }
+  }
+}
+
+// Tablet Portrait (600px to 768px)
+@media (min-width: 600px) and (max-width: $breakpoint-md) {
+  .experience {
+    &__grid {
+      grid-template-columns: 1fr;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// Large tablets and small laptops (768px to 1024px)
+@media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg) {
+  .experience {
+    &__grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: $spacing-2xl;
+    }
+
+    &__card {
+      max-width: none;
+    }
+  }
+}
+
+// Large screens (1440px and up)
+@media (min-width: 1440px) {
+  .experience {
+    &__content {
+      max-width: 1400px;
+    }
+
+    &__grid {
+      gap: $spacing-4xl;
+    }
+  }
+}
+
+// Ultra-wide screens (1920px and up)
+@media (min-width: 1920px) {
+  .experience {
+    &__content {
+      max-width: 1600px;
+    }
+  }
+}
+
+// Landscape orientation optimizations
+@media (orientation: landscape) and (max-height: 600px) {
+  .experience {
+    padding: $spacing-2xl 0;
+
+    &__header {
+      margin-bottom: $spacing-2xl;
+    }
+
+    &__title {
+      font-size: clamp($font-xl, 4vw, $font-3xl);
+    }
+  }
+}
+
+// High density displays
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .experience {
+    &__card {
+      border-width: 0.5px;
+    }
+
+    &__tech-tag {
+      border-width: 0.5px;
+    }
+  }
+}
+
+// Dark mode enhancements
+@media (prefers-color-scheme: dark) {
+  .experience {
+    &__card {
+      &:hover {
+        box-shadow: 
+          0 20px 25px -5px rgba(0, 0, 0, 0.25),
+          0 10px 10px -5px rgba(0, 0, 0, 0.1),
+          0 0 0 1px rgba(99, 102, 241, 0.1);
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .experience {
+    &__card,
+    &__achievement,
+    &__tech-tag,
+    &__icon-wrapper,
+    &__icon {
+      transition: none;
+    }
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .experience {
+    &__card {
+      border-width: 2px;
+    }
+
+    &__tech-tag {
+      border-width: 2px;
+    }
+
+    &__subtitle {
+      border-width: 2px;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .experience {
+    &__card {
+      box-shadow: none;
+      border: 2px solid #000;
+      page-break-inside: avoid;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
     }
   }
 }
