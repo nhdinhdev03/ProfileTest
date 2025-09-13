@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import MainLayout from "layouts/MainLayout";
 import { useTheme } from "hooks/useTheme";
 import { useLoadingManager } from "hooks/useLoadingManager";
 import { publicRoutes } from "router";
-import { ROUTES } from "router/routeConstants";
+
 import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
 import ScrollToTop from "components/Scroll/ScrollToTop/ScrollToTop";
 import "styles/App.scss";
+import NotFound from "pages/NotFound";
+
 
 function App() {
   const [theme, toggleTheme] = useTheme("dark");
@@ -94,14 +96,23 @@ function App() {
               path={route.path}
               element={
                 <Layout theme={theme} toggleTheme={toggleTheme}>
-                  <Page />
+                  <Suspense fallback={
+                    <LoadingScreen 
+                      isLoading={true}
+                      progress={50}
+                      currentTask="Loading page..."
+                    />
+                  }>
+                    <Page />
+                  </Suspense>
                 </Layout>
               }
             />
           );
         })}
         {/* Redirect to home if no match */}
-        <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
+    
+            <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

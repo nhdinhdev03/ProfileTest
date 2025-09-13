@@ -389,13 +389,4 @@ const LoadingScreen = ({
   );
 };
 
-// PropTypes for better development experience
-LoadingScreen.defaultProps = {
-  isLoading: true,
-  progress: 0,
-  currentTask: "Loading...",
-  onComplete: () => {},
-  loadingData: {}
-};
-
 export default LoadingScreen;
