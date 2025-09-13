@@ -6,30 +6,30 @@ import { useLocation } from 'react-router-dom';
 const PageTransition = ({ children }) => {
   const location = useLocation();
 
-  // Variants cho page transitions
+  // Optimized variants cho page transitions
   const pageVariants = {
     initial: {
       opacity: 0,
-      y: 20,
-      scale: 0.98,
+      y: 8, // Reduced from 20px
+      scale: 0.99, // Reduced from 0.98
     },
     enter: {
       opacity: 1,
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94], // cubic-bezier cho smooth easing
-        staggerChildren: 0.1,
+        duration: 0.25, // Reduced from 0.4s
+        ease: [0.23, 1, 0.32, 1], // Custom easing for smoother feel
+        staggerChildren: 0.05, // Reduced from 0.1
       },
     },
     exit: {
       opacity: 0,
-      y: -10,
-      scale: 1.02,
+      y: -4, // Reduced from -10px
+      scale: 1.01, // Reduced from 1.02
       transition: {
-        duration: 0.2,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        duration: 0.15, // Reduced from 0.2s
+        ease: [0.23, 1, 0.32, 1],
       },
     },
   };
@@ -38,13 +38,13 @@ const PageTransition = ({ children }) => {
   const contentVariants = {
     initial: {
       opacity: 0,
-      y: 15,
+      y: 8, // Reduced from 15px
     },
     enter: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.3,
+        duration: 0.2, // Reduced from 0.3s
         ease: "easeOut",
       },
     },
@@ -62,9 +62,19 @@ const PageTransition = ({ children }) => {
           width: '100%',
           minHeight: '100vh',
           position: 'relative',
+          // Optimize for performance
+          willChange: 'transform, opacity',
+          transform: 'translateZ(0)', // Force hardware acceleration
         }}
       >
-        <motion.div variants={contentVariants}>
+        <motion.div 
+          variants={contentVariants}
+          style={{ 
+            width: '100%',
+            // Prevent layout shifts
+            minHeight: 'inherit'
+          }}
+        >
           {children}
         </motion.div>
       </motion.div>

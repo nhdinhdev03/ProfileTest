@@ -1,23 +1,37 @@
-// PageTransition styles
+// PageTransition styles - Optimized for performance
 .page-transition {
   width: 100%;
   min-height: 100vh;
   position: relative;
   
-  // Tối ưu rendering performance
+  // Optimize rendering performance
   will-change: transform, opacity;
   transform: translateZ(0); // Force hardware acceleration
   
   // Smooth scrolling behavior
   scroll-behavior: smooth;
   
-  // Ngăn layout shift
+  // Prevent layout shifts during transitions
   &::before {
     content: '';
     display: block;
     height: 0;
     overflow: hidden;
     visibility: hidden;
+  }
+  
+  // Optimized transition states
+  &.transitioning {
+    // Reduce painting complexity during transition
+    contain: layout style paint;
+    
+    // Disable pointer events during transition
+    pointer-events: none;
+    
+    // Simplify animations during transition
+    * {
+      animation-play-state: paused;
+    }
   }
 }
 
@@ -27,6 +41,10 @@
   align-items: center;
   justify-content: center;
   min-height: 50vh;
+  
+  // Hardware acceleration
+  will-change: transform;
+  transform: translateZ(0);
   
   .loading-content {
     display: flex;
@@ -42,7 +60,7 @@
   }
 }
 
-// Smooth transition overlay
+// Smooth transition overlay - Optimized
 .transition-overlay {
   position: fixed;
   top: 0;
@@ -50,16 +68,31 @@
   width: 100%;
   height: 100%;
   background: var(--bg-primary);
+  z-index: 9999;
   opacity: 0;
   pointer-events: none;
-  z-index: 9999;
-  transition: opacity 0.2s ease;
+  
+  // Hardware acceleration
+  will-change: opacity;
+  transform: translateZ(0);
   
   &.active {
-    opacity: 0.8;
+    opacity: 1;
     pointer-events: all;
+    transition: opacity 0.2s ease;
   }
 }
+
+// Performance optimizations for Framer Motion
+.framer-motion-container {
+  // Optimize for transforms and opacity changes
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  
+  // Prevent layout thrashing
+  contain: layout;
+}
+
 
 // Performance optimizations
 * {

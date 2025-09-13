@@ -6,6 +6,8 @@ import { publicRoutes } from "router";
 
 import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
 import ScrollToTop from "components/Scroll/ScrollToTop/ScrollToTop";
+import PageTransition from "components/PageTransition/PageTransition";
+import LoadingSpinner from "components/Loading/LoadingSpinner";
 import "styles/App.scss";
 import NotFound from "pages/NotFound";
 
@@ -18,7 +20,19 @@ function App() {
     <Router>
       <ScrollToTopOnNavigate />
       <ScrollToTop />
-      <Suspense fallback={null}>
+      <Suspense 
+        fallback={
+          <div style={{ 
+            minHeight: '100vh', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            background: 'var(--background-primary)' 
+          }}>
+            <LoadingSpinner message="Loading page..." />
+          </div>
+        }
+      >
         <Routes>
           {publicRoutes.map((route, index) => {
             const Page = route.component;
@@ -29,7 +43,9 @@ function App() {
                 path={route.path}
                 element={
                   <LayoutComponent theme={theme} toggleTheme={toggleTheme}>
-                    <Page />
+                    <PageTransition>
+                      <Page />
+                    </PageTransition>
                   </LayoutComponent>
                 }
               />

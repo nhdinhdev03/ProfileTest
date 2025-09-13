@@ -1,0 +1,87 @@
+// Performance optimization styles
+.App {
+  // Optimize rendering performance
+  will-change: auto;
+  
+  // Prevent unnecessary repaints
+  &[data-theme] {
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+}
+
+// Route transition optimizations
+.route-transitioning {
+  // Reduce complexity during transitions
+  * {
+    animation-play-state: paused;
+  }
+  
+  // Disable expensive operations during route changes
+  .header__nav-link {
+    pointer-events: none;
+  }
+}
+
+// Layout optimization
+main {
+  // Optimize compositing
+  isolation: isolate;
+  
+  // Prevent reflow on content changes
+  contain: layout style;
+}
+
+// Hardware acceleration helpers
+.hw-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+// Loading state optimizations
+.loading-state {
+  // Smooth transitions for loading states
+  .page-content {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    
+    &.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Critical CSS for above-the-fold content
+.critical-content {
+  // Prioritize rendering of above-the-fold content
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+// Scroll performance
+.smooth-scroll {
+  scroll-behavior: smooth;
+  
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+// Prevent layout shifts
+.layout-stable {
+  // Reserve space to prevent layout shifts
+  min-height: 100vh;
+  contain: layout;
+}
+
+// Image loading optimizations
+img[loading="lazy"] {
+  // Smooth image loading
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  
+  &.loaded {
+    opacity: 1;
+  }
+}

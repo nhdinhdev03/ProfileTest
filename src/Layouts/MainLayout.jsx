@@ -13,7 +13,11 @@ const MainLayout = memo(({ children, theme, toggleTheme, showBreadcrumb = true }
         paddingTop: showBreadcrumb ? '120px' : '70px', // Extra space for breadcrumb
         minHeight: '100vh',
         paddingLeft: 'env(safe-area-inset-left, 0)',
-        paddingRight: 'env(safe-area-inset-right, 0)'
+        paddingRight: 'env(safe-area-inset-right, 0)',
+        // Performance optimizations
+        willChange: 'contents',
+        transform: 'translateZ(0)', // Force hardware acceleration
+        contain: 'layout style paint', // CSS containment for better performance
       }}>
         {children}
       </main>

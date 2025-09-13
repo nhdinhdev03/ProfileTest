@@ -16,6 +16,7 @@ import {
   FiStar,
 } from "react-icons/fi";
 import { ROUTES } from "router/routeConstants";
+import { useRoutePreloader } from "hooks/useRoutePreloader";
 import img from "assets/Img";
 import "./Header.scss";
 
@@ -74,7 +75,7 @@ const computeScrollDuration = ({ distance, isAdjacentNavigation }) => {
 };
 
 // Memoized Desktop Navigation - Simplified and Modern
-const DesktopNav = memo(({ activeSection }) => (
+const DesktopNav = memo(({ activeSection, onLinkHover }) => (
   <nav className="header__nav header__nav--desktop" aria-label="Primary">
     <ul className="header__nav-list">
       {NAV_ITEMS.map((item) => {
@@ -86,6 +87,7 @@ const DesktopNav = memo(({ activeSection }) => (
               to={item.path}
               className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
               aria-label={`Navigate to ${item.label}`}
+              onMouseEnter={() => onLinkHover && onLinkHover(item.path)}
             >
               <Icon className="header__nav-icon" />
               <span className="header__nav-text">{item.label}</span>
@@ -251,6 +253,7 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
 
 DesktopNav.propTypes = {
   activeSection: PropTypes.string.isRequired,
+  onLinkHover: PropTypes.func,
 };
 
 MobileNav.propTypes = {
@@ -313,7 +316,7 @@ const useScrollSpy = (isScrolling, setIsScrolled, setActiveSection) => {
         handleScroll();
         handleSectionInView();
         scrollTimeout = null;
-      }, 16);
+      }, 32); // Increased from 16ms to 32ms for better performance
     };
 
     window.addEventListener('scroll', throttled, { passive: true });
@@ -330,6 +333,9 @@ function Header({ theme, toggleTheme }) {
   const [isScrolling, setIsScrolling] = useState(false);
   const mobileNavRef = useRef(null);
   const menuButtonRef = useRef(null);
+  
+  // Route preloading hook
+  const { preloadRoute } = useRoutePreloader();
   
   // React Router location hook
   const location = useLocation();
@@ -359,6 +365,11 @@ function Header({ theme, toggleTheme }) {
 
   // Scroll spy
   useScrollSpy(isScrolling, setIsScrolled, setActiveSection);
+  
+  // Handle link hover for preloading
+  const handleLinkHover = useCallback((path) => {
+    preloadRoute(path);
+  }, [preloadRoute]);
   
   // (Removed inline scroll spy effect - replaced by custom hook)
 
@@ -476,7 +487,7 @@ function Header({ theme, toggleTheme }) {
           </div>
         </Link>
 
-        <DesktopNav activeSection={activeSection} />
+        <DesktopNav activeSection={activeSection} onLinkHover={handleLinkHover} />
 
         <div className="header__actions">
           <button
