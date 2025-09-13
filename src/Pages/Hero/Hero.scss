@@ -1012,7 +1012,7 @@
 // Mobile optimization - Enhanced mobile experience
 @media (max-width: $breakpoint-md) {
   .hero {
-    min-height: 100vh; // Full viewport height for better mobile experience
+    min-height: 70vh; // Full viewport height for better mobile experience
     padding: $spacing-lg 0;
     
     // Optimize layout for mobile
