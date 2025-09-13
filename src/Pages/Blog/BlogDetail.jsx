@@ -13,7 +13,7 @@ import {
   FiHeart,
   FiList,
 } from "react-icons/fi";
-import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import ScrollToTop from "../../components/Scroll/ScrollToTop/ScrollToTop";
 import { ROUTES } from "../../router/routeConstants";
 import "./BlogDetail.scss";
 

@@ -1,5 +1,4 @@
-@import 'styles/variables.scss';
-
+@use '../../../styles/variables.scss' as *;
 .community-testimonials {
   position: relative;
   padding: clamp(4rem, 8vw, 6rem) 0;
