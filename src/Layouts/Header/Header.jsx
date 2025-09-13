@@ -320,7 +320,10 @@ const MobileNav = memo(
                   }}
                 >
                   <div className="header__mobile-controls">
-                    <LanguageToggle className="header__mobile-language-toggle" />
+                    <LanguageToggle 
+                      className="header__mobile-language-toggle" 
+                      variant="compact"
+                    />
 
                     <button
                       className="header__mobile-theme-btn"
@@ -604,7 +607,10 @@ function Header({ theme, toggleTheme }) {
         />
 
         <div className="header__actions">
-          <LanguageToggle className="header__language-toggle" />
+          <LanguageToggle 
+            className="header__language-toggle" 
+            variant="dropdown" 
+          />
 
           <button
             className="header__theme-toggle"
