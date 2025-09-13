@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { useTranslation } from 'react-i18next'
 import { 
   FiMail, FiPhone, FiMapPin, FiSend, FiUser, FiMessageSquare, 
-  FiCheck, FiX, FiAlertCircle, FiCalendar, FiClock, FiGlobe,
+  FiCheck, FiX, FiAlertCircle, FiCalendar, FiClock,
   FiLinkedin, FiGithub, FiTwitter, FiInstagram, FiZap, FiStar
 } from 'react-icons/fi'
 import './Contact.scss'
@@ -31,22 +31,22 @@ function Contact() {
   const [formErrors, setFormErrors] = useState({})
   const [particles, setParticles] = useState([])
   const [isTyping, setIsTyping] = useState(false)
-  const contactRef = useRef(null)
+
 
   // Enhanced contact info with more details
   const contactInfo = [
     {
       icon: FiMail,
       title: 'Email',
-      value: 'nhdinhdev03@gmail.com',
-      link: 'mailto:nhdinhdev03@gmail.com',
+      value: 'nhdinh.dev03@gmail.com',
+      link: 'mailto:nhdinh.dev03@gmail.com',
       description: t('contact.response_commitment'),
       color: '#EA4335'
     },
     {
       icon: FiPhone,
       title: t('contact.phone'),
-      value: '+84 123 456 789',
+      value: '+84 389307257',
       link: 'tel:+84123456789',
       description: t('contact.timelines'),
       color: '#34A853'
@@ -748,7 +748,7 @@ function Contact() {
                 <h4>{t('contact.quick_contact')}</h4>
                 <div className="contact__quick-links">
                   <motion.a
-                    href="mailto:nhdinhdev03@gmail.com"
+                    href="mailto:nhdinh.dev03@gmail.com"
                     className="contact__quick-link"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
