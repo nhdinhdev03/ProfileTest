@@ -81,39 +81,29 @@ function App() {
   // Render main portfolio view with React Router
   return (
     <Router>
-      {/* Thêm ScrollToTopOnNavigate component để tự động cuộn lên đầu trang khi chuyển trang */}
       <ScrollToTopOnNavigate />
-      {/* Thêm ScrollToTop để hiển thị nút cuộn lên đầu trang khi người dùng cuộn xuống */}
       <ScrollToTop />
-      <Routes>
-        {publicRoutes.map((route, index) => {
-          const Page = route.component;
-          const Layout = route.layout || MainLayout;
-          
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                <Layout theme={theme} toggleTheme={toggleTheme}>
-                  <Suspense fallback={
-                    <LoadingScreen 
-                      isLoading={true}
-                      progress={50}
-                      currentTask="Loading page..."
-                    />
-                  }>
+      {/* Single Suspense wrapper (fallback null to tránh double loading) */}
+      <Suspense fallback={null}>
+        <Routes>
+          {publicRoutes.map((route, index) => {
+            const Page = route.component;
+            const Layout = route.layout || MainLayout;
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout theme={theme} toggleTheme={toggleTheme}>
                     <Page />
-                  </Suspense>
-                </Layout>
-              }
-            />
-          );
-        })}
-        {/* Redirect to home if no match */}
-    
-            <Route path="*" element={<NotFound />} />
-      </Routes>
+                  </Layout>
+                }
+              />
+            );
+          })}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
