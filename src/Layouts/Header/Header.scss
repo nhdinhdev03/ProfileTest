@@ -1,11 +1,11 @@
 @use "styles/variables.scss" as *;
 
 @keyframes slideInOut {
-  0% { 
+  0% {
     transform: scaleX(0);
     opacity: 0;
   }
-  100% { 
+  100% {
     transform: scaleX(1);
     opacity: 1;
   }
@@ -29,7 +29,7 @@
     height: 60px;
     padding: 0 env(safe-area-inset-left, 0) 0 env(safe-area-inset-right, 0);
   }
-  
+
   @include mobile-xxs-only {
     height: 56px;
     padding: 0 $spacing-xs;
@@ -50,28 +50,26 @@
     }
   }
 
-
-
   &__container {
     @include flex-between;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 $spacing-base;
     height: 100%;
-    
+
     // Better responsive padding
     @include mobile-xs-up {
       padding: 0 $spacing-lg;
     }
-    
+
     @include tablet-up {
       padding: 0 $spacing-xl;
     }
-    
+
     @include desktop-up {
       padding: 0 $spacing-2xl;
     }
-    
+
     @include mobile-xxs-only {
       padding: 0 $spacing-sm;
     }
@@ -247,20 +245,20 @@
     border-radius: 8px;
     position: relative;
     transition: all 0.2s ease;
-    
+
     // Improved touch targets
     @include mobile-touch-target(44px);
-    
+
     &:hover {
       color: var(--text-primary);
       background: var(--bg-secondary);
       transform: translateY(-1px);
-      
+
       @include touch-device {
         transform: none;
       }
     }
-    
+
     &:active {
       @include touch-device {
         transform: scale(0.95);
@@ -357,7 +355,7 @@
 
     // Ripple effect for touch
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -431,7 +429,11 @@
   &__nav-mobile-header {
     padding: $spacing-4xl $spacing-2xl $spacing-2xl;
     border-bottom: 1px solid var(--border-color);
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--bg-secondary) 0%,
+      var(--bg-tertiary) 100%
+    );
   }
 
   &__nav-mobile-title {
@@ -473,13 +475,18 @@
 
       // Hover effect
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
         transition: left 0.5s ease;
       }
 
@@ -577,13 +584,18 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
       transition: left 0.5s ease;
     }
 
@@ -664,4 +676,3 @@
     padding-top: env(safe-area-inset-top, 0);
   }
 }
-
