@@ -14,7 +14,6 @@ import {
   FiMail,
   FiSun,
   FiMoon,
-  FiStar,
 } from "react-icons/fi";
 import { ROUTES } from "router/routeConstants";
 import { useRoutePreloader } from "hooks/useRoutePreloader";
@@ -33,7 +32,6 @@ const useNavItems = () => {
     { id: "projects", label: t('navigation.projects'), icon: FiFolder, path: ROUTES.PROJECTS },
     { id: "blog", label: t('navigation.blog'), icon: FiBookOpen, path: ROUTES.BLOG },
     { id: "contact", label: t('navigation.contact'), icon: FiMail, path: ROUTES.CONTACT },
-    { id: "i18n-demo", label: t('navigation.i18n_demo'), icon: FiStar, path: ROUTES.I18N_DEMO },
   ];
 };
 
@@ -82,7 +80,6 @@ const computeScrollDuration = ({ distance, isAdjacentNavigation }) => {
 // Memoized Desktop Navigation - Simplified and Modern
 const DesktopNav = memo(({ activeSection, onLinkHover, pathname }) => {
   const navItems = useNavItems();
-  const navigate = useNavigate();
   
   const handleDesktopLinkClick = useCallback((e, path) => {
     // If already on the same page, prevent default navigation
@@ -108,7 +105,7 @@ const DesktopNav = memo(({ activeSection, onLinkHover, pathname }) => {
                 to={item.path}
                 className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
                 aria-label={`Navigate to ${item.label}`}
-                onMouseEnter={() => onLinkHover && onLinkHover(item.path)}
+                onMouseEnter={() => onLinkHover?.(item.path)}
                 onClick={(e) => handleDesktopLinkClick(e, item.path)}
               >
                 <Icon className="header__nav-icon" />
@@ -397,15 +394,6 @@ function Header({ theme, toggleTheme }) {
   
   const [activeSection, setActiveSection] = useRouteActiveSection(pathname, getActiveSectionFromPath, setIsMenuOpen);
 
-  // Helper function to get adjacent sections
-  const getAdjacentSections = (currentSectionId) => {
-    const currentIndex = NAV_ITEMS.findIndex(item => item.id === currentSectionId);
-    return {
-      previous: currentIndex > 0 ? NAV_ITEMS[currentIndex - 1].id : null,
-      next: currentIndex < NAV_ITEMS.length - 1 ? NAV_ITEMS[currentIndex + 1].id : null
-    };
-  };
-
   // Scroll spy
   useScrollSpy(isScrolling, setIsScrolled, setActiveSection);
   
@@ -434,51 +422,6 @@ function Header({ theme, toggleTheme }) {
   }, [pathname, navigate]);
 
   // (Removed inline scroll spy effect - replaced by custom hook)
-
-  const scrollToSection = useCallback((sectionId) => {
-    // Update active immediately for responsive UI
-    setActiveSection(sectionId);
-    setIsScrolling(true);
-
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const headerOffset = getHeaderOffset();
-      const elementRect = element.getBoundingClientRect();
-      const elementTop = elementRect.top + window.scrollY;
-      const { previous, next } = getAdjacentSections(activeSection);
-      const isAdjacentNavigation = sectionId === previous || sectionId === next;
-      const isCloseSection = areSectionsClose(activeSection, sectionId);
-      const targetY = computeTargetY({ elementRect, elementTop, headerOffset, isAdjacentNavigation, isCloseSection });
-
-      const startY = window.scrollY;
-      const finalDistance = targetY - startY;
-      const distance = Math.abs(finalDistance);
-      const duration = computeScrollDuration({ distance, isAdjacentNavigation });
-      let startTime = null;
-
-      const animateScroll = (currentTime) => {
-        if (startTime === null) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const easedProgress = easeInOutQuart(progress);
-        
-        const currentScrollY = startY + finalDistance * easedProgress;
-        window.scrollTo(0, currentScrollY);
-        
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        } else {
-          setIsScrolling(false);
-          // Ensure we're exactly at the target position
-          window.scrollTo(0, targetY);
-        }
-      };
-
-      // Always use custom animation for consistent behavior
-      requestAnimationFrame(animateScroll);
-    }
-    setIsMenuOpen(false);
-  }, [activeSection, setActiveSection, setIsScrolling]);
 
   // Body scroll lock when menu open (mobile)
   useEffect(() => {

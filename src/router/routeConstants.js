@@ -11,7 +11,6 @@ export const ROUTES = {
   BLOG_DETAIL: `/${API_VERSION}/blog/:id`,
   CONTACT: `/${API_VERSION}/contact`,
   EXPERIENCE: `/${API_VERSION}/experience`,
-  I18N_DEMO: `/${API_VERSION}/i18n-demo`,
 };
 
 // Route metadata for breadcrumb and navigation
@@ -54,11 +53,6 @@ export const ROUTE_METADATA = {
   [ROUTES.EXPERIENCE]: {
     title: 'Work Experience',
     description: 'My professional experience and career journey',
-    showBreadcrumb: true
-  },
-  [ROUTES.I18N_DEMO]: {
-    title: 'Internationalization Demo',
-    description: 'Demo of multi-language support',
     showBreadcrumb: true
   },
 };
