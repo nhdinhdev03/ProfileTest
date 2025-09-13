@@ -8,7 +8,7 @@ import {
   FiMapPin,
   FiDownload
 } from 'react-icons/fi'
-import ScrollToTop from 'components/ScrollToTop/ScrollToTop'
+
 import './Footer.scss'
 
 const Footer = memo(() => {
@@ -108,8 +108,6 @@ const Footer = memo(() => {
         </div>
       </div>
 
-      {/* Scroll to Top Component */}
-      <ScrollToTop />
     </footer>
   )
 })

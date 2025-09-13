@@ -5,8 +5,8 @@ import MainLayout from "layouts/MainLayout";
 import { useTheme } from "hooks/useTheme";
 import { publicRoutes } from "router";
 import { ROUTES } from "router/routeConstants";
-import ScrollToTopOnNavigate from "components/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
-import ScrollToTop from "components/ScrollToTop/ScrollToTop";
+import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
+import ScrollToTop from "components/Scroll/ScrollToTop/ScrollToTop";
 import "styles/App.scss";
 
 function App() {

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { smoothScrollTo } from '../../utils/scroll';
+import { smoothScrollTo } from 'utils/scroll';
+
 
 // Component này sẽ tự động cuộn lên đầu trang khi route thay đổi
 function ScrollToTopOnNavigate() {
