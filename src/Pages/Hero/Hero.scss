@@ -1031,29 +1031,9 @@
     }
     
     &__visual {
-      order: 1; // Visual comes first on mobile
-      margin-bottom: $spacing-2xl;
-      
-      // Simplified visual for mobile
-      .hero__avatar {
-        &-image {
-          width: 180px;
-          height: 180px;
-          border-width: 3px;
-        }
-        
-        &-ring {
-          display: none; // Hide complex rings on mobile
-        }
-        
-        &-orbital-ring {
-          display: none; // Hide orbital rings on mobile
-        }
-      }
-      
-      .hero__tech-stack {
-        display: none; // Hide tech stack on mobile for cleaner look
-      }
+      // Yêu cầu: Ẩn hoàn toàn phần visual trên mobile
+      // Previously we reordered and simplified it; now we just hide it
+      display: none !important;
     }
     
     // Optimize spacing for mobile
