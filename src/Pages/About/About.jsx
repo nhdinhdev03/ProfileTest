@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { 
   FiCode, FiZap, FiActivity,
@@ -520,6 +521,7 @@ function About() {
   const { profile } = useGithubData();
   const [particles, setParticles] = useState([])
   const aboutRef = useRef(null)
+  const { t } = useTranslation();
   const light =
     typeof document !== "undefined" &&
     document.documentElement.getAttribute("data-theme") === "light";
@@ -631,10 +633,10 @@ function About() {
               ease: 'linear'
             }}
           >
-            Giới Thiệu
+            {t('about.title')}
           </motion.h2>
           <motion.p variants={itemVariants}>
-            Giới thiệu chi tiết về kinh nghiệm và hành trình phát triển chuyên môn.
+            {t('about.description')}
           </motion.p>
         </motion.div>
 

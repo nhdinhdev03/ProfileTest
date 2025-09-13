@@ -79,11 +79,24 @@
 
   // Logo Styles
   &__logo-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
     text-decoration: none;
     transition: transform 0.2s ease;
+    color: inherit;
+    font-family: inherit;
 
     &:hover {
       transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
   }
 
@@ -287,6 +300,12 @@
   &__actions {
     @include flex-center;
     gap: $spacing-sm;
+  }
+
+  &__language-toggle {
+    @media (max-width: $breakpoint-lg) {
+      display: none;
+    }
   }
 
   &__theme-toggle {
@@ -526,6 +545,19 @@
     margin-top: $spacing-2xl;
     padding-top: $spacing-xl;
     border-top: 1px solid var(--border-color);
+  }
+
+  &__mobile-controls {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-base;
+    width: 100%;
+  }
+
+  &__mobile-language-toggle {
+    .language-selector {
+      justify-content: center;
+    }
   }
 
   &__mobile-theme-btn {

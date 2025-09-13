@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { useTranslation } from 'react-i18next'
 import { 
   FiMail, FiPhone, FiMapPin, FiSend, FiUser, FiMessageSquare, 
   FiCheck, FiX, FiAlertCircle, FiCalendar, FiClock, FiGlobe,
@@ -9,6 +10,7 @@ import {
 import './Contact.scss'
 
 function Contact() {
+  const { t } = useTranslation();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1

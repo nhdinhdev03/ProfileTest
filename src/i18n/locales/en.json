@@ -1,0 +1,115 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "hello": "Hello",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "download": "Download",
+    "upload": "Upload",
+    "search": "Search"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact",
+    "blog": "Blog",
+    "admin": "Admin",
+    "experience": "Experience",
+    "i18n_demo": "🌍 I18n Demo",
+    "menu": "Navigation",
+    "choose_destination": "Choose your destination"
+  },
+  "header": {
+    "brand_name": "Nhdinh",
+    "brand_title": "Web Developer",
+    "theme_toggle_dark": "Switch to dark theme",
+    "theme_toggle_light": "Switch to light theme",
+    "menu_toggle": "Toggle menu",
+    "switch_to_light": "Switch to Light Mode",
+    "switch_to_dark": "Switch to Dark Mode",
+    "logo_aria_label": "Go to homepage"
+  },
+  "hero": {
+    "title": "Professional Portfolio",
+    "subtitle": "Full Stack Developer",
+    "description": "Passionate about creating innovative solutions and building amazing user experiences",
+    "cta": "View My Work",
+    "contact_me": "Contact Me",
+    "download_cv": "Download CV",
+    "view_portfolio": "View Portfolio"
+  },
+  "about": {
+    "title": "About Me",
+    "description": "I am a passionate developer with expertise in modern web technologies",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills"
+  },
+  "projects": {
+    "title": "My Projects",
+    "view_project": "View Project",
+    "view_code": "View Code",
+    "technologies": "Technologies Used",
+    "live_demo": "Live Demo",
+    "source_code": "Source Code"
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Let's work together!",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send Message",
+    "success_message": "Thank you for your message! I'll get back to you soon.",
+    "error_message": "Sorry, there was an error sending your message. Please try again.",
+    "get_in_touch": "Get In Touch",
+    "phone": "Phone",
+    "location": "Location"
+  },
+  "footer": {
+    "brand_name": "Hoang Dinh",
+    "brand_title": "Full Stack Developer",
+    "description": "Creating amazing web experiences with modern technology and creative thinking.",
+    "download_cv": "Download CV",
+    "hire_me": "Hire Me",
+    "quick_links": "Quick Links",
+    "contact_info": "Contact Info",
+    "social_media": "Social Media",
+    "copyright": "All rights reserved",
+    "designed_by": "Designed and developed with",
+    "love": "love",
+    "email": "hoangdinh@example.com",
+    "phone": "+84 123 456 789",
+    "location": "Hau Giang, Vietnam"
+  },
+  "skills": {
+    "title": "Skills & Technologies",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "database": "Database",
+    "tools": "Tools",
+    "others": "Others"
+  },
+  "blog": {
+    "title": "Blog",
+    "read_more": "Read more",
+    "published_on": "Published on",
+    "by_author": "by",
+    "categories": "Categories",
+    "tags": "Tags",
+    "recent_posts": "Recent Posts"
+  }
+}

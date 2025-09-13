@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import {
   FiMenu,
   FiX,
@@ -18,19 +19,23 @@ import {
 import { ROUTES } from "router/routeConstants";
 import { useRoutePreloader } from "hooks/useRoutePreloader";
 import img from "assets/Img";
+import LanguageToggle from "components/LanguageToggle";
 import "./Header.scss";
 
-
-
-// Extract nav items outside component to avoid recreation on each render
-const NAV_ITEMS = [
-  { id: "home", label: "Home", icon: FiHome, path: ROUTES.HOME },
-  { id: "about", label: "About", icon: FiUser, path: ROUTES.ABOUT },
-  { id: "skills", label: "Skills", icon: FiCode, path: ROUTES.SKILLS },
-  { id: "projects", label: "Projects", icon: FiFolder, path: ROUTES.PROJECTS },
-  { id: "blog", label: "Blog", icon: FiBookOpen, path: ROUTES.BLOG },
-  { id: "contact", label: "Contact", icon: FiMail, path: ROUTES.CONTACT },
-];
+// Hook to generate nav items with translations
+const useNavItems = () => {
+  const { t } = useTranslation();
+  
+  return [
+    { id: "home", label: t('navigation.home'), icon: FiHome, path: ROUTES.HOME },
+    { id: "about", label: t('navigation.about'), icon: FiUser, path: ROUTES.ABOUT },
+    { id: "skills", label: t('navigation.skills'), icon: FiCode, path: ROUTES.SKILLS },
+    { id: "projects", label: t('navigation.projects'), icon: FiFolder, path: ROUTES.PROJECTS },
+    { id: "blog", label: t('navigation.blog'), icon: FiBookOpen, path: ROUTES.BLOG },
+    { id: "contact", label: t('navigation.contact'), icon: FiMail, path: ROUTES.CONTACT },
+    { id: "i18n-demo", label: t('navigation.i18n_demo'), icon: FiStar, path: ROUTES.I18N_DEMO },
+  ];
+};
 
 // Helper utilities (outside component to lower cognitive complexity inside component)
 const getHeaderOffset = () => {
@@ -75,44 +80,63 @@ const computeScrollDuration = ({ distance, isAdjacentNavigation }) => {
 };
 
 // Memoized Desktop Navigation - Simplified and Modern
-const DesktopNav = memo(({ activeSection, onLinkHover }) => (
-  <nav className="header__nav header__nav--desktop" aria-label="Primary">
-    <ul className="header__nav-list">
-      {NAV_ITEMS.map((item) => {
-        const Icon = item.icon;
-        const isActive = activeSection === item.id;
-        return (
-          <li key={item.id} className="header__nav-item">
-            <Link
-              to={item.path}
-              className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
-              aria-label={`Navigate to ${item.label}`}
-              onMouseEnter={() => onLinkHover && onLinkHover(item.path)}
-            >
-              <Icon className="header__nav-icon" />
-              <span className="header__nav-text">{item.label}</span>
-              {isActive && (
-                <motion.div
-                  className="header__nav-indicator"
-                  layoutId="activeIndicator"
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 25,
-                  }}
-                />
-              )}
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-));
+const DesktopNav = memo(({ activeSection, onLinkHover, pathname }) => {
+  const navItems = useNavItems();
+  const navigate = useNavigate();
+  
+  const handleDesktopLinkClick = useCallback((e, path) => {
+    // If already on the same page, prevent default navigation
+    if (pathname === path) {
+      e.preventDefault();
+      if (path === ROUTES.HOME) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+    // Otherwise, let React Router handle the navigation
+  }, [pathname]);
+  
+  return (
+    <nav className="header__nav header__nav--desktop" aria-label="Primary">
+      <ul className="header__nav-list">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeSection === item.id;
+          return (
+            <li key={item.id} className="header__nav-item">
+              <Link
+                to={item.path}
+                className={`header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
+                aria-label={`Navigate to ${item.label}`}
+                onMouseEnter={() => onLinkHover && onLinkHover(item.path)}
+                onClick={(e) => handleDesktopLinkClick(e, item.path)}
+              >
+                <Icon className="header__nav-icon" />
+                <span className="header__nav-text">{item.label}</span>
+                {isActive && (
+                  <motion.div
+                    className="header__nav-indicator"
+                    layoutId="activeIndicator"
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 25,
+                    }}
+                  />
+                )}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+});
 
 // Modern Mobile Navigation with smooth animations
-const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef }) => {
-  const navigate = useNavigate();
+const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggleTheme, mobileNavRef, pathname, navigate }) => {
+  const navItems = useNavItems();
+  const { t } = useTranslation();
   
   const handleLinkClick = (e, path) => {
     e.preventDefault();
@@ -120,6 +144,17 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
       navigator.vibrate(10);
     }
     setIsMenuOpen(false);
+    
+    // Optimize navigation - don't reload if already on the same page
+    if (pathname === path) {
+      // If it's home page, scroll to top
+      if (path === ROUTES.HOME) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setActiveSection('home');
+      }
+      return;
+    }
+    
     // Use timeout to wait for the menu close animation
     setTimeout(() => {
       navigate(path);
@@ -169,12 +204,12 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.3 }}
           >
-            <h2 className="header__nav-mobile-title">Navigation</h2>
-            <p className="header__nav-mobile-subtitle">Choose your destination</p>
+            <h2 className="header__nav-mobile-title">{t('navigation.menu')}</h2>
+            <p className="header__nav-mobile-subtitle">{t('navigation.choose_destination')}</p>
           </motion.div>
           
           <ul className="header__nav-list header__nav-list--mobile">
-            {NAV_ITEMS.map((item, index) => {
+            {navItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = activeSection === item.id;
               return (
@@ -222,26 +257,30 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
                 ease: "easeOut"
               }}
             >
-              <button
-                className="header__mobile-theme-btn"
-                onClick={() => {
-                  if (navigator.vibrate) {
-                    navigator.vibrate(10);
-                  }
-                  toggleTheme();
-                }}
-                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-              >
-                <div className="header__theme-icon-wrapper">
-                  <motion.div
-                    animate={{ rotate: theme === 'dark' ? 0 : 180 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                  >
-                    {theme === 'dark' ? <FiMoon /> : <FiSun />}
-                  </motion.div>
-                </div>
-                <span>Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
-              </button>
+              <div className="header__mobile-controls">
+                <LanguageToggle className="header__mobile-language-toggle" />
+                
+                <button
+                  className="header__mobile-theme-btn"
+                  onClick={() => {
+                    if (navigator.vibrate) {
+                      navigator.vibrate(10);
+                    }
+                    toggleTheme();
+                  }}
+                  aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+                >
+                  <div className="header__theme-icon-wrapper">
+                    <motion.div
+                      animate={{ rotate: theme === 'dark' ? 0 : 180 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                      {theme === 'dark' ? <FiMoon /> : <FiSun />}
+                    </motion.div>
+                  </div>
+                  <span>{theme === 'dark' ? t('header.switch_to_light') : t('header.switch_to_dark')}</span>
+                </button>
+              </div>
             </motion.li>
           </ul>
         </motion.nav>
@@ -254,6 +293,7 @@ const MobileNav = memo(({ isMenuOpen, setIsMenuOpen, activeSection, theme, toggl
 DesktopNav.propTypes = {
   activeSection: PropTypes.string.isRequired,
   onLinkHover: PropTypes.func,
+  pathname: PropTypes.string.isRequired,
 };
 
 MobileNav.propTypes = {
@@ -263,6 +303,8 @@ MobileNav.propTypes = {
   theme: PropTypes.string.isRequired,
   toggleTheme: PropTypes.func.isRequired,
   mobileNavRef: PropTypes.object.isRequired,
+  pathname: PropTypes.string.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
 // Hook: derive active section from route changes
@@ -333,12 +375,13 @@ function Header({ theme, toggleTheme }) {
   const [isScrolling, setIsScrolling] = useState(false);
   const mobileNavRef = useRef(null);
   const menuButtonRef = useRef(null);
+  const { t } = useTranslation();
   
   // Route preloading hook
   const { preloadRoute } = useRoutePreloader();
   
-  // React Router location hook
   const location = useLocation();
+  const navigate = useNavigate();
   const pathname = location.pathname;
   
   // Determine active section based on current route
@@ -371,6 +414,25 @@ function Header({ theme, toggleTheme }) {
     preloadRoute(path);
   }, [preloadRoute]);
   
+  // Optimized logo click handler
+  const handleLogoClick = useCallback((e) => {
+    e.preventDefault();
+    
+    // If already on home page, just scroll to top
+    if (pathname === ROUTES.HOME) {
+      // Scroll to top smoothly
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      // Update active section
+      setActiveSection('home');
+    } else {
+      // Navigate to home page
+      navigate(ROUTES.HOME);
+    }
+  }, [pathname, navigate]);
+
   // (Removed inline scroll spy effect - replaced by custom hook)
 
   const scrollToSection = useCallback((sectionId) => {
@@ -463,11 +525,10 @@ function Header({ theme, toggleTheme }) {
     >
       <div className="header__container">
 
-        <Link 
-          to={ROUTES.HOME}
+        <button 
           className="header__logo-link"
-          aria-label="Navigate to Home"
-          onClick={() => scrollToSection("home")}
+          aria-label={t('header.logo_aria_label')}
+          onClick={handleLogoClick}
         >
           <div className="header__logo">
             <div className="header__logo-icon">
@@ -480,20 +541,22 @@ function Header({ theme, toggleTheme }) {
             />
           </div>
             <div className="header__logo-text">
-              <span className="header__logo-name">Nhdinh</span>
-              <span className="header__logo-title">Web Developer</span>
+              <span className="header__logo-name">{t('header.brand_name')}</span>
+              <span className="header__logo-title">{t('header.brand_title')}</span>
             </div>
           </div>
-        </Link>
+        </button>
 
-        <DesktopNav activeSection={activeSection} onLinkHover={handleLinkHover} />
+        <DesktopNav activeSection={activeSection} onLinkHover={handleLinkHover} pathname={pathname} />
 
         <div className="header__actions">
+          <LanguageToggle className="header__language-toggle" />
+          
           <button
             className="header__theme-toggle"
             onClick={toggleTheme}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            aria-label={theme === 'dark' ? t('header.theme_toggle_light') : t('header.theme_toggle_dark')}
+            title={theme === 'dark' ? t('header.theme_toggle_light') : t('header.theme_toggle_dark')}
           >
             {theme === 'dark' ? <FiMoon /> : <FiSun />}
           </button>
@@ -501,7 +564,7 @@ function Header({ theme, toggleTheme }) {
           <button
             className={`header__menu-toggle ${isMenuOpen ? "header__menu-toggle--open" : ""}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={t('header.menu_toggle')}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-navigation"
             ref={menuButtonRef}
@@ -517,6 +580,8 @@ function Header({ theme, toggleTheme }) {
         theme={theme}
         toggleTheme={toggleTheme}
         mobileNavRef={mobileNavRef}
+        pathname={pathname}
+        navigate={navigate}
       />
     </header>
   );

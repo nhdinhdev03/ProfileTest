@@ -115,3 +115,9 @@ dist-ssr
 *.local
 
 /jsconfig.json
+
+/netlify.toml
+
+.env.development
+/.env.production
+/.env.test

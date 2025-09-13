@@ -1,0 +1,49 @@
+.i18n-demo-page {
+  min-height: 100vh;
+  padding-top: 100px; // Account for fixed header
+  background: var(--background-primary);
+
+  .page-header {
+    text-align: center;
+    padding: 2rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: var(--text-primary);
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .i18n-demo-page {
+    padding-top: 80px;
+
+    .page-header {
+      padding: 1rem;
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+}

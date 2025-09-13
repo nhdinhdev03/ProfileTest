@@ -11,6 +11,9 @@ import LoadingSpinner from "components/Loading/LoadingSpinner";
 import "styles/App.scss";
 import NotFound from "pages/NotFound";
 
+// Import i18n configuration
+import "./i18n";
+
 
 function App() {
   const [theme, toggleTheme] = useTheme("dark");

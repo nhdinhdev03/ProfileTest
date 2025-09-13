@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { 
   FiHeart, 
   FiGithub, 
@@ -13,6 +14,7 @@ import './Footer.scss'
 
 const Footer = memo(() => {
   const currentYear = new Date().getFullYear()
+  const { t } = useTranslation()
 
   const socialLinks = [
     { icon: FiGithub, url: 'https://github.com', label: 'GitHub' },
@@ -21,9 +23,9 @@ const Footer = memo(() => {
   ]
 
   const contactInfo = [
-    { icon: FiMail, text: 'hoangdinh@example.com', href: 'mailto:hoangdinh@example.com' },
-    { icon: FiPhone, text: '+84 123 456 789', href: 'tel:+84123456789' },
-    { icon: FiMapPin, text: 'Hậu Giang, Việt Nam', href: '#' }
+    { icon: FiMail, text: t('footer.email'), href: 'mailto:hoangdinh@example.com' },
+    { icon: FiPhone, text: t('footer.phone'), href: 'tel:+84123456789' },
+    { icon: FiMapPin, text: t('footer.location'), href: '#' }
   ]
 
   return (
@@ -33,10 +35,10 @@ const Footer = memo(() => {
           {/* Main Info */}
           <div className="footer__main">
             <div className="footer__brand">
-              <h3 className="footer__title">Hoang Dinh</h3>
-              <p className="footer__subtitle">Full Stack Developer</p>
+              <h3 className="footer__title">{t('footer.brand_name')}</h3>
+              <p className="footer__subtitle">{t('footer.brand_title')}</p>
               <p className="footer__description">
-                Tạo ra những trải nghiệm web tuyệt vời với công nghệ hiện đại và tư duy sáng tạo.
+                {t('footer.description')}
               </p>
             </div>
 
@@ -48,21 +50,21 @@ const Footer = memo(() => {
                 className="footer__cta-btn footer__cta-btn--primary"
               >
                 <FiDownload />
-                <span>Download CV</span>
+                <span>{t('footer.download_cv')}</span>
               </a>
               <a
                 href="#contact"
                 className="footer__cta-btn footer__cta-btn--secondary"
               >
                 <FiMail />
-                <span>Liên hệ</span>
+                <span>{t('footer.hire_me')}</span>
               </a>
             </div>
           </div>
 
           {/* Contact Info */}
           <div className="footer__contact">
-            <h4 className="footer__section-title">Liên hệ</h4>
+            <h4 className="footer__section-title">{t('footer.contact_info')}</h4>
             <div className="footer__contact-list">
               {contactInfo.map((contact, index) => {
                 const IconComponent = contact.icon
@@ -103,7 +105,7 @@ const Footer = memo(() => {
         {/* Footer Bottom */}
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {currentYear} Made with <FiHeart className="footer__heart" /> by Hoang Dinh
+            © {currentYear} {t('footer.designed_by')} <FiHeart className="footer__heart" /> {t('footer.love')} - {t('footer.copyright')}
           </p>
         </div>
       </div>

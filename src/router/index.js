@@ -39,6 +39,9 @@ const Experience = lazyWithRetry(() =>
 const Hero = lazyWithRetry(() => 
   import('pages/Hero/Hero').then(module => ({ default: module.default }))
 );
+const I18nDemo = lazyWithRetry(() => 
+  import('pages/I18nDemo/I18nDemoPage').then(module => ({ default: module.default }))
+);
 
 export const publicRoutes = [
   { 
@@ -80,6 +83,11 @@ export const publicRoutes = [
     path: ROUTES.EXPERIENCE, 
     component: Experience, 
     metadata: ROUTE_METADATA[ROUTES.EXPERIENCE]
+  },
+  { 
+    path: ROUTES.I18N_DEMO, 
+    component: I18nDemo, 
+    metadata: ROUTE_METADATA[ROUTES.I18N_DEMO]
   },
 ];
 

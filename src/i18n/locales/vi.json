@@ -1,0 +1,115 @@
+{
+  "common": {
+    "welcome": "Chào mừng",
+    "hello": "Xin chào",
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "view": "Xem",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước đó",
+    "download": "Tải xuống",
+    "upload": "Tải lên",
+    "search": "Tìm kiếm"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "projects": "Dự án",
+    "skills": "Kỹ năng",
+    "contact": "Liên hệ",
+    "blog": "Blog",
+    "admin": "Quản trị",
+    "experience": "Kinh nghiệm",
+    "i18n_demo": "🌍 Demo Đa Ngôn Ngữ",
+    "menu": "Menu",
+    "choose_destination": "Chọn điểm đến của bạn"
+  },
+  "header": {
+    "brand_name": "Nhdinh",
+    "brand_title": "Web Developer",
+    "theme_toggle_dark": "Chuyển sang giao diện tối",
+    "theme_toggle_light": "Chuyển sang giao diện sáng",
+    "menu_toggle": "Mở/Đóng menu",
+    "switch_to_light": "Chuyển sang Giao diện Sáng",
+    "switch_to_dark": "Chuyển sang Giao diện Tối",
+    "logo_aria_label": "Về trang chủ"
+  },
+  "hero": {
+    "title": "Hồ Sơ Chuyên Nghiệp",
+    "subtitle": "Lập Trình Viên Full Stack",
+    "description": "Đam mê tạo ra các giải pháp sáng tạo và xây dựng những trải nghiệm người dùng tuyệt vời",
+    "cta": "Xem Công Việc Của Tôi",
+    "contact_me": "Liên Hệ Với Tôi",
+    "download_cv": "Tải CV",
+    "view_portfolio": "Xem Portfolio"
+  },
+  "about": {
+    "title": "Về Tôi",
+    "description": "Tôi là một lập trình viên đam mê với chuyên môn về các công nghệ web hiện đại",
+    "experience": "Kinh Nghiệm",
+    "education": "Học Vấn",
+    "skills": "Kỹ Năng"
+  },
+  "projects": {
+    "title": "Dự Án Của Tôi",
+    "view_project": "Xem Dự Án",
+    "view_code": "Xem Mã Nguồn",
+    "technologies": "Công Nghệ Sử Dụng",
+    "live_demo": "Demo Trực Tiếp",
+    "source_code": "Mã Nguồn"
+  },
+  "contact": {
+    "title": "Liên Hệ",
+    "subtitle": "Hãy cùng làm việc nhé!",
+    "name": "Tên",
+    "email": "Email",
+    "message": "Tin nhắn",
+    "send": "Gửi Tin Nhắn",
+    "success_message": "Cảm ơn bạn đã gửi tin nhắn! Tôi sẽ phản hồi sớm nhất có thể.",
+    "error_message": "Xin lỗi, đã có lỗi khi gửi tin nhắn. Vui lòng thử lại.",
+    "get_in_touch": "Liên Hệ Với Tôi",
+    "phone": "Điện thoại",
+    "location": "Địa chỉ"
+  },
+  "footer": {
+    "brand_name": "Hoang Dinh",
+    "brand_title": "Full Stack Developer",
+    "description": "Tạo ra những trải nghiệm web tuyệt vời với công nghệ hiện đại và tư duy sáng tạo.",
+    "download_cv": "Tải CV",
+    "hire_me": "Thuê Tôi",
+    "quick_links": "Liên Kết Nhanh",
+    "contact_info": "Thông Tin Liên Hệ",
+    "social_media": "Mạng Xã Hội",
+    "copyright": "Tất cả quyền được bảo lưu",
+    "designed_by": "Được thiết kế và phát triển với",
+    "love": "tình yêu",
+    "email": "hoangdinh@example.com",
+    "phone": "+84 123 456 789",
+    "location": "Hậu Giang, Việt Nam"
+  },
+  "skills": {
+    "title": "Kỹ Năng & Công Nghệ",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "database": "Cơ sở dữ liệu",
+    "tools": "Công cụ",
+    "others": "Khác"
+  },
+  "blog": {
+    "title": "Blog",
+    "read_more": "Đọc thêm",
+    "published_on": "Xuất bản vào",
+    "by_author": "bởi",
+    "categories": "Danh mục",
+    "tags": "Tags",
+    "recent_posts": "Bài viết gần đây"
+  }
+}
