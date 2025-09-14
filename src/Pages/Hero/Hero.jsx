@@ -148,8 +148,8 @@ function Hero() {
         navigator.userAgent
       );
 
-    // Reduce particle count on mobile devices for better performance
-    const particleCount = isMobile || isLowPerformance ? 12 : 30;
+    // Significantly reduce particle count for better performance
+    const particleCount = isMobile || isLowPerformance ? 6 : 15; // Reduced from 12:30 to 6:15
     const newParticles = [];
 
     for (let i = 0; i < particleCount; i++) {
@@ -157,19 +157,19 @@ function Hero() {
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * (isMobile ? 3 : 4) + 2,
-        speed: Math.random() * (isMobile ? 1.5 : 2) + 1,
-        opacity: Math.random() * 0.4 + 0.1,
+        size: Math.random() * (isMobile ? 2 : 3) + 1, // Reduced size
+        speed: Math.random() * (isMobile ? 1 : 1.5) + 0.5, // Reduced speed
+        opacity: Math.random() * 0.3 + 0.1, // Reduced opacity
         direction: Math.random() * 360,
         color: ["#6366f1", "#8b5cf6", "#ec4899"][Math.floor(Math.random() * 3)],
-        rotationSpeed: Math.random() * 1 + 0.3,
+        rotationSpeed: Math.random() * 0.5 + 0.2, // Reduced rotation speed
       });
     }
 
     setParticles(newParticles);
 
-    // Initialize gentle morphing shapes - fewer on mobile
-    const shapeCount = isMobile || isLowPerformance ? 2 : 4;
+    // Initialize gentle morphing shapes - significantly reduced
+    const shapeCount = isMobile || isLowPerformance ? 1 : 2; // Reduced from 2:4 to 1:2
     const newShapes = [];
 
     for (let i = 0; i < shapeCount; i++) {
@@ -177,17 +177,17 @@ function Hero() {
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * (isMobile ? 60 : 80) + 40,
+        size: Math.random() * (isMobile ? 40 : 60) + 30, // Reduced size
         rotation: Math.random() * 360,
-        morphSpeed: Math.random() * 1.5 + 0.8,
+        morphSpeed: Math.random() * 1 + 0.5, // Reduced morph speed
         color: ["#6366f1", "#8b5cf6"][Math.floor(Math.random() * 2)],
       });
     }
 
     setMorphingShapes(newShapes);
 
-    // Initialize gentle floating elements - fewer on mobile
-    const floatingCount = isMobile || isLowPerformance ? 3 : 6;
+    // Initialize gentle floating elements - significantly reduced
+    const floatingCount = isMobile || isLowPerformance ? 2 : 3; // Reduced from 3:6 to 2:3
     const newFloatingElements = [];
 
     for (let i = 0; i < floatingCount; i++) {
@@ -196,9 +196,9 @@ function Hero() {
         x: Math.random() * 100,
         y: Math.random() * 100,
         icon: [FiStar, FiZap][Math.floor(Math.random() * 2)],
-        size: Math.random() * (isMobile ? 12 : 15) + 12,
-        floatSpeed: Math.random() * 2 + 1.5,
-        rotateSpeed: Math.random() * 0.8 + 0.3,
+        size: Math.random() * (isMobile ? 10 : 12) + 10, // Reduced size
+        floatSpeed: Math.random() * 1.5 + 1, // Reduced float speed
+        rotateSpeed: Math.random() * 0.5 + 0.2, // Reduced rotate speed
       });
     }
 

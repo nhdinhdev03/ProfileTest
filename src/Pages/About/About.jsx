@@ -82,9 +82,10 @@ const ProfileHero = ({ profile, light }) => {
   const rotateX = useSpring(useTransform(mouseY, [-300, 300], [5, -5]), { stiffness: 100, damping: 30 })
   const rotateY = useSpring(useTransform(mouseX, [-300, 300], [-5, 5]), { stiffness: 100, damping: 30 })
 
-  // Initialize particles
+  // Initialize particles - optimized for performance
   useEffect(() => {
-    const particleCount = 12
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 4 : 8; // Reduced from 12
     const newParticles = []
     
     for (let i = 0; i < particleCount; i++) {
@@ -92,9 +93,9 @@ const ProfileHero = ({ profile, light }) => {
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 6 + 3,
-        speed: Math.random() * 3 + 2,
-        opacity: Math.random() * 0.4 + 0.1,
+        size: Math.random() * 4 + 2, // Reduced size
+        speed: Math.random() * 2 + 1, // Reduced speed
+        opacity: Math.random() * 0.3 + 0.1, // Reduced opacity
         color: ['#6366f1', '#8b5cf6', '#ec4899', '#10b981'][Math.floor(Math.random() * 4)]
       })
     }

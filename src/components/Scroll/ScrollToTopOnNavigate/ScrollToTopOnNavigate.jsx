@@ -2,7 +2,6 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { smoothScrollTo } from 'utils/scroll';
 
-
 // Component này sẽ tự động cuộn lên đầu trang khi route thay đổi
 function ScrollToTopOnNavigate() {
   const { pathname, hash } = useLocation();
@@ -17,15 +16,16 @@ function ScrollToTopOnNavigate() {
     
     scrollTimeoutRef.current = setTimeout(() => {
       if (targetPosition === 0) {
+        // Cuộn lên đầu trang ngay lập tức cho UX tốt hơn
         window.scrollTo({
           top: 0,
           left: 0,
-          behavior: 'smooth'
+          behavior: 'auto' // Immediate scroll for better UX
         });
       } else {
         smoothScrollTo(targetPosition);
       }
-    }, 50); // Debounce delay
+    }, 10); // Giảm delay để responsive hơn
   }, []);
   
   useEffect(() => {
@@ -48,13 +48,22 @@ function ScrollToTopOnNavigate() {
       return;
     }
     
-    // Nếu pathname đã thay đổi, cuộn lên đầu trang
+    // Nếu pathname đã thay đổi, cuộn lên đầu trang ngay lập tức
     if (pathname !== lastPathname.current) {
       lastPathname.current = pathname;
       
-      // Sử dụng requestAnimationFrame để đảm bảo DOM đã render
+      // Cuộn ngay lập tức để tránh hiện tượng nhấp nháy
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto'
+      });
+      
+      // Sau đó làm mượt thêm nếu cần
       requestAnimationFrame(() => {
-        debouncedScroll(0);
+        if (window.scrollY > 0) {
+          debouncedScroll(0);
+        }
       });
     }
   }, [pathname, hash, debouncedScroll]);

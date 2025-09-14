@@ -389,26 +389,26 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
   }, [isMobile]);
 
   // Adaptive base speed (px/s) if not provided with mobile optimization
-  const speedRef = useRef(60);
+  const speedRef = useRef(isMobile ? 30 : 60); // Reduced default speed
   useEffect(() => {
     if (typeof speed === "number" && speed > 0) {
       speedRef.current = speed;
       return;
     }
     const w = window.innerWidth;
-    // More conservative speeds for mobile with cleaner logic
+    // More conservative speeds for better performance
     if (w > 1400) {
-      speedRef.current = 85;
+      speedRef.current = 60; // Reduced from 85
     } else if (w > 1100) {
-      speedRef.current = 70;
+      speedRef.current = 50; // Reduced from 70
     } else if (w > 900) {
-      speedRef.current = 60;
+      speedRef.current = 40; // Reduced from 60
     } else if (w > 600) {
-      speedRef.current = 50;
+      speedRef.current = 35; // Reduced from 50
     } else {
-      speedRef.current = 35;
+      speedRef.current = 25; // Reduced from 35
     }
-  }, [speed]);
+  }, [speed, isMobile]);
 
   // Enhanced pixel based RAF animation with mobile optimization
   useEffect(() => {

@@ -64,6 +64,6 @@ export const createDebouncedScrollHandler = (callback, delay = 16) => {
   
   return (...args) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback.apply(null, args), delay);
+    timeoutId = setTimeout(() => callback(...args), delay);
   };
 };

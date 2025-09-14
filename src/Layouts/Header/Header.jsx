@@ -385,22 +385,34 @@ const useRouteActiveSection = (
   const [activeSection, setActiveSection] = useState(
     getActiveSectionFromPath(pathname)
   );
+  
   useEffect(() => {
-    setActiveSection(getActiveSectionFromPath(pathname));
+    // Cập nhật activeSection ngay lập tức khi route thay đổi
+    const newActiveSection = getActiveSectionFromPath(pathname);
+    setActiveSection(newActiveSection);
     setIsMenuOpen(false); // close menu on navigation
+    
+    // Đảm bảo rằng scroll spy không override ngay lập tức
+    // bằng cách delay một chút để DOM render xong
+    if (pathname !== '/') {
+      setTimeout(() => {
+        setActiveSection(newActiveSection);
+      }, 100);
+    }
   }, [pathname, getActiveSectionFromPath, setIsMenuOpen]);
+  
   return [activeSection, setActiveSection];
 };
 
-// Optimized scroll spy with better performance
+// Optimized scroll spy with better performance - chỉ hoạt động trên trang Home
 const useScrollSpy = (
   isScrolling,
   setIsScrolled,
   setActiveSection,
-  navItems
+  navItems,
+  pathname // Thêm pathname để kiểm tra trang hiện tại
 ) => {
   const rafRef = useRef();
-  const lastScrollY = useRef(0);
   const lastActiveSection = useRef("home");
 
   useEffect(() => {
@@ -408,7 +420,8 @@ const useScrollSpy = (
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 50);
 
-      if (isScrolling) return; // skip while programmatic scroll
+      // Chỉ cho phép scroll spy hoạt động trên trang Home
+      if (isScrolling || pathname !== ROUTES.HOME) return;
 
       // Use RAF for smooth scroll handling
       if (rafRef.current) {
@@ -476,13 +489,13 @@ const useScrollSpy = (
       if (scrollTimeout) clearTimeout(scrollTimeout);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isScrolling, setIsScrolled, setActiveSection, navItems]);
+  }, [isScrolling, setIsScrolled, setActiveSection, navItems, pathname]);
 };
 
 function Header({ theme, toggleTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [isScrolling] = useState(false); // Removed setIsScrolling since it's not used
   const mobileNavRef = useRef(null);
   const menuButtonRef = useRef(null);
   const { t } = useTranslation();
@@ -514,8 +527,8 @@ function Header({ theme, toggleTheme }) {
     setIsMenuOpen
   );
 
-  // Scroll spy
-  useScrollSpy(isScrolling, setIsScrolled, setActiveSection, navItems);
+  // Scroll spy - chỉ hoạt động trên trang Home
+  useScrollSpy(isScrolling, setIsScrolled, setActiveSection, navItems, pathname);
 
   // Handle link hover for preloading
   const handleLinkHover = useCallback(
