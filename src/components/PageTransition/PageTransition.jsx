@@ -1,54 +1,52 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
-const PageTransition = ({ children }) => {
+const PageTransition = memo(({ children }) => {
   const location = useLocation();
 
-  // Optimized variants cho page transitions
+  // Ultra-optimized variants for mobile performance
   const pageVariants = {
     initial: {
       opacity: 0,
-      y: 8, // Reduced from 20px
-      scale: 0.99, // Reduced from 0.98
+      y: 4, // Minimal movement
     },
     enter: {
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: {
-        duration: 0.25, // Reduced from 0.4s
-        ease: [0.23, 1, 0.32, 1], // Custom easing for smoother feel
-        staggerChildren: 0.05, // Reduced from 0.1
+        duration: 0.2, // Faster transition
+        ease: "easeOut",
       },
     },
     exit: {
       opacity: 0,
-      y: -4, // Reduced from -10px
-      scale: 1.01, // Reduced from 1.02
+      y: -2, // Minimal movement
       transition: {
-        duration: 0.15, // Reduced from 0.2s
-        ease: [0.23, 1, 0.32, 1],
+        duration: 0.1, // Very fast exit
+        ease: "easeIn",
       },
     },
   };
 
-  // Variants cho content stagger animation
-  const contentVariants = {
-    initial: {
-      opacity: 0,
-      y: 8, // Reduced from 15px
-    },
-    enter: {
+  // Detect mobile for performance optimization
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  
+  // Use simpler animations on mobile
+  const mobileVariants = {
+    initial: { opacity: 0 },
+    enter: { 
       opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.2, // Reduced from 0.3s
-        ease: "easeOut",
-      },
+      transition: { duration: 0.15, ease: "easeOut" }
+    },
+    exit: { 
+      opacity: 0,
+      transition: { duration: 0.1, ease: "easeIn" }
     },
   };
+
+  const variants = isMobile ? mobileVariants : pageVariants;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -57,30 +55,23 @@ const PageTransition = ({ children }) => {
         initial="initial"
         animate="enter"
         exit="exit"
-        variants={pageVariants}
+        variants={variants}
         style={{
           width: '100%',
           minHeight: '100vh',
           position: 'relative',
           // Optimize for performance
-          willChange: 'transform, opacity',
+          willChange: isMobile ? 'opacity' : 'transform, opacity',
           transform: 'translateZ(0)', // Force hardware acceleration
+          // Prevent layout shifts
+          contain: 'layout style',
         }}
       >
-        <motion.div 
-          variants={contentVariants}
-          style={{ 
-            width: '100%',
-            // Prevent layout shifts
-            minHeight: 'inherit'
-          }}
-        >
-          {children}
-        </motion.div>
+        {children}
       </motion.div>
     </AnimatePresence>
   );
-};
+});
 
 PageTransition.propTypes = {
   children: PropTypes.node.isRequired,

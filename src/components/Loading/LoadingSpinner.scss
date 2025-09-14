@@ -33,7 +33,7 @@
   }
 }
 
-// Simple spinner styles
+// Ultra-optimized simple spinner styles for mobile
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -42,19 +42,39 @@
   gap: 1rem;
   padding: 2rem;
   
-  // Hardware acceleration
+  // Optimized hardware acceleration
   will-change: transform;
   transform: translateZ(0);
   
-  // Mobile-first responsive design
+  // Mobile-first responsive design with performance focus
   @include mobile-xxs-only {
     padding: 1rem;
     gap: 0.75rem;
+    
+    // Reduce animations on very small screens
+    .loading-spinner__circle {
+      animation-duration: 2s;
+    }
   }
   
   @include mobile-xs-only {
     padding: 1.25rem;
     gap: 0.875rem;
+  }
+  
+  // Mobile performance optimizations
+  @include mobile-only {
+    // Reduce will-change for better battery life
+    will-change: transform;
+    
+    // Simplify animations
+    .loading-spinner__circle {
+      animation-duration: 1.8s;
+    }
+    
+    .loading-spinner__dot {
+      animation-duration: 1.8s;
+    }
   }
   
   &--small {
@@ -197,7 +217,7 @@
   opacity: 0.8;
 }
 
-// Truck loader styles
+// Ultra-optimized truck loader styles for mobile performance
 .truck-loader {
   display: flex;
   flex-direction: column;
@@ -205,9 +225,26 @@
   justify-content: center;
   gap: 1rem;
   
-  // Mobile-first responsive design
+  // Mobile-first responsive design with performance focus
   @include mobile-xxs-only {
     gap: 0.75rem;
+    
+    // Force simple spinner on very small screens
+    display: none;
+  }
+  
+  // Mobile performance optimizations
+  @include mobile-only {
+    // Reduce animation complexity on mobile
+    .truck-loader__body {
+      animation-duration: 1.5s;
+    }
+    
+    .truck-loader__road::before,
+    .truck-loader__road::after,
+    .truck-loader__lamp-post {
+      animation-duration: 2s;
+    }
   }
   
   &--small {
@@ -579,7 +616,7 @@
   opacity: 0.8;
 }
 
-// Keyframe animations
+// Ultra-optimized keyframe animations for mobile performance
 @keyframes rotate {
   to {
     transform: rotate(360deg);
@@ -597,35 +634,36 @@
   }
 }
 
+// Simplified truck motion for better mobile performance
 @keyframes truck-motion {
   0% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(3px);
+    transform: translateY(2px); // Reduced movement
   }
   100% {
     transform: translateY(0px);
   }
 }
 
-// Optimized road animation for mobile performance
+// Ultra-optimized road animation for mobile
 @keyframes road-animation {
   0% {
     transform: translateX(0px);
   }
   100% {
-    transform: translateX(-350px);
+    transform: translateX(-250px); // Shorter distance for better performance
   }
 }
 
-// Mobile-optimized animations with reduced complexity
+// Mobile-optimized animations with minimal complexity
 @keyframes road-animation-mobile {
   0% {
     transform: translateX(0px);
   }
   100% {
-    transform: translateX(-200px); // Shorter distance for mobile
+    transform: translateX(-150px); // Much shorter distance for mobile
   }
 }
 
@@ -634,7 +672,7 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(2px); // Reduced movement for mobile
+    transform: translateY(1px); // Minimal movement for mobile
   }
   100% {
     transform: translateY(0px);

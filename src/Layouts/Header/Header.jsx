@@ -174,7 +174,7 @@ const DesktopNav = memo(({ activeSection, onLinkHover, pathname }) => {
   );
 });
 
-// Modern Mobile Navigation with smooth animations
+// Optimized Mobile Navigation with reduced animations
 const MobileNav = memo(
   ({
     isMenuOpen,
@@ -190,7 +190,7 @@ const MobileNav = memo(
     const navItems = useNavItems();
     const { t } = useTranslation();
 
-    const handleLinkClick = (e, path) => {
+    const handleLinkClick = useCallback((e, path) => {
       e.preventDefault();
       if (navigator.vibrate) {
         navigator.vibrate(10);
@@ -207,156 +207,152 @@ const MobileNav = memo(
         return;
       }
 
-      // Use timeout to wait for the menu close animation
-      setTimeout(() => {
+      // Use requestAnimationFrame for smoother navigation
+      requestAnimationFrame(() => {
         navigate(path);
-      }, 300);
+      });
+    }, [pathname, navigate, setActiveSection, setIsMenuOpen]);
+
+    // Simplified animation variants for better performance
+    const overlayVariants = {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+      exit: { opacity: 0 }
     };
+
+    const navVariants = {
+      hidden: { x: "100%", opacity: 0 },
+      visible: { 
+        x: 0, 
+        opacity: 1,
+        transition: {
+          type: "tween",
+          duration: 0.2,
+          ease: "easeOut"
+        }
+      },
+      exit: { 
+        x: "100%", 
+        opacity: 0,
+        transition: {
+          type: "tween",
+          duration: 0.15,
+          ease: "easeIn"
+        }
+      }
+    };
+
+    const itemVariants = {
+      hidden: { opacity: 0, x: 20 },
+      visible: { 
+        opacity: 1, 
+        x: 0,
+        transition: {
+          duration: 0.2,
+          ease: "easeOut"
+        }
+      }
+    };
+
+    if (!isMenuOpen) return null;
 
     return (
       <AnimatePresence mode="wait">
-        {isMenuOpen && (
-          <>
-            <motion.div
-              className="header__overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <motion.nav
-              id="mobile-navigation"
-              className="header__nav header__nav--mobile"
-              aria-label="Mobile navigation"
-              ref={mobileNavRef}
-              initial={{ x: "100%", opacity: 0 }}
-              animate={{
-                x: 0,
-                opacity: 1,
-                transition: {
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 40,
-                  mass: 1,
-                },
-              }}
-              exit={{
-                x: "100%",
-                opacity: 0,
-                transition: {
-                  duration: 0.25,
-                  ease: "easeIn",
-                },
-              }}
-            >
-              <motion.div
-                className="header__nav-mobile-header"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.3 }}
-              >
-                <h2 className="header__nav-mobile-title">
-                  {t("navigation.menu")}
-                </h2>
-                <p className="header__nav-mobile-subtitle">
-                  {t("navigation.choose_destination")}
-                </p>
-              </motion.div>
+        <motion.div
+          key="overlay"
+          className="header__overlay"
+          variants={overlayVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          onClick={() => setIsMenuOpen(false)}
+        />
+        <motion.nav
+          key="mobile-nav"
+          id="mobile-navigation"
+          className="header__nav header__nav--mobile"
+          aria-label="Mobile navigation"
+          ref={mobileNavRef}
+          variants={navVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <div className="header__nav-mobile-header">
+            <h2 className="header__nav-mobile-title">
+              {t("navigation.menu")}
+            </h2>
+            <p className="header__nav-mobile-subtitle">
+              {t("navigation.choose_destination")}
+            </p>
+          </div>
 
-              <ul className="header__nav-list header__nav-list--mobile">
-                {navItems.map((item, index) => {
-                  const Icon = item.icon;
-                  const isActive = activeSection === item.id;
-                  return (
-                    <motion.li
-                      key={item.id}
-                      className="header__nav-item"
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: 0.1 + index * 0.05,
-                        duration: 0.3,
-                        ease: "easeOut",
-                      }}
-                    >
-                      <Link
-                        to={item.path}
-                        className={`header__nav-link ${
-                          isActive ? "header__nav-link--active" : ""
-                        }`}
-                        onClick={(e) => handleLinkClick(e, item.path)}
-                      >
-                        <div className="header__nav-icon-wrapper">
-                          <Icon className="header__nav-icon" />
-                        </div>
-                        <span className="header__nav-text">{item.label}</span>
-                        {isActive && (
-                          <motion.div
-                            className="header__nav-active-dot"
-                            layoutId="activeDotMobile"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 500,
-                              damping: 30,
-                            }}
-                          />
-                        )}
-                      </Link>
-                    </motion.li>
-                  );
-                })}
-
+          <ul className="header__nav-list header__nav-list--mobile">
+            {navItems.map((item, index) => {
+              const Icon = item.icon;
+              const isActive = activeSection === item.id;
+              return (
                 <motion.li
-                  className="header__nav-item header__nav-item--theme"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: 0.1 + navItems.length * 0.05,
-                    duration: 0.3,
-                    ease: "easeOut",
-                  }}
+                  key={item.id}
+                  className="header__nav-item"
+                  variants={itemVariants}
+                  custom={index}
                 >
-                  <div className="header__mobile-controls">
-                    <LanguageToggle 
-                      className="header__mobile-language-toggle" 
-                      variant="compact"
-                    />
-
-                    <button
-                      className="header__mobile-theme-btn"
-                      onClick={() => {
-                        if (navigator.vibrate) {
-                          navigator.vibrate(10);
-                        }
-                        toggleTheme();
-                      }}
-                      aria-label={`Switch to ${
-                        theme === "dark" ? "light" : "dark"
-                      } theme`}
-                    >
-                      <div className="header__theme-icon-wrapper">
-                        <motion.div
-                          animate={{ rotate: theme === "dark" ? 0 : 180 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                        >
-                          {theme === "dark" ? <FiMoon /> : <FiSun />}
-                        </motion.div>
-                      </div>
-                      <span>
-                        {theme === "dark"
-                          ? t("header.switch_to_light")
-                          : t("header.switch_to_dark")}
-                      </span>
-                    </button>
-                  </div>
+                  <Link
+                    to={item.path}
+                    className={`header__nav-link ${
+                      isActive ? "header__nav-link--active" : ""
+                    }`}
+                    onClick={(e) => handleLinkClick(e, item.path)}
+                  >
+                    <div className="header__nav-icon-wrapper">
+                      <Icon className="header__nav-icon" />
+                    </div>
+                    <span className="header__nav-text">{item.label}</span>
+                    {isActive && (
+                      <div className="header__nav-active-dot" />
+                    )}
+                  </Link>
                 </motion.li>
-              </ul>
-            </motion.nav>
-          </>
-        )}
+              );
+            })}
+
+            <motion.li
+              className="header__nav-item header__nav-item--theme"
+              variants={itemVariants}
+              custom={navItems.length}
+            >
+              <div className="header__mobile-controls">
+                <LanguageToggle 
+                  className="header__mobile-language-toggle" 
+                  variant="compact"
+                />
+
+                <button
+                  className="header__mobile-theme-btn"
+                  onClick={() => {
+                    if (navigator.vibrate) {
+                      navigator.vibrate(10);
+                    }
+                    toggleTheme();
+                  }}
+                  aria-label={`Switch to ${
+                    theme === "dark" ? "light" : "dark"
+                  } theme`}
+                >
+                  <div className="header__theme-icon-wrapper">
+                    {theme === "dark" ? <FiMoon /> : <FiSun />}
+                  </div>
+                  <span>
+                    {theme === "dark"
+                      ? t("header.switch_to_light")
+                      : t("header.switch_to_dark")}
+                  </span>
+                </button>
+              </div>
+            </motion.li>
+          </ul>
+        </motion.nav>
       </AnimatePresence>
     );
   }
@@ -396,62 +392,89 @@ const useRouteActiveSection = (
   return [activeSection, setActiveSection];
 };
 
-// Hook: scroll spy & header scrolled state
+// Optimized scroll spy with better performance
 const useScrollSpy = (
   isScrolling,
   setIsScrolled,
   setActiveSection,
   navItems
 ) => {
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+  const rafRef = useRef();
+  const lastScrollY = useRef(0);
+  const lastActiveSection = useRef("home");
 
-    const handleSectionInView = () => {
-      if (isScrolling) return; // skip while programmatic scroll
-      let current = "home";
-      const viewHeight = window.innerHeight;
+  useEffect(() => {
+    const handleScroll = () => {
       const scrollY = window.scrollY;
-      const headerOffset = getHeaderOffset();
-      let maxVisibleArea = 0;
-      navItems.forEach(({ id }) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const elementTop = rect.top + scrollY;
-        const elementBottom = elementTop + rect.height;
+      setIsScrolled(scrollY > 50);
+
+      if (isScrolling) return; // skip while programmatic scroll
+
+      // Use RAF for smooth scroll handling
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+
+      rafRef.current = requestAnimationFrame(() => {
+        const viewHeight = window.innerHeight;
+        const headerOffset = getHeaderOffset();
+        let maxVisibleArea = 0;
+        let current = "home";
+
+        // Optimize: only check sections that are likely to be visible
         const viewTop = scrollY + headerOffset;
         const viewBottom = scrollY + viewHeight;
-        const visibleTop = Math.max(elementTop, viewTop);
-        const visibleBottom = Math.min(elementBottom, viewBottom);
-        const visibleArea = Math.max(0, visibleBottom - visibleTop);
-        const distanceFromTop = Math.abs(elementTop - viewTop);
-        const topProximityBonus = Math.max(
-          0,
-          (viewHeight * 0.5 - distanceFromTop) / (viewHeight * 0.5)
-        );
-        const adjustedVisibleArea = visibleArea * (1 + topProximityBonus * 0.3);
-        if (adjustedVisibleArea > maxVisibleArea) {
-          maxVisibleArea = adjustedVisibleArea;
-          current = id;
+
+        navItems.forEach(({ id }) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+
+          const rect = el.getBoundingClientRect();
+          const elementTop = rect.top + scrollY;
+          const elementBottom = elementTop + rect.height;
+
+          // Skip if element is completely outside viewport
+          if (elementBottom < viewTop || elementTop > viewBottom) return;
+
+          const visibleTop = Math.max(elementTop, viewTop);
+          const visibleBottom = Math.min(elementBottom, viewBottom);
+          const visibleArea = Math.max(0, visibleBottom - visibleTop);
+          
+          // Simplified calculation for better performance
+          const distanceFromTop = Math.abs(elementTop - viewTop);
+          const topProximityBonus = Math.max(0, (viewHeight * 0.3 - distanceFromTop) / (viewHeight * 0.3));
+          const adjustedVisibleArea = visibleArea * (1 + topProximityBonus * 0.2);
+          
+          if (adjustedVisibleArea > maxVisibleArea) {
+            maxVisibleArea = adjustedVisibleArea;
+            current = id;
+          }
+        });
+
+        // Only update if section actually changed
+        if (current !== lastActiveSection.current) {
+          lastActiveSection.current = current;
+          setActiveSection(current);
         }
       });
-      setActiveSection(current);
     };
 
+    // Throttle scroll events for better performance
     let scrollTimeout;
-    const throttled = () => {
+    const throttledScroll = () => {
       if (scrollTimeout) return;
       scrollTimeout = setTimeout(() => {
         handleScroll();
-        handleSectionInView();
         scrollTimeout = null;
-      }, 32); // Increased from 16ms to 32ms for better performance
+      }, 16); // 60fps
     };
 
-    window.addEventListener("scroll", throttled, { passive: true });
+    window.addEventListener("scroll", throttledScroll, { passive: true });
+    
     return () => {
-      window.removeEventListener("scroll", throttled);
+      window.removeEventListener("scroll", throttledScroll);
       if (scrollTimeout) clearTimeout(scrollTimeout);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [isScrolling, setIsScrolled, setActiveSection, navItems]);
 };

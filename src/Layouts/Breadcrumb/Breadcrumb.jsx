@@ -113,31 +113,31 @@ const generateBreadcrumbs = (pathname) => {
 const BreadcrumbItem = memo(({ item, isLast, index }) => {
   const IconComponent = item.icon;
   
+  // Simplified variants for better mobile performance
   const itemVariants = {
-    hidden: { opacity: 0, x: -20, scale: 0.8 },
+    hidden: { opacity: 0, x: -10 },
     visible: { 
       opacity: 1, 
-      x: 0, 
-      scale: 1,
+      x: 0,
       transition: {
-        delay: index * 0.1,
-        duration: 0.3,
+        delay: index * 0.05, // Reduced delay
+        duration: 0.2, // Faster animation
         ease: "easeOut"
       }
     },
-    exit: { opacity: 0, x: 20, scale: 0.8 }
+    exit: { opacity: 0, x: 10 }
   };
 
   const content = (
     <motion.div
       className={`breadcrumb__item ${item.isActive ? 'breadcrumb__item--active' : ''}`}
       variants={itemVariants}
+      // Simplified hover effects for mobile
       whileHover={!item.isActive ? { 
-        scale: 1.05,
-        y: -2,
-        transition: { duration: 0.2 }
+        scale: 1.02, // Reduced scale
+        transition: { duration: 0.15 }
       } : {}}
-      whileTap={!item.isActive ? { scale: 0.95 } : {}}
+      whileTap={!item.isActive ? { scale: 0.98 } : {}}
     >
       <div 
         className="breadcrumb__icon-wrapper"
@@ -147,11 +147,7 @@ const BreadcrumbItem = memo(({ item, isLast, index }) => {
       </div>
       <span className="breadcrumb__label">{item.label}</span>
       {item.isActive && (
-        <motion.div
-          className="breadcrumb__active-indicator"
-          layoutId="activeBreadcrumb"
-          transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        />
+        <div className="breadcrumb__active-indicator" />
       )}
     </motion.div>
   );
@@ -239,17 +235,17 @@ const Breadcrumb = memo(({ className = '', showOnHome = false }) => {
     return null;
   }
 
+  // Simplified container variants for better performance
   const containerVariants = {
-    hidden: { opacity: 0, y: -10 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
+        staggerChildren: 0.05, // Reduced stagger
+        delayChildren: 0.05 // Reduced delay
       }
     },
-    exit: { opacity: 0, y: -10 }
+    exit: { opacity: 0 }
   };
 
   return (
@@ -261,7 +257,7 @@ const Breadcrumb = memo(({ className = '', showOnHome = false }) => {
         initial="hidden"
         animate="visible"
         exit="exit"
-        key={location.pathname} // Force re-animation on route change
+        key={location.pathname}
       >
         <motion.ol 
           ref={breadcrumbListRef}

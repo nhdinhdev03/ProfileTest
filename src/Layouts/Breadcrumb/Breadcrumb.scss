@@ -5,12 +5,16 @@
   position: sticky;
   top: calc(var(--header-height, 70px));
   z-index: 100;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease; // Faster transition
   background: rgba(var(--bg-primary), 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
-
-  // Mobile optimizations
+  
+  // Hardware acceleration for smooth scrolling
+  will-change: transform;
+  transform: translateZ(0);
+  
+  // Mobile optimizations with performance focus
   @include mobile-only {
     top: calc(var(--header-height, 60px));
     padding: $spacing-xs $spacing-sm;
@@ -18,11 +22,18 @@
     // Ensure breadcrumb doesn't interfere with safe areas
     padding-left: max($spacing-sm, env(safe-area-inset-left, 0));
     padding-right: max($spacing-sm, env(safe-area-inset-right, 0));
+    
+    // Reduce backdrop blur on mobile for better performance
+    backdrop-filter: blur(5px);
   }
 
   @include mobile-xxs-only {
     top: calc(var(--header-height, 56px));
     padding: $spacing-xs;
+    
+    // Disable backdrop blur on very small screens
+    backdrop-filter: none;
+    background: var(--bg-primary);
   }
 
   &__list {
@@ -36,7 +47,11 @@
     position: relative;
     z-index: 1;
     
-    // Mobile scroll optimization
+    // Optimize for performance
+    contain: layout style;
+    will-change: transform;
+    
+    // Mobile scroll optimization with performance focus
     @include mobile-only {
       gap: $spacing-xxs;
       overflow-x: auto;
@@ -47,53 +62,31 @@
       scroll-behavior: smooth;
       scroll-snap-type: x mandatory;
       
+      // Hardware acceleration for smooth scrolling
+      transform: translateZ(0);
+      
       &::-webkit-scrollbar {
         display: none;
       }
       
-      // Add scroll shadow indicator và scroll snapping
+      // Simplified scroll shadow indicator
       &::after {
         content: '';
         position: absolute;
         top: 0;
         right: 0;
-        width: 20px;
+        width: 15px; // Reduced width
         height: 100%;
         background: linear-gradient(to left, var(--bg-primary), transparent);
         pointer-events: none;
         z-index: 2;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.2s ease; // Faster transition
       }
       
       // Show shadow when scrollable
       &.scrollable::after {
         opacity: 1;
-      }
-      
-      // Add scroll indicators
-      &::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(
-          to right,
-          transparent 0%,
-          var(--primary-light) 20%,
-          var(--primary-light) 80%,
-          transparent 100%
-        );
-        opacity: 0.3;
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
-      }
-      
-      &:hover::before {
-        transform: scaleX(1);
       }
     }
     

@@ -434,7 +434,7 @@
     }
   }
 
-  // Mobile Navigation - Modern & Smooth
+  // Optimized Mobile Navigation
   &__overlay {
     position: fixed;
     top: 0;
@@ -445,8 +445,12 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     z-index: 999;
-    pointer-events: all; /* Ensure overlay captures all clicks */
-    touch-action: none; /* Prevent touch events from passing through */
+    pointer-events: all;
+    touch-action: none;
+    
+    // Hardware acceleration for smooth animations
+    will-change: opacity;
+    transform: translateZ(0);
   }
 
   &__nav--mobile {
@@ -461,8 +465,29 @@
     z-index: 1000;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    isolation: isolate; /* Create new stacking context */
-    pointer-events: all; /* Ensure menu captures all clicks */
+    isolation: isolate;
+    pointer-events: all;
+    
+    // Hardware acceleration for smooth animations
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    
+    // Optimize scrolling performance
+    contain: layout style paint;
+    
+    // Reduce repaints during scroll
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 2px;
+    }
 
     [data-theme="dark"] & {
       box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
@@ -497,10 +522,17 @@
     gap: $spacing-sm;
     display: flex;
     flex-direction: column;
+    
+    // Optimize for performance
+    contain: layout style;
+    will-change: transform;
 
     .header__nav-item {
       width: 100%;
       margin-bottom: $spacing-xs;
+      
+      // Reduce repaints
+      contain: layout style;
     }
 
     .header__nav-link {
@@ -514,33 +546,18 @@
       font-weight: $font-medium;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      // Simplified transitions for better performance
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      
+      // Hardware acceleration
+      will-change: transform, background-color;
+      transform: translateZ(0);
 
-      // Hover effect
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      &:hover::before {
-        left: 100%;
-      }
-
+      // Simplified hover effect - removed complex gradient animation
       &:hover {
         background: var(--bg-tertiary);
-        transform: translateX(4px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateX(2px);
       }
 
       &--active {
@@ -549,8 +566,20 @@
         box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
 
         &:hover {
-          transform: translateX(2px);
+          transform: translateX(1px);
           box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+      }
+      
+      // Touch device optimizations
+      @include touch-device {
+        &:hover {
+          transform: none;
+        }
+        
+        &:active {
+          transform: scale(0.98);
+          transition: transform 0.1s ease;
         }
       }
     }
