@@ -10,6 +10,12 @@
   transform-style: preserve-3d;
   -webkit-tap-highlight-color: transparent; // remove gray tap highlight on mobile
   touch-action: manipulation; // hint for better tap behavior
+  
+  &__particles, 
+  &__morphing-shapes,
+  &__background {
+    pointer-events: none; // Prevent background elements from blocking interactions
+  }
 
   &__grid {
     display: grid;
@@ -131,15 +137,24 @@
     gap: $spacing-base;
     margin-bottom: $spacing-2xl;
     flex-wrap: wrap;
+    z-index: 10; // Ensure buttons are clickable
 
     @media (min-width: $breakpoint-lg) {
       justify-content: flex-start;
+    }
+
+    a {
+      position: relative;
+      z-index: 2;
+      pointer-events: auto; // Explicitly enable pointer events
+      cursor: pointer;
     }
   }
 
   &__social {
     @include flex-center;
     gap: $spacing-base;
+    z-index: 10; // Ensure social links are clickable
 
     @media (min-width: $breakpoint-lg) {
       justify-content: flex-start;
@@ -148,6 +163,8 @@
     &-link {
       @include flex-center;
       width: 50px;
+      z-index: 2;
+      pointer-events: auto; // Explicitly enable pointer events
       height: 50px;
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
