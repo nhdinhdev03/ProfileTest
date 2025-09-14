@@ -102,12 +102,38 @@
   "projects": {
     "title": "Dự Án Nổi Bật",
     "subtitle": "Khám phá các sản phẩm tôi đã tạo ra",
-    "all": "Tất cả",
-    "web": "Website",
-    "mobile": "Mobile",
-    "desktop": "Desktop",
-    "ui_ux": "UI/UX",
-    "no_projects": "Không tìm thấy dự án nào",
+    "description": "Tổng hợp các dự án tiêu biểu mà tôi đã phát triển, từ ứng dụng web đến mobile app.",
+    "filters": {
+      "featured": "Nổi bật",
+      "all": "Tất cả",
+      "fullstack": "Full Stack",
+      "frontend": "Frontend",
+      "mobile": "Mobile",
+      "backend": "Backend"
+    },
+    "view_modes": {
+      "grid": "Dạng lưới",
+      "list": "Dạng danh sách"
+    },
+    "status": {
+      "completed": "Hoàn thành",
+      "in_progress": "Đang phát triển",
+      "planned": "Lên kế hoạch"
+    },
+    "actions": {
+      "view_demo": "Xem demo",
+      "view_code": "Xem code",
+      "visit_site": "Truy cập",
+      "view_details": "Xem chi tiết",
+      "live_demo": "Demo trực tiếp",
+      "source_code": "Mã nguồn"
+    },
+    "empty_state": {
+      "title": "Không tìm thấy dự án nào",
+      "description": "Không có dự án nào phù hợp với bộ lọc này.",
+      "suggestion": "Hãy thử chọn danh mục khác."
+    },
+    "featured_badge": "Nổi bật",
     "try_another_category": "Hãy chọn danh mục khác.",
     "view_details": "Xem Chi Tiết",
     "live_demo": "Demo Trực Tiếp",
@@ -115,7 +141,8 @@
     "start_project": "Bắt Đầu Dự Án",
     "cta_title": "Bạn có ý tưởng thú vị?",
     "cta_description": "Hãy cùng nhau biến ý tưởng của bạn thành hiện thực với công nghệ hiện đại nhất!",
-    "view_reviews": "Xem Đánh Giá"
+    "view_reviews": "Xem Đánh Giá",
+    "no_projects": "Không tìm thấy dự án nào với bộ lọc này."
   },
   "contact": {
     "title": "Liên Hệ & Hợp Tác",

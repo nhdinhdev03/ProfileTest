@@ -102,12 +102,38 @@
   "projects": {
     "title": "Featured Projects",
     "subtitle": "Explore the products I've created",
-    "all": "All",
-    "web": "Website",
-    "mobile": "Mobile",
-    "desktop": "Desktop",
-    "ui_ux": "UI/UX",
-    "no_projects": "No projects found",
+    "description": "A showcase of representative projects I've developed, from web applications to mobile apps.",
+    "filters": {
+      "featured": "Featured",
+      "all": "All",
+      "fullstack": "Full Stack",
+      "frontend": "Frontend",
+      "mobile": "Mobile",
+      "backend": "Backend"
+    },
+    "view_modes": {
+      "grid": "Grid view",
+      "list": "List view"
+    },
+    "status": {
+      "completed": "Completed",
+      "in_progress": "In Progress",
+      "planned": "Planned"
+    },
+    "actions": {
+      "view_demo": "View demo",
+      "view_code": "View code",
+      "visit_site": "Visit site",
+      "view_details": "View details",
+      "live_demo": "Live demo",
+      "source_code": "Source code"
+    },
+    "empty_state": {
+      "title": "No projects found",
+      "description": "No projects match the current filter.",
+      "suggestion": "Please try another category."
+    },
+    "featured_badge": "Featured",
     "try_another_category": "Please try another category.",
     "view_details": "View Details",
     "live_demo": "Live Demo",
@@ -115,7 +141,8 @@
     "start_project": "Start Project",
     "cta_title": "Have an exciting idea?",
     "cta_description": "Let's bring your ideas to life with the latest technology!",
-    "view_reviews": "View Reviews"
+    "view_reviews": "View Reviews",
+    "no_projects": "No projects found with this filter."
   },
   "contact": {
     "title": "Contact & Collaboration",
