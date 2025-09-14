@@ -35,7 +35,7 @@ const App = memo(() => {
     </div>
   ), []);
 
-  // Render main portfolio view với React Router
+
   return (
     <Router>
       <ScrollToTopOnNavigate />
