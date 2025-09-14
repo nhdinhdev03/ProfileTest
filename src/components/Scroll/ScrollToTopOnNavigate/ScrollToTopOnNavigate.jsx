@@ -1,81 +1,43 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { smoothScrollTo } from 'utils/scroll';
 
 // Component này sẽ tự động cuộn lên đầu trang khi route thay đổi
 function ScrollToTopOnNavigate() {
   const { pathname, hash } = useLocation();
   const lastPathname = useRef(pathname);
-  const scrollTimeoutRef = useRef(null);
-  
-  // Debounced scroll function để tránh multiple calls
-  const debouncedScroll = useCallback((targetPosition = 0) => {
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-    
-    scrollTimeoutRef.current = setTimeout(() => {
-      if (targetPosition === 0) {
-        // Cuộn lên đầu trang ngay lập tức cho UX tốt hơn
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'auto' // Immediate scroll for better UX
-        });
-      } else {
-        smoothScrollTo(targetPosition);
-      }
-    }, 10); // Giảm delay để responsive hơn
-  }, []);
   
   useEffect(() => {
-    // Nếu có hash trong URL (ví dụ: /about#section1), không cuộn lên đầu trang
-    // vì người dùng đang cố gắng điều hướng đến một phần cụ thể của trang
+    // Nếu có hash trong URL, cuộn đến phần tử đó
     if (hash) {
-      // Tìm phần tử có ID khớp với hash và cuộn đến đó
       const id = hash.replace('#', '');
       const element = document.getElementById(id);
       if (element) {
-        // Tính toán vị trí của phần tử có xét đến header offset
         setTimeout(() => {
-          const headerOffset = 80; // Chiều cao của header
+          const headerOffset = 80;
           const elementPosition = element.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
           
-          debouncedScroll(offsetPosition);
-        }, 150);
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }, 100);
       }
       return;
     }
     
-    // Nếu pathname đã thay đổi, cuộn lên đầu trang ngay lập tức
+    // Nếu pathname thay đổi, cuộn lên đầu trang
     if (pathname !== lastPathname.current) {
       lastPathname.current = pathname;
       
-      // Cuộn ngay lập tức để tránh hiện tượng nhấp nháy
+      // Cuộn ngay lập tức cho UX tốt
       window.scrollTo({
         top: 0,
         left: 0,
-        behavior: 'auto'
-      });
-      
-      // Sau đó làm mượt thêm nếu cần
-      requestAnimationFrame(() => {
-        if (window.scrollY > 0) {
-          debouncedScroll(0);
-        }
+        behavior: 'instant'
       });
     }
-  }, [pathname, hash, debouncedScroll]);
-
-  // Cleanup function
-  useEffect(() => {
-    return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
+  }, [pathname, hash]);
 
   // Component này không render gì cả
   return null;

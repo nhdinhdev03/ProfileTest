@@ -10,23 +10,31 @@ export const useScrollProgress = (callback, threshold = 300) => {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const rafRef = useRef();
-  const lastScrollY = useRef(0);
+  const lastValues = useRef({ scrollY: 0, progress: 0, visible: false });
 
   const handleScroll = useCallback(() => {
     const scrollY = window.pageYOffset;
     
-    // Skip if scroll hasn't changed significantly (optimization)
-    if (Math.abs(scrollY - lastScrollY.current) < 5) return;
-    lastScrollY.current = scrollY;
-
+    // Skip nếu scroll không thay đổi đáng kể
+    if (Math.abs(scrollY - lastValues.current.scrollY) < 10) return;
+    
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = Math.min(scrollY / maxScroll, 1);
+    const progress = maxScroll > 0 ? Math.min(scrollY / maxScroll, 1) : 0;
+    const visible = scrollY > threshold;
     
-    setIsVisible(scrollY > threshold);
-    setScrollProgress(progress);
-    
-    // Call additional callback if provided
-    if (callback) callback(scrollY, progress);
+    // Chỉ update state khi có thay đổi thực sự
+    if (
+      visible !== lastValues.current.visible ||
+      Math.abs(progress - lastValues.current.progress) > 0.01
+    ) {
+      setIsVisible(visible);
+      setScrollProgress(progress);
+      
+      lastValues.current = { scrollY, progress, visible };
+      
+      // Gọi callback nếu có
+      if (callback) callback(scrollY, progress);
+    }
   }, [callback, threshold]);
 
   useEffect(() => {

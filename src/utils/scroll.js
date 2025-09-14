@@ -1,31 +1,36 @@
-// Tối ưu hóa smooth scroll với performance improvements
+// Tối ưu hóa smooth scroll - sử dụng native API khi có thể
 export const smoothScrollTo = (targetY, duration = null) => {
-  const startY = window.scrollY;
-  const distance = targetY - startY;
-  
-  // Dynamic duration based on distance for better UX
-  const calculatedDuration = duration || Math.min(Math.abs(distance) * 0.4, 800);
-  
-  // Tránh scroll nếu đã ở đúng vị trí
-  if (Math.abs(distance) < 1) {
+  // Kiểm tra browser support cho smooth scroll
+  if ('scrollBehavior' in document.documentElement.style) {
+    window.scrollTo({
+      top: targetY,
+      behavior: 'smooth'
+    });
     return;
   }
   
+  // Fallback cho browser cũ
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  
+  // Tránh scroll nếu đã ở đúng vị trí
+  if (Math.abs(distance) < 1) return;
+  
+  // Dynamic duration dựa trên khoảng cách
+  const calculatedDuration = duration || Math.min(Math.abs(distance) * 0.3, 600);
+  
   let start = null;
 
-  // Improved easing function cho smooth transition
-  const easeInOutQuart = (t) => {
-    return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
-  };
+  // Simplified easing function
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 
   const animate = (timestamp) => {
     if (start === null) start = timestamp;
     const elapsed = timestamp - start;
     const progress = Math.min(elapsed / calculatedDuration, 1);
-    const easedProgress = easeInOutQuart(progress);
+    const easedProgress = easeOut(progress);
     
-    const currentY = startY + distance * easedProgress;
-    window.scrollTo(0, currentY);
+    window.scrollTo(0, startY + distance * easedProgress);
     
     if (progress < 1) {
       requestAnimationFrame(animate);
@@ -55,10 +60,18 @@ export const scrollToElement = (element, headerOffset = 80) => {
   const elementPosition = element.getBoundingClientRect().top;
   const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
   
-  smoothScrollTo(offsetPosition);
+  // Sử dụng native smooth scroll khi có thể
+  if ('scrollBehavior' in document.documentElement.style) {
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  } else {
+    smoothScrollTo(offsetPosition);
+  }
 };
 
-// Debounced scroll handler cho performance
+// Simplified debounced scroll handler
 export const createDebouncedScrollHandler = (callback, delay = 16) => {
   let timeoutId;
   
