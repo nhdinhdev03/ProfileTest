@@ -14,7 +14,8 @@ import NotFound from "pages/NotFound";
 import "./i18n";
 
 const App = memo(() => {
-  const [theme, toggleTheme] = useTheme("dark");
+  // Không cần truyền initialTheme vì useTheme đã tự động đọc từ document/localStorage
+  const [theme, toggleTheme] = useTheme();
 
   return (
     <Router>

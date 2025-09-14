@@ -3,6 +3,16 @@
 @use 'responsive.scss' as *;
 @use 'typography.scss' as *;
 
+// Theme transition optimization - ngăn chặn FOUC
+html.theme-transitioning {
+  visibility: hidden;
+}
+
+html:not(.theme-transitioning) {
+  visibility: visible;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 .App {
   min-height: 100vh;
   background: var(--bg-primary);

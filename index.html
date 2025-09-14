@@ -22,15 +22,32 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-      <!-- Theme persistence script to prevent FOUC -->
+      <!-- Enhanced theme persistence script to prevent FOUC -->
     <script>
       (function() {
         try {
           const savedTheme = localStorage.getItem('theme') || 'dark';
-          document.documentElement.setAttribute('data-theme', savedTheme);
-          document.documentElement.style.setProperty('--initial-theme', savedTheme);
+          const html = document.documentElement;
+          
+          // Ngay lập tức áp dụng theme
+          html.setAttribute('data-theme', savedTheme);
+          html.style.setProperty('--initial-theme', savedTheme);
+          
+          // Thêm class để CSS có thể xử lý transition sau khi load
+          html.classList.add('theme-transitioning');
+          
+          // Ngăn chặn flash bằng cách ẩn body cho đến khi theme được áp dụng
+          document.addEventListener('DOMContentLoaded', function() {
+            // Sau khi DOM loaded, cho phép transition
+            requestAnimationFrame(function() {
+              html.classList.remove('theme-transitioning');
+            });
+          });
+          
         } catch (e) {
           console.error('Error applying saved theme:', e);
+          // Fallback nếu có lỗi
+          document.documentElement.setAttribute('data-theme', 'dark');
         }
       })();
     </script>
