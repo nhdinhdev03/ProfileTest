@@ -18,33 +18,17 @@
   .hero__particles,
   .hero__morphing-shapes,
   .hero__floating-elements,
-  .parallax-element,
-  .complex-animation {
+  .parallax-element {
     display: none !important;
   }
 }
 
 // Performance optimizations for tablets
 @media (min-width: $breakpoint-md) and (max-width: $tablet-landscape) {
-  // Reduce animation complexity on tablets
-  .complex-animation {
-    animation-duration: 0.5s;
-    animation-timing-function: ease-out;
-  }
-  
   // Optimize for tablet touch scrolling
   * {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-  }
-}
-
-// Enhanced performance for laptops and desktops
-@media (min-width: $breakpoint-xl) {
-  // Enable enhanced animations only on larger screens
-  .enhanced-animation {
-    animation-duration: 1s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   // GPU acceleration for smooth scrolling
@@ -90,13 +74,6 @@
   .header {
     height: 50px;
   }
-  
-  // Optimize content for landscape viewing
-  .content-landscape {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
 }
 
 // Tablet portrait optimization
@@ -128,12 +105,6 @@
     display: flex;
     gap: $spacing-xl;
   }
-  
-  // Multi-column layout for tablets
-  .content-columns {
-    column-count: 2;
-    column-gap: $spacing-2xl;
-  }
 }
 
 // Small laptop optimization
@@ -161,13 +132,6 @@
   // Enhanced visual hierarchy
   .section {
     padding: $spacing-5xl 0;
-  }
-  
-  // Multi-column content
-  .content-wide {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: $spacing-4xl;
   }
 }
 
@@ -289,13 +253,6 @@
     min-height: 80vh;
     padding: $spacing-sm 0;
   }
-  
-  // Compact navigation
-  .nav-compact {
-    display: flex;
-    justify-content: space-around;
-    padding: $spacing-xs;
-  }
 }
 
 // ===== PRINT OPTIMIZATIONS =====
@@ -317,10 +274,6 @@
   
   .no-print {
     display: none !important;
-  }
-  
-  .print-break {
-    page-break-before: always;
   }
   
   // Optimize images for print
