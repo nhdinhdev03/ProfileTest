@@ -16,10 +16,13 @@ export default function NotFound() {
       y: e.clientY,
     };
     setClickEffect(prev => [...prev, newEffect]);
-  }, []);
-
-  const removeClickEffect = useCallback((effectId) => {
-    setClickEffect(prev => prev.filter(effect => effect.id !== effectId));
+    
+    // Auto remove after animation completes (using CSS animation duration)
+    const effectId = newEffect.id;
+    requestAnimationFrame(() => {
+      // Remove effect after next frame to allow CSS animation
+      setClickEffect(prev => prev.filter(effect => effect.id !== effectId));
+    });
   }, []);
 
   const handleMouseMove = useCallback((e) => {
@@ -28,9 +31,7 @@ export default function NotFound() {
 
   const handleClick = useCallback((e) => {
     createClickEffect(e);
-    const effectId = Date.now();
-    setTimeout(() => removeClickEffect(effectId), 1000);
-  }, [createClickEffect, removeClickEffect]);
+  }, [createClickEffect]);
 
   useEffect(() => {
     // Initialize particles
@@ -54,7 +55,7 @@ export default function NotFound() {
     };
   }, [handleMouseMove, handleClick]);
 
-  // Animate particles
+  // Animate particles using requestAnimationFrame instead of setInterval
   useEffect(() => {
     const updateParticlePosition = (particle) => {
       let newX = particle.x + particle.speedX;
@@ -73,21 +74,28 @@ export default function NotFound() {
       };
     };
 
+    let animationId;
     const animateParticles = () => {
       setParticles(prev => prev.map(updateParticlePosition));
+      animationId = requestAnimationFrame(animateParticles);
     };
 
-    const interval = setInterval(animateParticles, 50);
-    return () => clearInterval(interval);
+    animationId = requestAnimationFrame(animateParticles);
+    return () => cancelAnimationFrame(animationId);
   }, []);
 
   const handleIconHover = useCallback((e) => {
-    // Add sound effect simulation (visual feedback)
+    // Add sound effect simulation (visual feedback) using CSS transitions
     const target = e.target;
     target.style.filter = 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)) brightness(1.5)';
-    setTimeout(() => {
+    target.style.transition = 'filter 0.3s ease-out';
+    
+    const handleTransitionEnd = () => {
       target.style.filter = '';
-    }, 300);
+      target.removeEventListener('transitionend', handleTransitionEnd);
+    };
+    
+    target.addEventListener('transitionend', handleTransitionEnd);
   }, []);
 
   return (

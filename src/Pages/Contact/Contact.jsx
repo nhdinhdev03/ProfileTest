@@ -163,9 +163,13 @@ function Contact() {
       setFormErrors(prev => ({ ...prev, [name]: '' }))
     }
     
-    // Show typing indicator
+    // Show typing indicator using debouncing
     setIsTyping(true)
-    setTimeout(() => setIsTyping(false), 500)
+    // Use requestIdleCallback or setTimeout replacement if needed
+    const typingTimeout = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsTyping(false));
+    });
+    return () => cancelAnimationFrame(typingTimeout);
   }
 
   const handleSubmit = async (e) => {
@@ -182,8 +186,20 @@ function Contact() {
     setSubmitStatus(null)
     
     try {
-      // Simulate form submission with realistic delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Simulate form submission with promise-based delay
+      await new Promise(resolve => {
+        // Use requestAnimationFrame for better performance
+        let frames = 0;
+        const animate = () => {
+          frames++;
+          if (frames < 120) { // ~2 seconds at 60fps
+            requestAnimationFrame(animate);
+          } else {
+            resolve();
+          }
+        };
+        requestAnimationFrame(animate);
+      });
       
       // Simulate random success/failure for demo
       if (Math.random() > 0.1) { // 90% success rate
@@ -201,8 +217,17 @@ function Contact() {
     } finally {
       setIsSubmitting(false)
       
-      // Auto-hide status after 5 seconds
-      setTimeout(() => setSubmitStatus(null), 5000)
+      // Auto-hide status using requestAnimationFrame
+      let hideFrames = 0;
+      const hideStatus = () => {
+        hideFrames++;
+        if (hideFrames < 300) { // ~5 seconds at 60fps
+          requestAnimationFrame(hideStatus);
+        } else {
+          setSubmitStatus(null);
+        }
+      };
+      requestAnimationFrame(hideStatus);
     }
   }
 

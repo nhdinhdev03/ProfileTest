@@ -123,21 +123,44 @@ const Hero = memo(() => {
     const typingSpeed = isDeleting ? 50 : 100;
     const pauseTime = isDeleting ? 500 : 2000;
 
-    const timeout = setTimeout(() => {
-      if (!isDeleting && displayText === currentRole) {
-        setTimeout(() => setIsDeleting(true), pauseTime);
-      } else if (isDeleting && displayText === "") {
-        setIsDeleting(false);
-        setCurrentIndex((prev) => (prev + 1) % roles.length);
-      } else {
-        const nextText = isDeleting
-          ? currentRole.substring(0, displayText.length - 1)
-          : currentRole.substring(0, displayText.length + 1);
-        setDisplayText(nextText);
-      }
-    }, typingSpeed);
+    let animationId;
+    let startTime;
 
-    return () => clearTimeout(timeout);
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+
+      if (elapsed >= typingSpeed) {
+        if (!isDeleting && displayText === currentRole) {
+          // Pause before deleting
+          let pauseStart;
+          const pauseAnimate = (pauseTimestamp) => {
+            if (!pauseStart) pauseStart = pauseTimestamp;
+            const pauseElapsed = pauseTimestamp - pauseStart;
+            
+            if (pauseElapsed >= pauseTime) {
+              setIsDeleting(true);
+            } else {
+              requestAnimationFrame(pauseAnimate);
+            }
+          };
+          requestAnimationFrame(pauseAnimate);
+        } else if (isDeleting && displayText === "") {
+          setIsDeleting(false);
+          setCurrentIndex((prev) => (prev + 1) % roles.length);
+        } else {
+          const nextText = isDeleting
+            ? currentRole.substring(0, displayText.length - 1)
+            : currentRole.substring(0, displayText.length + 1);
+          setDisplayText(nextText);
+        }
+      } else {
+        animationId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
   }, [displayText, currentIndex, isDeleting, roles]);
 
   // Initialize gentle particle systems
