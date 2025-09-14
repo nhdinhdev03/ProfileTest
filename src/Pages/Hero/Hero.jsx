@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, memo, Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 import {
   motion,
@@ -22,11 +22,13 @@ import { FaReact, FaJsSquare, FaNodeJs, FaPython } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss } from "react-icons/si";
 import { useTranslation } from "react-i18next";
 import "./Hero.scss";
-import Experience from "components/Hero/Experience/Experience";
-import CommunityTestimonials from "components/Hero/CommunityTestimonials/CommunityTestimonials";
 import { ROUTES } from "router/routeConstants";
 
-function Hero() {
+// Lazy load heavy components để tối ưu performance
+const Experience = lazy(() => import("components/Hero/Experience/Experience"));
+const CommunityTestimonials = lazy(() => import("components/Hero/CommunityTestimonials/CommunityTestimonials"));
+
+const Hero = memo(() => {
   const { t } = useTranslation();
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -1326,11 +1328,17 @@ function Hero() {
         </div>
       </motion.section>
 
-      <Experience />
+      <Suspense fallback={<div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
+        <Experience />
+      </Suspense>
 
-      <CommunityTestimonials />
+      <Suspense fallback={<div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
+        <CommunityTestimonials />
+      </Suspense>
     </>
   );
-}
+});
+
+Hero.displayName = 'Hero';
 
 export default Hero;

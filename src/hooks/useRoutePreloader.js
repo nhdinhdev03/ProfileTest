@@ -8,7 +8,6 @@ const ROUTE_PRELOADERS = {
   '/v1/projects': () => import('pages/Projects/Projects'),
   '/v1/blog': () => import('pages/Blog/Blog'),
   '/v1/contact': () => import('pages/Contact/Contact'),
-  '/v1/experience': () => import('components/Hero/Experience/Experience'),
 };
 
 export const useRoutePreloader = () => {

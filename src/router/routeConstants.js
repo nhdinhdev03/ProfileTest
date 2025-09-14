@@ -10,7 +10,6 @@ export const ROUTES = {
   BLOG: `/${API_VERSION}/blog`,
   BLOG_DETAIL: `/${API_VERSION}/blog/:id`,
   CONTACT: `/${API_VERSION}/contact`,
-  EXPERIENCE: `/${API_VERSION}/experience`,
 };
 
 // Route metadata for breadcrumb and navigation
@@ -48,11 +47,6 @@ export const ROUTE_METADATA = {
   [ROUTES.CONTACT]: {
     title: 'Contact Me',
     description: 'Get in touch with me',
-    showBreadcrumb: true
-  },
-  [ROUTES.EXPERIENCE]: {
-    title: 'Work Experience',
-    description: 'My professional experience and career journey',
     showBreadcrumb: true
   },
 };

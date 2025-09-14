@@ -1,13 +1,14 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FiStar, FiHeart, FiUsers } from "react-icons/fi";
 import "./CommunityTestimonials.scss";
 
-const CommunityTestimonials = () => {
+const CommunityTestimonials = memo(() => {
   const { t } = useTranslation();
-  const testimonials = [
-    
+  
+  // Memoize testimonials data để tối ưu performance
+  const testimonials = useMemo(() => [
     {
       id: 1,
       name: "Sarah Chen",
@@ -62,9 +63,10 @@ const CommunityTestimonials = () => {
       rating: 5,
       company: "NextGen Solutions"
     }
-  ];
+  ], []);
 
-  const containerVariants = {
+  // Memoize animation variants
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -73,9 +75,9 @@ const CommunityTestimonials = () => {
         staggerChildren: 0.1
       }
     }
-  };
+  }), []);
 
-  const itemVariants = {
+  const itemVariants = useMemo(() => ({
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
@@ -85,9 +87,9 @@ const CommunityTestimonials = () => {
         ease: "easeOut"
       }
     }
-  };
+  }), []);
 
-  const cardVariants = {
+  const cardVariants = useMemo(() => ({
     hidden: { 
       scale: 0.9, 
       opacity: 0,
@@ -111,7 +113,7 @@ const CommunityTestimonials = () => {
         ease: "easeOut"
       }
     }
-  };
+  }), []);
 
   return (
     <motion.section 
@@ -283,6 +285,8 @@ const CommunityTestimonials = () => {
       </div>
     </motion.section>
   );
-};
+});
+
+CommunityTestimonials.displayName = 'CommunityTestimonials';
 
 export default CommunityTestimonials;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { useTranslation } from 'react-i18next'
@@ -13,14 +13,15 @@ import {
 } from 'react-icons/fi'
 import './Experience.scss'
 
-function Experience() {
+const Experience = memo(() => {
   const { t } = useTranslation()
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
   })
 
-  const experiences = [
+  // Memoize experiences data để tránh re-render không cần thiết
+  const experiences = useMemo(() => [
     {
       id: 1,
       title: 'Web Developer',
@@ -72,9 +73,10 @@ function Experience() {
       color: '#06b6d4',
       bgColor: '#f0fdfa'
     }
-  ]
+  ], [])
 
-  const containerVariants = {
+  // Memoize animation variants để tối ưu performance
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -83,9 +85,9 @@ function Experience() {
         delayChildren: 0.1
       }
     }
-  }
+  }), [])
 
-  const cardVariants = {
+  const cardVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
@@ -96,7 +98,7 @@ function Experience() {
         damping: 15
       }
     }
-  }
+  }), [])
 
   return (
     <section id="experience" className="experience">
@@ -199,6 +201,8 @@ function Experience() {
       </div>
     </section>
   )
-}
+})
+
+Experience.displayName = 'Experience'
 
 export default Experience

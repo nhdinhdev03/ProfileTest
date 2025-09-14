@@ -1,44 +1,35 @@
 import { lazy } from 'react';
 import { ROUTES, ROUTE_METADATA } from 'router/routeConstants';
 
-// Lazy load các component từ thư mục Pages để tối ưu hiệu suất
-// Thêm retry mechanism cho các trường hợp network fail
-const lazyWithRetry = (componentImport) => lazy(() => 
-  componentImport().catch((error) => {
-    console.warn('Failed to load component, retrying...', error);
-    // Retry after 1 second
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(componentImport());
-      }, 1000);
-    });
-  })
-);
+// Enhanced lazy loading với retry mechanism và caching
+const lazyWithRetry = (componentImport, maxRetries = 3) => {
+  const loadComponent = async (retryCount = 0) => {
+    try {
+      const module = await componentImport();
+      return { default: module.default };
+    } catch (error) {
+      if (retryCount < maxRetries) {
+        console.warn(`Failed to load component, retrying... (${retryCount + 1}/${maxRetries})`, error);
+        // Exponential backoff: 1s, 2s, 4s
+        const delay = Math.pow(2, retryCount) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return loadComponent(retryCount + 1);
+      }
+      throw error;
+    }
+  };
+  
+  return lazy(() => loadComponent());
+};
 
-const About = lazyWithRetry(() => 
-  import('pages/About/About').then(module => ({ default: module.default }))
-);
-const Skills = lazyWithRetry(() => 
-  import('pages/Skills/Skills').then(module => ({ default: module.default }))
-);
-const Projects = lazyWithRetry(() => 
-  import('pages/Projects/Projects').then(module => ({ default: module.default }))
-);
-const Blog = lazyWithRetry(() => 
-  import('pages/Blog/Blog').then(module => ({ default: module.default }))
-);
-const BlogDetail = lazyWithRetry(() => 
-  import('pages/Blog/BlogDetail').then(module => ({ default: module.default }))
-);
-const Contact = lazyWithRetry(() => 
-  import('pages/Contact/Contact').then(module => ({ default: module.default }))
-);
-const Experience = lazyWithRetry(() => 
-  import('components/Hero/Experience/Experience').then(module => ({ default: module.default }))
-);
-const Hero = lazyWithRetry(() => 
-  import('pages/Hero/Hero').then(module => ({ default: module.default }))
-);
+// Preload components với caching để tối ưu performance
+const About = lazyWithRetry(() => import('pages/About/About'));
+const Skills = lazyWithRetry(() => import('pages/Skills/Skills'));
+const Projects = lazyWithRetry(() => import('pages/Projects/Projects'));
+const Blog = lazyWithRetry(() => import('pages/Blog/Blog'));
+const BlogDetail = lazyWithRetry(() => import('pages/Blog/BlogDetail'));
+const Contact = lazyWithRetry(() => import('pages/Contact/Contact'));
+const Hero = lazyWithRetry(() => import('pages/Hero/Hero'));
 
 export const publicRoutes = [
   { 
@@ -75,11 +66,6 @@ export const publicRoutes = [
     path: ROUTES.CONTACT, 
     component: Contact, 
     metadata: ROUTE_METADATA[ROUTES.CONTACT]
-  },
-  { 
-    path: ROUTES.EXPERIENCE, 
-    component: Experience, 
-    metadata: ROUTE_METADATA[ROUTES.EXPERIENCE]
   },
 ];
 
