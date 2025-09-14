@@ -1,30 +1,38 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import img from 'assets/Img';
 import './LanguageToggle.scss';
 
 const LanguageToggle = ({ className = '', variant = 'dropdown' }) => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     setIsOpen(false);
+    
+    // Add haptic feedback if available
+    if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
   };
 
   const languages = [
     { 
       code: 'vi', 
-      name: 'Việt Nam', 
+      name: t('language.vietnamese'), 
       flag: img.Co_VN,
-      shortName: 'VI'
+      shortName: 'VI',
+      nativeName: 'Tiếng Việt'
     },
     { 
       code: 'en', 
-      name: 'English', 
+      name: t('language.english'), 
       flag: img.Co_My,
-      shortName: 'EN'
+      shortName: 'EN',
+      nativeName: 'English'
     }
   ];
 
@@ -57,21 +65,38 @@ const LanguageToggle = ({ className = '', variant = 'dropdown' }) => {
   if (variant === 'compact') {
     return (
       <div className={`language-toggle language-toggle--compact ${className}`}>
+        <div className="language-toggle__header">
+          <span className="language-toggle__title">
+            {t('language.title')}
+          </span>
+        </div>
         <div className="language-selector">
           {languages.map((lang) => (
             <button
               key={lang.code}
               className={`language-btn ${i18n.language === lang.code ? 'active' : ''}`}
               onClick={() => changeLanguage(lang.code)}
-              title={lang.name}
-              aria-label={`Switch to ${lang.name}`}
+              title={lang.nativeName}
+              aria-label={`${t('language.switch_to')} ${lang.name}`}
             >
-              <img 
-                src={lang.flag} 
-                alt={`${lang.name} flag`}
-                className="flag-img"
-              />
-              <span className="lang-code">{lang.shortName}</span>
+              <div className="flag-container">
+                <img 
+                  src={lang.flag} 
+                  alt={`${lang.name} flag`}
+                  className="flag-img"
+                />
+              </div>
+              <div className="lang-info">
+                <span className="lang-name">{lang.nativeName}</span>
+                <span className="lang-code">{lang.shortName}</span>
+              </div>
+              {i18n.language === lang.code && (
+                <div className="check-indicator">
+                  <svg viewBox="0 0 24 24" width="10" height="10">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                  </svg>
+                </div>
+              )}
             </button>
           ))}
         </div>
@@ -85,21 +110,27 @@ const LanguageToggle = ({ className = '', variant = 'dropdown' }) => {
         className={`language-current ${isOpen ? 'language-current--open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
-        aria-label={`Current language: ${currentLanguage.name}. Click to change language`}
+        aria-label={`${t('language.current')}: ${currentLanguage.nativeName}. ${t('language.switch_to')}`}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        <img 
-          src={currentLanguage.flag} 
-          alt={`${currentLanguage.name} flag`}
-          className="flag-img"
-        />
-        <span className="lang-name">{currentLanguage.name}</span>
+        <div className="current-flag-container">
+          <img 
+            src={currentLanguage.flag} 
+            alt={`${currentLanguage.name} flag`}
+            className="flag-img"
+          />
+        </div>
+        <div className="current-lang-info">
+          <span className="lang-name">{currentLanguage.nativeName}</span>
+          <span className="lang-code">{currentLanguage.shortName}</span>
+        </div>
         <svg 
-          className={`chevron ${isOpen ? 'chevron--open' : ''}`} 
+          className="chevron" 
           viewBox="0 0 24 24" 
-          width="16" 
-          height="16"
+          width="14" 
+          height="14"
+          style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }}
         >
           <path d="M7 10l5 5 5-5z" fill="currentColor"/>
         </svg>
@@ -112,21 +143,25 @@ const LanguageToggle = ({ className = '', variant = 'dropdown' }) => {
               key={lang.code}
               className={`language-option ${i18n.language === lang.code ? 'language-option--active' : ''}`}
               onClick={() => changeLanguage(lang.code)}
-              aria-label={`Switch to ${lang.name}`}
+              aria-label={`${t('language.switch_to')} ${lang.name}`}
             >
-              <img 
-                src={lang.flag} 
-                alt={`${lang.name} flag`}
-                className="flag-img"
-              />
+              <div className="option-flag-container">
+                <img 
+                  src={lang.flag} 
+                  alt={`${lang.name} flag`}
+                  className="flag-img"
+                />
+              </div>
               <div className="lang-details">
-                <span className="lang-name">{lang.name}</span>
-                <span className="lang-code">{lang.shortName}</span>
+                <span className="lang-name">{lang.nativeName}</span>
+                <span className="lang-code-sub">{lang.shortName}</span>
               </div>
               {i18n.language === lang.code && (
-                <svg className="check-icon" viewBox="0 0 24 24" width="16" height="16">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
-                </svg>
+                <div className="check-icon">
+                  <svg viewBox="0 0 24 24" width="12" height="12">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                  </svg>
+                </div>
               )}
             </button>
           ))}
@@ -134,6 +169,11 @@ const LanguageToggle = ({ className = '', variant = 'dropdown' }) => {
       )}
     </div>
   );
+};
+
+LanguageToggle.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['dropdown', 'compact'])
 };
 
 export default LanguageToggle;

@@ -41,6 +41,13 @@
     "switch_to_dark": "Chuyển sang Giao diện Tối",
     "logo_aria_label": "Về trang chủ"
   },
+  "language": {
+    "title": "Ngôn ngữ",
+    "current": "Ngôn ngữ hiện tại",
+    "switch_to": "Chuyển sang",
+    "vietnamese": "Tiếng Việt",
+    "english": "English"
+  },
   "hero": {
     "title": "Hồ Sơ Chuyên Nghiệp",
     "subtitle": "Lập Trình Viên Full Stack",

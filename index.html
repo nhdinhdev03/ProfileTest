@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
     />
-    <title>nhdinh_profile</title>
+    <title>nhdinh_Portfolio</title>
     <meta
       name="description"
       content="Professional developer portfolio showcasing modern web development skills and projects"
@@ -22,37 +22,35 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-      <!-- Enhanced theme persistence script to prevent FOUC -->
+    <!-- Enhanced theme persistence script to prevent FOUC -->
     <script>
-      (function() {
+      (function () {
         try {
-          const savedTheme = localStorage.getItem('theme') || 'dark';
+          const savedTheme = localStorage.getItem("theme") || "dark";
           const html = document.documentElement;
-          
+
           // Ngay lập tức áp dụng theme
-          html.setAttribute('data-theme', savedTheme);
-          html.style.setProperty('--initial-theme', savedTheme);
-          
+          html.setAttribute("data-theme", savedTheme);
+          html.style.setProperty("--initial-theme", savedTheme);
+
           // Thêm class để CSS có thể xử lý transition sau khi load
-          html.classList.add('theme-transitioning');
-          
+          html.classList.add("theme-transitioning");
+
           // Ngăn chặn flash bằng cách ẩn body cho đến khi theme được áp dụng
-          document.addEventListener('DOMContentLoaded', function() {
+          document.addEventListener("DOMContentLoaded", function () {
             // Sau khi DOM loaded, cho phép transition
-            requestAnimationFrame(function() {
-              html.classList.remove('theme-transitioning');
+            requestAnimationFrame(function () {
+              html.classList.remove("theme-transitioning");
             });
           });
-          
         } catch (e) {
-          console.error('Error applying saved theme:', e);
+          console.error("Error applying saved theme:", e);
           // Fallback nếu có lỗi
-          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.setAttribute("data-theme", "dark");
         }
       })();
     </script>
-
-</head>
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>

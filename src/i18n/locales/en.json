@@ -41,6 +41,13 @@
     "switch_to_dark": "Switch to Dark Mode",
     "logo_aria_label": "Go to homepage"
   },
+  "language": {
+    "title": "Language",
+    "current": "Current language",
+    "switch_to": "Switch to",
+    "vietnamese": "Tiếng Việt",
+    "english": "English"
+  },
   "hero": {
     "title": "Professional Portfolio",
     "subtitle": "Full Stack Developer",
