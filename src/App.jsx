@@ -14,58 +14,6 @@ import NotFound from "pages/NotFound";
 // Import i18n configuration
 import "./i18n";
 
-// Error Boundary Component
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('App Error:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{ 
-          minHeight: '100vh', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          flexDirection: 'column',
-          background: 'var(--bg-primary)',
-          color: 'var(--text-primary)',
-          padding: '2rem'
-        }}>
-          <h1>Oops! Something went wrong</h1>
-          <p>Please refresh the page or try again later.</p>
-          <button 
-            onClick={() => window.location.reload()}
-            style={{
-              padding: '0.5rem 1rem',
-              marginTop: '1rem',
-              background: 'var(--accent)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Refresh Page
-          </button>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
 const App = memo(() => {
   const [theme, toggleTheme] = useTheme("dark");
 
@@ -89,34 +37,32 @@ const App = memo(() => {
 
   // Render main portfolio view với React Router
   return (
-    <ErrorBoundary>
-      <Router>
-        <ScrollToTopOnNavigate />
-        <ScrollToTop />
-        <Suspense fallback={loadingFallback}>
-          <Routes>
-            {publicRoutes.map((route, index) => {
-              const Page = route.component;
-              const LayoutComponent = route.layout ?? MainLayout; // fallback
-              return (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={
-                    <LayoutComponent theme={theme} toggleTheme={toggleTheme}>
-                      <PageTransition>
-                        <Page />
-                      </PageTransition>
-                    </LayoutComponent>
-                  }
-                />
-              );
-            })}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </Router>
-    </ErrorBoundary>
+    <Router>
+      <ScrollToTopOnNavigate />
+      <ScrollToTop />
+      <Suspense fallback={loadingFallback}>
+        <Routes>
+          {publicRoutes.map((route, index) => {
+            const Page = route.component;
+            const LayoutComponent = route.layout ?? MainLayout; // fallback
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <LayoutComponent theme={theme} toggleTheme={toggleTheme}>
+                    <PageTransition>
+                      <Page />
+                    </PageTransition>
+                  </LayoutComponent>
+                }
+              />
+            );
+          })}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </Router>
   );
 });
 
