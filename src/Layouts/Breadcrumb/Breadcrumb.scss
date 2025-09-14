@@ -5,35 +5,20 @@
   position: sticky;
   top: calc(var(--header-height, 70px));
   z-index: 100;
-  transition: all 0.2s ease; // Faster transition
-  background: rgba(var(--bg-primary), 0.95);
-  backdrop-filter: blur(10px);
+  background: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
   
-  // Hardware acceleration for smooth scrolling
-  will-change: transform;
-  transform: translateZ(0);
-  
-  // Mobile optimizations with performance focus
+  // Mobile optimizations
   @include mobile-only {
     top: calc(var(--header-height, 60px));
     padding: $spacing-xs $spacing-sm;
-    
-    // Ensure breadcrumb doesn't interfere with safe areas
     padding-left: max($spacing-sm, env(safe-area-inset-left, 0));
     padding-right: max($spacing-sm, env(safe-area-inset-right, 0));
-    
-    // Reduce backdrop blur on mobile for better performance
-    backdrop-filter: blur(5px);
   }
 
   @include mobile-xxs-only {
     top: calc(var(--header-height, 56px));
     padding: $spacing-xs;
-    
-    // Disable backdrop blur on very small screens
-    backdrop-filter: none;
-    background: var(--bg-primary);
   }
 
   &__list {
@@ -44,14 +29,8 @@
     margin: 0 auto;
     padding: 0;
     max-width: 1324px;
-    position: relative;
-    z-index: 1;
     
-    // Optimize for performance
-    contain: layout style;
-    will-change: transform;
-    
-    // Mobile scroll optimization with performance focus
+    // Mobile scroll optimization
     @include mobile-only {
       gap: $spacing-xxs;
       overflow-x: auto;
@@ -59,32 +38,24 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
-      scroll-behavior: smooth;
-      scroll-snap-type: x mandatory;
-      
-      // Hardware acceleration for smooth scrolling
-      transform: translateZ(0);
       
       &::-webkit-scrollbar {
         display: none;
       }
       
-      // Simplified scroll shadow indicator
+      // Simplified scroll indicator
       &::after {
         content: '';
         position: absolute;
         top: 0;
         right: 0;
-        width: 15px; // Reduced width
+        width: 12px;
         height: 100%;
         background: linear-gradient(to left, var(--bg-primary), transparent);
         pointer-events: none;
-        z-index: 2;
         opacity: 0;
-        transition: opacity 0.2s ease; // Faster transition
       }
       
-      // Show shadow when scrollable
       &.scrollable::after {
         opacity: 1;
       }
@@ -99,8 +70,6 @@
     @include flex-center;
     gap: $spacing-xs;
     white-space: nowrap;
-    position: relative;
-    scroll-snap-align: start;
     
     @include mobile-only {
       flex-shrink: 0;
@@ -115,12 +84,7 @@
   &__link {
     text-decoration: none;
     border-radius: 8px;
-    transition: all 0.2s ease;
     display: block;
-
-    &:hover {
-      transform: translateY(-1px);
-    }
 
     &:focus-visible {
       outline: 2px solid var(--primary-light);
@@ -133,8 +97,6 @@
     gap: $spacing-xs;
     padding: $spacing-xs $spacing-sm;
     border-radius: 8px;
-    position: relative;
-    transition: all 0.2s ease;
     background: transparent;
     cursor: pointer;
     
@@ -158,18 +120,9 @@
 
     &:hover {
       background: var(--bg-tertiary);
-      transform: translateY(-1px);
       
       @include touch-device {
-        transform: none;
         background: var(--bg-secondary);
-      }
-    }
-    
-    &:active {
-      @include touch-device {
-        transform: scale(0.95);
-        transition: transform 0.1s ease;
       }
     }
 
@@ -179,7 +132,6 @@
 
       &:hover {
         background: var(--bg-tertiary);
-        transform: none;
       }
     }
   }
@@ -190,7 +142,6 @@
     height: 28px;
     border-radius: 6px;
     background: transparent;
-    transition: all 0.2s ease;
     
     @include mobile-only {
       width: 24px;
@@ -206,11 +157,6 @@
 
     .breadcrumb__item:hover & {
       background: rgba(99, 102, 241, 0.1);
-      transform: scale(1.05);
-      
-      @include touch-device {
-        transform: none;
-      }
     }
 
     .breadcrumb__item--active & {
@@ -221,7 +167,6 @@
   &__icon {
     font-size: $font-base;
     color: var(--primary-light);
-    transition: all 0.2s ease;
     
     @include mobile-only {
       font-size: $font-sm;
@@ -233,7 +178,6 @@
 
     .breadcrumb__item--active & {
       color: var(--primary-dark);
-      transform: scale(1.1);
     }
     
     .breadcrumb__item:hover & {
@@ -245,7 +189,6 @@
     font-size: $font-sm;
     font-weight: $font-medium;
     color: var(--text-secondary);
-    transition: all 0.2s ease;
     line-height: 1.2;
     
     @include mobile-only {
@@ -270,11 +213,6 @@
 
     .breadcrumb__item:hover & {
       color: var(--text-primary);
-      transform: translateY(-1px);
-      
-      @include touch-device {
-        transform: none;
-      }
     }
 
     .breadcrumb__item--active & {
@@ -288,7 +226,6 @@
     color: var(--text-tertiary);
     font-size: $font-sm;
     margin: 0 $spacing-xs;
-    transition: all 0.2s ease;
     opacity: 0.6;
     
     @include mobile-only {
@@ -299,11 +236,6 @@
     @include mobile-xxs-only {
       font-size: 10px;
       margin: 0 1px;
-    }
-    
-    &:hover {
-      opacity: 1;
-      transform: scale(1.1);
     }
   }
 
@@ -346,14 +278,6 @@
         border-color: var(--primary-light);
         border-width: 2px;
       }
-    }
-  }
-
-  // Reduced motion support
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      transition: none !important;
-      animation: none !important;
     }
   }
 }

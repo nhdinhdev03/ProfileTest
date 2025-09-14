@@ -27,27 +27,30 @@
   // Enhanced mobile optimizations
   @include mobile-xxs-only {
     height: 52px;
-    padding: 0 env(safe-area-inset-left, $spacing-xs) 0 env(safe-area-inset-right, $spacing-xs);
+    padding: 0 env(safe-area-inset-left, $spacing-xs) 0
+      env(safe-area-inset-right, $spacing-xs);
   }
-  
+
   @include mobile-xs-only {
     height: 56px;
-    padding: 0 env(safe-area-inset-left, $spacing-sm) 0 env(safe-area-inset-right, $spacing-sm);
+    padding: 0 env(safe-area-inset-left, $spacing-sm) 0
+      env(safe-area-inset-right, $spacing-sm);
   }
 
   @include mobile-sm-only {
     height: 60px;
-    padding: 0 env(safe-area-inset-left, $spacing-base) 0 env(safe-area-inset-right, $spacing-base);
+    padding: 0 env(safe-area-inset-left, $spacing-base) 0
+      env(safe-area-inset-right, $spacing-base);
   }
 
   @include mobile-only {
     height: 60px;
   }
-  
+
   @include tablet-up {
     height: 70px;
   }
-  
+
   @include desktop-up {
     height: 75px;
   }
@@ -76,15 +79,18 @@
 
     // Enhanced responsive padding with safe area support
     @include mobile-xxs-only {
-      padding: 0 max($spacing-xs, env(safe-area-inset-left, 0)) 0 max($spacing-xs, env(safe-area-inset-right, 0));
+      padding: 0 max($spacing-xs, env(safe-area-inset-left, 0)) 0
+        max($spacing-xs, env(safe-area-inset-right, 0));
     }
-    
+
     @include mobile-xs-up {
-      padding: 0 max($spacing-base, env(safe-area-inset-left, 0)) 0 max($spacing-base, env(safe-area-inset-right, 0));
+      padding: 0 max($spacing-base, env(safe-area-inset-left, 0)) 0
+        max($spacing-base, env(safe-area-inset-right, 0));
     }
 
     @include mobile-sm-up {
-      padding: 0 max($spacing-lg, env(safe-area-inset-left, 0)) 0 max($spacing-lg, env(safe-area-inset-right, 0));
+      padding: 0 max($spacing-lg, env(safe-area-inset-left, 0)) 0
+        max($spacing-lg, env(safe-area-inset-right, 0));
     }
 
     @include tablet-up {
@@ -447,7 +453,7 @@
     z-index: 999;
     pointer-events: all;
     touch-action: none;
-    
+
     // Hardware acceleration for smooth animations
     will-change: opacity;
     transform: translateZ(0);
@@ -467,23 +473,23 @@
     -webkit-overflow-scrolling: touch;
     isolation: isolate;
     pointer-events: all;
-    
+
     // Hardware acceleration for smooth animations
     will-change: transform, opacity;
     transform: translateZ(0);
-    
+
     // Optimize scrolling performance
     contain: layout style paint;
-    
+
     // Reduce repaints during scroll
     &::-webkit-scrollbar {
       width: 4px;
     }
-    
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       background: var(--border-color);
       border-radius: 2px;
@@ -522,7 +528,7 @@
     gap: $spacing-sm;
     display: flex;
     flex-direction: column;
-    
+
     // Optimize for performance
     contain: layout style;
     will-change: transform;
@@ -530,7 +536,7 @@
     .header__nav-item {
       width: 100%;
       margin-bottom: $spacing-xs;
-      
+
       // Reduce repaints
       contain: layout style;
     }
@@ -546,10 +552,10 @@
       font-weight: $font-medium;
       position: relative;
       overflow: hidden;
-      
+
       // Simplified transitions for better performance
       transition: background-color 0.2s ease, transform 0.2s ease;
-      
+
       // Hardware acceleration
       will-change: transform, background-color;
       transform: translateZ(0);
@@ -570,13 +576,13 @@
           box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
       }
-      
+
       // Touch device optimizations
       @include touch-device {
         &:hover {
           transform: none;
         }
-        
+
         &:active {
           transform: scale(0.98);
           transition: transform 0.1s ease;

@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useEffect, useRef } from 'react';
+import React, { memo, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
@@ -15,54 +15,75 @@ import {
 import './Breadcrumb.scss';
 import { ROUTES } from '../../router/routeConstants';
 
-// Route mapping với metadata
-const ROUTE_CONFIG = {
+// Icon mapping for better performance và tree-shaking
+const ICONS = Object.freeze({
+  home: FiHome,
+  user: FiUser,
+  code: FiCode,
+  folder: FiFolder,
+  book: FiBookOpen,
+  mail: FiMail,
+  briefcase: FiBriefcase,
+});
+
+// Color palette constants
+const COLORS = Object.freeze({
+  primary: '#6366f1',
+  purple: '#8b5cf6',
+  green: '#10b981',
+  amber: '#f59e0b',
+  red: '#ef4444',
+  cyan: '#06b6d4',
+  pink: '#ec4899',
+});
+
+// Optimized route config - removed redundant parent properties
+const ROUTE_CONFIG = Object.freeze({
   [ROUTES.HOME]: {
     label: 'Home',
-    icon: FiHome,
-    color: '#6366f1',
+    icon: ICONS.home,
+    color: COLORS.primary,
     isHome: true
   },
   [ROUTES.ABOUT]: {
     label: 'About Me',
-    icon: FiUser,
-    color: '#8b5cf6',
-    parent: ROUTES.HOME
+    icon: ICONS.user,
+    color: COLORS.purple
   },
   [ROUTES.SKILLS]: {
     label: 'Skills',
-    icon: FiCode,
-    color: '#10b981',
-    parent: ROUTES.HOME
+    icon: ICONS.code,
+    color: COLORS.green
   },
   [ROUTES.PROJECTS]: {
     label: 'Projects',
-    icon: FiFolder,
-    color: '#f59e0b',
-    parent: ROUTES.HOME
+    icon: ICONS.folder,
+    color: COLORS.amber
   },
   [ROUTES.BLOG]: {
     label: 'Blog',
-    icon: FiBookOpen,
-    color: '#ef4444',
-    parent: ROUTES.HOME
+    icon: ICONS.book,
+    color: COLORS.red
   },
   [ROUTES.CONTACT]: {
     label: 'Contact',
-    icon: FiMail,
-    color: '#06b6d4',
-    parent: ROUTES.HOME
+    icon: ICONS.mail,
+    color: COLORS.cyan
   },
   [ROUTES.EXPERIENCE]: {
     label: 'Experience',
-    icon: FiBriefcase,
-    color: '#ec4899',
-    parent: ROUTES.HOME
+    icon: ICONS.briefcase,
+    color: COLORS.pink
   },
-};
+});
 
-// Generate breadcrumb path từ current route
+// Cached breadcrumb generation với logic tối ưu
+const breadcrumbCache = new Map();
 const generateBreadcrumbs = (pathname) => {
+  if (breadcrumbCache.has(pathname)) {
+    return breadcrumbCache.get(pathname);
+  }
+  
   const breadcrumbs = [];
   
   // Handle blog detail routes
@@ -71,31 +92,31 @@ const generateBreadcrumbs = (pathname) => {
     breadcrumbs.push(ROUTE_CONFIG[ROUTES.BLOG]);
     breadcrumbs.push({
       label: 'Blog Post',
-      icon: FiBookOpen,
-      color: '#ef4444',
+      icon: ICONS.book,
+      color: COLORS.red,
       isActive: true,
       path: pathname
     });
+    breadcrumbCache.set(pathname, breadcrumbs);
     return breadcrumbs;
   }
 
   // Find current route config
   const currentRoute = Object.keys(ROUTE_CONFIG).find(route => {
     if (route === pathname) return true;
-    // Handle dynamic routes
     if (route.includes(':') && pathname.startsWith(route.split(':')[0])) return true;
     return false;
   });
 
   if (!currentRoute) {
-    // Fallback for unknown routes
     breadcrumbs.push(ROUTE_CONFIG[ROUTES.HOME]);
+    breadcrumbCache.set(pathname, breadcrumbs);
     return breadcrumbs;
   }
 
   const config = ROUTE_CONFIG[currentRoute];
   
-  // Always start with home if not already home
+  // Always start with home if not already home (simplified logic)
   if (!config.isHome) {
     breadcrumbs.push(ROUTE_CONFIG[ROUTES.HOME]);
   }
@@ -107,37 +128,34 @@ const generateBreadcrumbs = (pathname) => {
     path: currentRoute
   });
 
+  breadcrumbCache.set(pathname, breadcrumbs);
   return breadcrumbs;
 };
 
 const BreadcrumbItem = memo(({ item, isLast, index }) => {
   const IconComponent = item.icon;
   
-  // Simplified variants for better mobile performance
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
+  // Simplified animations for better mobile performance
+  const itemVariants = useMemo(() => ({
+    hidden: { opacity: 0, x: -5 },
     visible: { 
       opacity: 1, 
       x: 0,
       transition: {
-        delay: index * 0.05, // Reduced delay
-        duration: 0.2, // Faster animation
+        delay: index * 0.02, // Faster stagger
+        duration: 0.12, // Shorter duration
         ease: "easeOut"
       }
-    },
-    exit: { opacity: 0, x: 10 }
-  };
+    }
+  }), [index]);
 
-  const content = (
+  const content = useMemo(() => (
     <motion.div
       className={`breadcrumb__item ${item.isActive ? 'breadcrumb__item--active' : ''}`}
       variants={itemVariants}
-      // Simplified hover effects for mobile
-      whileHover={!item.isActive ? { 
-        scale: 1.02, // Reduced scale
-        transition: { duration: 0.15 }
-      } : {}}
+      whileHover={!item.isActive ? { scale: 1.02 } : {}}
       whileTap={!item.isActive ? { scale: 0.98 } : {}}
+      transition={{ duration: 0.1 }}
     >
       <div 
         className="breadcrumb__icon-wrapper"
@@ -146,11 +164,9 @@ const BreadcrumbItem = memo(({ item, isLast, index }) => {
         <IconComponent className="breadcrumb__icon" />
       </div>
       <span className="breadcrumb__label">{item.label}</span>
-      {item.isActive && (
-        <div className="breadcrumb__active-indicator" />
-      )}
+      {item.isActive && <div className="breadcrumb__active-indicator" />}
     </motion.div>
-  );
+  ), [item, itemVariants, IconComponent]);
 
   return (
     <motion.li 
@@ -172,9 +188,9 @@ const BreadcrumbItem = memo(({ item, isLast, index }) => {
       {!isLast && (
         <motion.div
           className="breadcrumb__separator"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: (index + 0.5) * 0.1, duration: 0.2 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: index * 0.02 + 0.05, duration: 0.1 }}
         >
           <FiChevronRight />
         </motion.div>
@@ -187,66 +203,71 @@ const Breadcrumb = memo(({ className = '', showOnHome = false }) => {
   const location = useLocation();
   const breadcrumbListRef = useRef(null);
   
+  // Memoized breadcrumbs
   const breadcrumbs = useMemo(() => 
     generateBreadcrumbs(location.pathname), 
     [location.pathname]
   );
 
-  // Handle scroll indicator
-  useEffect(() => {
-    const listElement = breadcrumbListRef.current;
-    if (!listElement) return;
-
-    const handleScroll = () => {
-      const { scrollWidth, clientWidth } = listElement;
-      const isScrollable = scrollWidth > clientWidth;
-      
-      if (isScrollable) {
-        listElement.classList.add('scrollable');
-      } else {
-        listElement.classList.remove('scrollable');
-      }
-    };
-
-    const handleResize = () => {
-      handleScroll();
-    };
-
-    // Initial check
-    handleScroll();
-
-    // Add event listeners
-    listElement.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      listElement.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [breadcrumbs]);
-
-  // Don't show breadcrumb on home page unless explicitly requested
-  if (location.pathname === ROUTES.HOME && !showOnHome) {
-    return null;
-  }
-
-  // Don't show if only home breadcrumb
-  if (breadcrumbs.length <= 1 && !showOnHome) {
-    return null;
-  }
-
-  // Simplified container variants for better performance
-  const containerVariants = {
+  // Simplified container animation - đặt trước early returns
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05, // Reduced stagger
-        delayChildren: 0.05 // Reduced delay
+        staggerChildren: 0.02,
+        delayChildren: 0.01
       }
-    },
-    exit: { opacity: 0 }
-  };
+    }
+  }), []);
+
+  // Optimized scroll handler
+  const handleScroll = useCallback(() => {
+    const listElement = breadcrumbListRef.current;
+    if (!listElement) return;
+
+    const { scrollWidth, clientWidth } = listElement;
+    const isScrollable = scrollWidth > clientWidth;
+    
+    listElement.classList.toggle('scrollable', isScrollable);
+  }, []);
+
+  // Effect với performance optimization
+  useEffect(() => {
+    const listElement = breadcrumbListRef.current;
+    if (!listElement) return;
+
+    let timeoutId;
+    const debouncedHandleScroll = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleScroll, 10);
+    };
+
+    const debouncedHandleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleScroll, 16); // ~60fps
+    };
+
+    handleScroll();
+
+    listElement.addEventListener('scroll', debouncedHandleScroll, { passive: true });
+    window.addEventListener('resize', debouncedHandleResize, { passive: true });
+
+    return () => {
+      clearTimeout(timeoutId);
+      listElement.removeEventListener('scroll', debouncedHandleScroll);
+      window.removeEventListener('resize', debouncedHandleResize);
+    };
+  }, [handleScroll]);
+
+  // Early returns for better performance
+  if (location.pathname === ROUTES.HOME && !showOnHome) {
+    return null;
+  }
+
+  if (breadcrumbs.length <= 1 && !showOnHome) {
+    return null;
+  }
 
   return (
     <AnimatePresence mode="wait">
@@ -256,8 +277,9 @@ const Breadcrumb = memo(({ className = '', showOnHome = false }) => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        exit="exit"
+        exit={{ opacity: 0 }}
         key={location.pathname}
+        style={{ willChange: 'opacity' }}
       >
         <motion.ol 
           ref={breadcrumbListRef}
