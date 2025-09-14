@@ -399,7 +399,7 @@ a {
 
 // Focus Styles - Enhanced for responsive accessibility
 *:focus {
-  outline: 2px solid var(--primary-light);
+  // outline: 2px solid var(--primary-light);
   outline-offset: 2px;
   border-radius: 4px;
 }
