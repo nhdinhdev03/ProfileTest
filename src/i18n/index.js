@@ -25,7 +25,6 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     resources,
-    lng: 'vi', // Default language
     fallbackLng: 'en', // Fallback language if translation not found
     debug: process.env.NODE_ENV === 'development',
 
@@ -38,7 +37,12 @@ i18n
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
+      checkWhitelist: true, // Check if detected language is in supported languages
     },
+
+    // Supported languages whitelist
+    supportedLngs: ['en', 'vi'],
+    nonExplicitSupportedLngs: true,
 
     // React specific options
     react: {
