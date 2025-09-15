@@ -1,35 +1,16 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import "./TechMarquee.scss";
-
-
 
 // Inline SVG logos with React.memo for performance
 const Logo = React.memo(({ type }) => {
   switch (type) {
-    case "react":
-      return (
-        <svg viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="5" fill="#61dafb" />
-          <g stroke="#61dafb" strokeWidth="3" fill="none">
-            <ellipse rx="22" ry="8" cx="32" cy="32" />
-            <ellipse
-              rx="22"
-              ry="8"
-              cx="32"
-              cy="32"
-              transform="rotate(60 32 32)"
-            />
-            <ellipse
-              rx="22"
-              ry="8"
-              cx="32"
-              cy="32"
-              transform="rotate(120 32 32)"
-            />
-          </g>
-        </svg>
-      );
     case "ts":
       return (
         <svg viewBox="0 0 64 64" aria-hidden="true">
@@ -56,6 +37,29 @@ const Logo = React.memo(({ type }) => {
             fill="#fff"
             opacity=".1"
           />
+        </svg>
+      );
+    case "react":
+      return (
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="5" fill="#61dafb" />
+          <g stroke="#61dafb" strokeWidth="3" fill="none">
+            <ellipse rx="22" ry="8" cx="32" cy="32" />
+            <ellipse
+              rx="22"
+              ry="8"
+              cx="32"
+              cy="32"
+              transform="rotate(60 32 32)"
+            />
+            <ellipse
+              rx="22"
+              ry="8"
+              cx="32"
+              cy="32"
+              transform="rotate(120 32 32)"
+            />
+          </g>
         </svg>
       );
     case "docker":
@@ -303,12 +307,12 @@ const Logo = React.memo(({ type }) => {
 });
 
 // Add prop validation for Logo component
-Logo.displayName = 'Logo';
+Logo.displayName = "Logo";
 
 const LOGOS = [
-  { key: "react", label: "React" },
   { key: "ts", label: "TypeScript" },
   { key: "javascript", label: "JavaScript" },
+  { key: "react", label: "React" },
   { key: "node", label: "Node.js" },
   { key: "express", label: "Express.js" },
   { key: "nestjs", label: "NestJS" },
@@ -335,8 +339,11 @@ const LOGOS = [
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const mq = window.matchMedia ? window.matchMedia("(max-width: 768px)") : null;
-    const update = () => setIsMobile(mq ? mq.matches : window.innerWidth <= 768);
+    const mq = window.matchMedia
+      ? window.matchMedia("(max-width: 768px)")
+      : null;
+    const update = () =>
+      setIsMobile(mq ? mq.matches : window.innerWidth <= 768);
     update();
     if (mq?.addEventListener) {
       mq.addEventListener("change", update);
@@ -354,11 +361,16 @@ function useIsMobile() {
   return { isMobile };
 }
 
-function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compact = false }) {
+function TechMarquee({
+  direction = "ltr",
+  speed = null,
+  showHeader = true,
+  compact = false,
+}) {
   const { isMobile } = useIsMobile();
   const marqueeRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
-  
+
   // speed prop now means desired pixels/second (optional override)
   const trackRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -375,9 +387,9 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
           setIsInView(entry.isIntersecting);
         });
       },
-      { 
+      {
         threshold: isMobile ? 0.1 : 0.2,
-        rootMargin: isMobile ? '50px' : '100px'
+        rootMargin: isMobile ? "50px" : "100px",
       }
     );
 
@@ -414,7 +426,7 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
   useEffect(() => {
     const track = trackRef.current;
     if (!track || !isInView) return;
-    
+
     let pos = 0; // translateX in px (negative for left movement)
     let last = performance.now();
     let cycleWidth = 0; // width of one copy
@@ -430,14 +442,17 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
         w += track.children[i].getBoundingClientRect().width + gap;
       cycleWidth = w;
     };
-    
+
     measure();
     let resizeTO;
     const onResize = () => {
       clearTimeout(resizeTO);
-      resizeTO = setTimeout(() => {
-        measure();
-      }, isMobile ? 100 : 120);
+      resizeTO = setTimeout(
+        () => {
+          measure();
+        },
+        isMobile ? 100 : 120
+      );
     };
     window.addEventListener("resize", onResize);
 
@@ -467,15 +482,18 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const root = track.closest('section');
+    const root = track.closest("section");
     if (!root) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.target === root) {
-          setIsVisible(e.isIntersecting);
-        }
-      });
-    }, { threshold: 0.05 });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.target === root) {
+            setIsVisible(e.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
     io.observe(root);
     return () => io.disconnect();
   }, []);
@@ -484,7 +502,7 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
   const handleMouseEnter = useCallback(() => {
     if (!isMobile) setIsPaused(true);
   }, [isMobile]);
-  
+
   const handleMouseLeave = useCallback(() => {
     if (!isMobile) setIsPaused(false);
   }, [isMobile]);
@@ -527,7 +545,7 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
     >
       <div className="container">
         {showHeader && (
-          <div className={`tech__header ${isInView ? 'animate-in' : ''}`}>
+          <div className={`tech__header ${isInView ? "animate-in" : ""}`}>
             <h2 className="sec-titles">
               <span className="highlight">Công Nghệ & Công Cụ</span>
             </h2>
@@ -538,7 +556,7 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
         )}
         {/* Fade slideshow (all breakpoints) */}
         <ul
-          className={`logos-slideshow ${isInView ? 'animate-in' : ''}`}
+          className={`logos-slideshow ${isInView ? "animate-in" : ""}`}
           aria-label="Logo công nghệ nổi bật"
         >
           {LOGOS.map((l, i) => (
@@ -554,7 +572,7 @@ function TechMarquee({ direction = "ltr", speed = null, showHeader = true, compa
         </ul>
         {/* Scrolling marquee (băng truyền) */}
         <div
-          className={`marquee__viewport ${isInView ? 'animate-in' : ''}`}
+          className={`marquee__viewport ${isInView ? "animate-in" : ""}`}
           aria-label="Danh sách công nghệ"
         >
           <ul
