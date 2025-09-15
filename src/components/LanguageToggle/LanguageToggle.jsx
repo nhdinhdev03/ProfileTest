@@ -24,14 +24,14 @@ const LanguageToggle = ({ className = '', variant = 'dropdown' }) => {
       code: 'vi', 
       name: t('language.vietnamese'), 
       flag: img.Co_VN,
-      shortName: 'VI',
+
       nativeName: 'Tiếng Việt'
     },
     { 
       code: 'en', 
       name: t('language.english'), 
       flag: img.Co_My,
-      shortName: 'EN',
+
       nativeName: 'English'
     }
   ];
