@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, Suspense, startTransition } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "layouts/MainLayout";
 import { useTheme } from "hooks/useTheme";
@@ -7,6 +7,7 @@ import { publicRoutes } from "router";
 import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
 import ScrollToTop from "components/Scroll/ScrollToTop/ScrollToTop";
 import PageTransition from "components/PageTransition/PageTransition";
+import LoadingFallback from "components/Loading/LoadingFallback";
 import "styles/App.scss";
 import NotFound from "pages/NotFound";
 
@@ -21,26 +22,28 @@ const App = memo(() => {
     <Router>
       <ScrollToTopOnNavigate />
       <ScrollToTop />
-      <Routes>
-        {publicRoutes.map((route, index) => {
-          const Page = route.component;
-          const LayoutComponent = route.layout ?? MainLayout; // fallback
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                <LayoutComponent theme={theme} toggleTheme={toggleTheme}>
-                  <PageTransition>
-                    <Page />
-                  </PageTransition>
-                </LayoutComponent>
-              }
-            />
-          );
-        })}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          {publicRoutes.map((route, index) => {
+            const Page = route.component;
+            const LayoutComponent = route.layout ?? MainLayout; // fallback
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <LayoutComponent theme={theme} toggleTheme={toggleTheme}>
+                    <PageTransition>
+                      <Page />
+                    </PageTransition>
+                  </LayoutComponent>
+                }
+              />
+            );
+          })}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 });
