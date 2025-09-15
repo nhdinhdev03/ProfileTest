@@ -480,12 +480,14 @@
     top: 0;
     right: 0;
     width: min(380px, 90vw);
+    // Use dynamic viewport height for mobile browsers (iOS Safari, etc.)
     height: 100vh;
+    height: 100dvh;
     background: var(--bg-primary);
     border-left: 1px solid var(--border-color);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    overflow-y: auto;
+    overflow: hidden; // internal scroll container
     -webkit-overflow-scrolling: touch;
     isolation: isolate;
     pointer-events: all;
@@ -513,6 +515,63 @@
 
     [data-theme="dark"] & {
       box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    &.header__nav--scrollable {
+      // Add subtle inset shadow to indicate scrollability
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1), inset 0 8px 12px -8px rgba(0,0,0,0.08), inset 0 -8px 12px -8px rgba(0,0,0,0.06);
+      [data-theme="dark"] & {
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3), inset 0 8px 12px -8px rgba(0,0,0,0.4), inset 0 -8px 12px -8px rgba(0,0,0,0.35);
+      }
+    }
+
+    &.header__nav--at-top {
+      .header__nav-scroll::before { opacity: 0; }
+    }
+
+    &.header__nav--at-bottom {
+      .header__nav-scroll::after { opacity: 0; }
+    }
+  }
+
+  // Scroll wrapper inside mobile nav
+  &__nav-scroll {
+    position: relative;
+    height: calc(100% - 140px); // subtract approx header area (adjust if design changes)
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: $spacing-3xl;
+    scroll-behavior: smooth;
+
+    // Hide default scrollbar visually but keep functional
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+
+    // Gradient overlays for scroll cue
+    &::before,
+    &::after {
+      content: "";
+      position: sticky;
+      left: 0;
+      right: 0;
+      height: 36px;
+      pointer-events: none;
+      z-index: 5;
+      transition: opacity 0.3s ease;
+    }
+    &::before {
+      top: 0;
+      margin-top: -4px; // overlap
+      background: linear-gradient(to bottom, var(--bg-primary) 0%, rgba(var(--bg-primary-rgb),0) 100%);
+    }
+    &::after {
+      bottom: 0;
+      margin-bottom: -4px;
+      background: linear-gradient(to top, var(--bg-primary) 0%, rgba(var(--bg-primary-rgb),0) 100%);
     }
   }
 

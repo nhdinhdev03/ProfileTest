@@ -189,6 +189,10 @@ const MobileNav = memo(
   }) => {
     const navItems = useNavItems();
     const { t } = useTranslation();
+    const [isScrollable, setIsScrollable] = useState(false);
+    const [atTop, setAtTop] = useState(true);
+    const [atBottom, setAtBottom] = useState(false);
+    const scrollContainerRef = useRef(null);
 
     const handleLinkClick = useCallback((e, path) => {
       e.preventDefault();
@@ -199,18 +203,16 @@ const MobileNav = memo(
 
       // Optimize navigation - don't reload if already on the same page
       if (pathname === path) {
-        // If it's home page, scroll to top
         if (path === ROUTES.HOME) {
           window.scrollTo({ top: 0, behavior: "smooth" });
           setActiveSection("home");
         }
-        return;
+      } else {
+        // Use requestAnimationFrame for smoother navigation
+        requestAnimationFrame(() => {
+          navigate(path);
+        });
       }
-
-      // Use requestAnimationFrame for smoother navigation
-      requestAnimationFrame(() => {
-        navigate(path);
-      });
     }, [pathname, navigate, setActiveSection, setIsMenuOpen]);
 
     // Simplified animation variants for better performance
@@ -254,6 +256,30 @@ const MobileNav = memo(
       }
     };
 
+    // Evaluate scrollability when menu opens or window resizes
+    useEffect(() => {
+      if (!isMenuOpen) return;
+      const el = scrollContainerRef.current;
+      if (!el) return;
+      const check = () => {
+        if (!el) return;
+        const scrollable = el.scrollHeight > el.clientHeight + 2; // tolerance
+        setIsScrollable(scrollable);
+        setAtTop(el.scrollTop <= 0);
+        setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 1);
+      };
+      check();
+      const handle = () => {
+        check();
+      };
+      el.addEventListener('scroll', handle, { passive: true });
+      window.addEventListener('resize', check);
+      return () => {
+        el.removeEventListener('scroll', handle);
+        window.removeEventListener('resize', check);
+      };
+    }, [isMenuOpen]);
+
     if (!isMenuOpen) return null;
 
     return (
@@ -270,7 +296,7 @@ const MobileNav = memo(
         <motion.nav
           key="mobile-nav"
           id="mobile-navigation"
-          className="header__nav header__nav--mobile"
+          className={`header__nav header__nav--mobile ${isScrollable ? 'header__nav--scrollable' : ''} ${atTop ? 'header__nav--at-top' : ''} ${atBottom ? 'header__nav--at-bottom' : ''}`}
           aria-label="Mobile navigation"
           ref={mobileNavRef}
           variants={navVariants}
@@ -279,14 +305,14 @@ const MobileNav = memo(
           exit="exit"
         >
           <div className="header__nav-mobile-header">
-            <h2 className="header__nav-mobile-title">
-              {t("navigation.menu")}
-            </h2>
-            <p className="header__nav-mobile-subtitle">
-              {t("navigation.choose_destination")}
-            </p>
+            <h2 className="header__nav-mobile-title">{t("navigation.menu")}</h2>
+            <p className="header__nav-mobile-subtitle">{t("navigation.choose_destination")}</p>
           </div>
-
+          <div
+            className="header__nav-scroll"
+            ref={scrollContainerRef}
+            aria-label={t('navigation.menu_scrollable')}
+          >
           <ul className="header__nav-list header__nav-list--mobile">
             {navItems.map((item, index) => {
               const Icon = item.icon;
@@ -304,6 +330,7 @@ const MobileNav = memo(
                       isActive ? "header__nav-link--active" : ""
                     }`}
                     onClick={(e) => handleLinkClick(e, item.path)}
+                    tabIndex={0}
                   >
                     <div className="header__nav-icon-wrapper">
                       <Icon className="header__nav-icon" />
@@ -352,6 +379,7 @@ const MobileNav = memo(
               </div>
             </motion.li>
           </ul>
+          </div>
         </motion.nav>
       </AnimatePresence>
     );
