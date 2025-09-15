@@ -1,478 +1,282 @@
-import React, { memo, useEffect, useState, useRef } from "react";
-import "./LoadingFallback.scss";
+import React, { memo, useMemo } from "react";
+import styled from "styled-components";
 
 /**
- * ✨ ULTRA FUTURISTIC LoadingFallback 1000x 
- * 
- * Revolutionary Features:
- * - Neomorphism 3D design with depth
- * - AI-inspired particle system 
- * - Morphing geometric animations
- * - Dynamic color pulse system
- * - Quantum loading physics
- * - Neural network visual effects
- * - Holographic glassmorphism
- * - Fluid responsive typography
+ * Optimized Loading Fallback component with dark mode support
+ * @param {Object} props
+ * @param {'dark' | 'light'} props.theme - Theme mode for styling
  */
-const LoadingFallback = memo(() => {
-  const [particles, setParticles] = useState([]);
-  const [colorPhase, setColorPhase] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const canvasRef = useRef(null);
-  
-  // Generate AI particles and ensure visibility
-  useEffect(() => {
-    // Force component to be visible immediately
-    setIsVisible(true);
-    
-    const generateParticles = () => {
-      const newParticles = Array.from({ length: 50 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 4 + 1,
-        speed: Math.random() * 2 + 0.5,
-        direction: Math.random() * 360,
-        opacity: Math.random() * 0.7 + 0.3,
-        color: `hsl(${Math.random() * 360}, 70%, 60%)`
-      }));
-      setParticles(newParticles);
+// eslint-disable-next-line react/prop-types
+const LoadingFallback = memo(({ theme = 'dark' }) => {
+  // Định nghĩa theme colors tối ưu cho performance
+  const themeColors = useMemo(() => {
+    const isDark = theme === 'dark';
+    return {
+      background: isDark ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+      backdropFilter: isDark ? 'blur(3px) brightness(0.7)' : 'blur(3px) brightness(1.1)',
+      truckBodyPrimary: isDark ? '#F83D3D' : '#E63946',
+      truckBodySecondary: isDark ? '#7D7C7C' : '#6C757D',
+      truckElements: isDark ? '#282828' : '#343A40',
+      truckDetails: isDark ? '#DFDFDF' : '#F8F9FA',
+      highlight: isDark ? '#FFFCAB' : '#FFF3CD',
+      road: isDark ? '#282828' : '#343A40',
+      roadLines: isDark ? 'white' : '#F8F9FA',
     };
-    
-    generateParticles();
-    const interval = setInterval(() => {
-      setColorPhase(prev => (prev + 1) % 360);
-    }, 100);
-    
-    return () => clearInterval(interval);
-  }, []);
+  }, [theme]);
 
-  // Dynamic color generator
-  const getDynamicColor = (offset = 0) => {
-    return `hsl(${(colorPhase + offset) % 360}, 80%, 60%)`;
-  };
+  // Tối ưu SVG content với theme colors
+  const truckSVG = useMemo(() => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 198 93"
+      className="trucksvg"
+    >
+      <path
+        strokeWidth={3}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckBodyPrimary}
+        d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.4404 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z"
+      />
+      <path
+        strokeWidth={3}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckBodySecondary}
+        d="M146 33.5H181.741C182.779 33.5 183.709 34.1415 184.078 35.112L190.538 52.112C191.16 53.748 189.951 55.5 188.201 55.5H146C144.619 55.5 143.5 54.3807 143.5 53V36C143.5 34.6193 144.619 33.5 146 33.5Z"
+      />
+      <path
+        strokeWidth={2}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckElements}
+        d="M150 65C150 65.39 149.763 65.8656 149.127 66.2893C148.499 66.7083 147.573 67 146.5 67C145.427 67 144.501 66.7083 143.873 66.2893C143.237 65.8656 143 65.39 143 65C143 64.61 143.237 64.1344 143.873 63.7107C144.501 63.2917 145.427 63 146.5 63C147.573 63 148.499 63.2917 149.127 63.7107C149.763 64.1344 150 64.61 150 65Z"
+      />
+      <rect
+        strokeWidth={2}
+        stroke={themeColors.truckElements}
+        fill={themeColors.highlight}
+        rx={1}
+        height={7}
+        width={5}
+        y={63}
+        x={187}
+      />
+      <rect
+        strokeWidth={2}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckElements}
+        rx={1}
+        height={11}
+        width={4}
+        y={81}
+        x={193}
+      />
+      <rect
+        strokeWidth={3}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckDetails}
+        rx="2.5"
+        height={90}
+        width={121}
+        y="1.5"
+        x="6.5"
+      />
+      <rect
+        strokeWidth={2}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckDetails}
+        rx={2}
+        height={4}
+        width={6}
+        y={84}
+        x={1}
+      />
+    </svg>
+  ), [themeColors]);
 
-  // Force render để debug
-  console.log("🚀 LoadingFallback is rendering!", { isVisible, particles: particles.length });
+  const tireSVG = useMemo(() => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 30 30"
+      className="tiresvg"
+    >
+      <circle
+        strokeWidth={3}
+        stroke={themeColors.truckElements}
+        fill={themeColors.truckElements}
+        r="13.5"
+        cy={15}
+        cx={15}
+      />
+      <circle fill={themeColors.truckDetails} r={7} cy={15} cx={15} />
+    </svg>
+  ), [themeColors]);
 
-  if (!isVisible) {
-    return <div style={{ 
-      position: 'fixed', 
-      top: 0, 
-      left: 0, 
-      right: 0, 
-      bottom: 0, 
-      background: 'rgba(0,0,0,0.9)', 
-      color: 'white', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      zIndex: 10000
-    }}>
-      Simple Loading...
-    </div>;
-  }
+  const lampPostSVG = useMemo(() => (
+    <svg
+      xmlSpace="preserve"
+      viewBox="0 0 453.459 453.459"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      xmlns="http://www.w3.org/2000/svg"
+      id="Capa_1"
+      version="1.1"
+      fill={themeColors.truckElements}
+      className="lampPost"
+    >
+      <path
+        d="M252.882,0c-37.781,0-68.686,29.953-70.245,67.358h-6.917v8.954c-26.109,2.163-45.463,10.011-45.463,19.366h9.993c-1.65,5.146-2.507,10.54-2.507,16.017c0,28.956,23.558,52.514,52.514,52.514c28.956,0,52.514-23.558,52.514-52.514c0-5.478-0.856-10.872-2.506-16.017h9.992c0-9.354-19.352-17.204-45.463-19.366v-8.954h-6.149C200.189,38.779,223.924,16,252.882,16c29.952,0,54.32,24.368,54.32,54.32c0,28.774-11.078,37.009-25.105,47.437c-17.444,12.968-37.216,27.667-37.216,78.884v113.914h-0.797c-5.068,0-9.174,4.108-9.174,9.177c0,2.844,1.293,5.383,3.321,7.066c-3.432,27.933-26.851,95.744-8.226,115.459v11.202h45.75v-11.202c18.625-19.715-4.794-87.527-8.227-115.459c2.029-1.683,3.322-4.223,3.322-7.066c0-5.068-4.107-9.177-9.176-9.177h-0.795V196.641c0-43.174,14.942-54.283,30.762-66.043c14.793-10.997,31.559-23.461,31.559-60.277C323.202,31.545,291.656,0,252.882,0z M232.77,111.694c0,23.442-19.071,42.514-42.514,42.514c-23.442,0-42.514-19.072-42.514-42.514c0-5.531,1.078-10.957,3.141-16.017h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
+      />
+    </svg>
+  ), [themeColors]);
 
   return (
-    <div 
-      className="loading-fallback-ultra"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: `
-          radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-          radial-gradient(circle at 40% 80%, rgba(119, 198, 255, 0.3) 0%, transparent 50%),
-          linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%)
-        `,
-        backdropFilter: 'blur(40px) saturate(200%)',
-        WebkitBackdropFilter: 'blur(40px) saturate(200%)',
-        zIndex: 10000,
-        overflow: 'hidden',
-        animation: 'cosmicEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1)',
-        willChange: 'transform, opacity',
-        contain: 'layout style paint'
-      }}
-      role="status"
-      aria-label="Loading with advanced animations"
-      aria-live="polite"
-    >
-      {/* AI Particle System Background */}
-      <div 
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          pointerEvents: 'none',
-          overflow: 'hidden'
-        }}
-      >
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            style={{
-              position: 'absolute',
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${particle.color} 0%, transparent 70%)`,
-              opacity: particle.opacity,
-              animation: `
-                particleFloat 8s ease-in-out infinite,
-                particlePulse 3s ease-in-out infinite
-              `,
-              animationDelay: `${particle.id * 0.1}s`,
-              filter: 'blur(0.5px)',
-              transform: `rotate(${particle.direction}deg)`
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Neural Network Grid Background */}
-      <div 
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-          animation: 'neuralGrid 20s linear infinite',
-          opacity: 0.4
-        }}
-      />
-
-      {/* Main Holographic Container */}
-      <div 
-        style={{
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '2.5rem',
-          padding: '4rem 5rem',
-          borderRadius: '32px',
-          background: `
-            linear-gradient(145deg, 
-              rgba(255,255,255,0.1) 0%, 
-              rgba(255,255,255,0.05) 25%,
-              rgba(0,0,0,0.1) 75%,
-              rgba(0,0,0,0.2) 100%
-            )
-          `,
-          border: '2px solid rgba(255,255,255,0.1)',
-          boxShadow: `
-            0 50px 100px -20px rgba(0, 0, 0, 0.5),
-            0 0 0 1px rgba(255, 255, 255, 0.1),
-            inset 0 2px 0 rgba(255, 255, 255, 0.2),
-            inset 0 -2px 0 rgba(0, 0, 0, 0.1),
-            0 0 50px rgba(120, 119, 198, 0.3)
-          `,
-          backdropFilter: 'blur(30px) contrast(120%)',
-          WebkitBackdropFilter: 'blur(30px) contrast(120%)',
-          transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-          transformStyle: 'preserve-3d',
-          animation: 'holographicFloat 6s ease-in-out infinite',
-          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          willChange: 'transform, filter'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'perspective(1000px) rotateX(-5deg) rotateY(5deg) scale(1.03)';
-          e.currentTarget.style.filter = 'brightness(1.2) contrast(1.3)';
-          e.currentTarget.style.boxShadow = `
-            0 60px 120px -20px rgba(0, 0, 0, 0.6),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            inset 0 2px 0 rgba(255, 255, 255, 0.3),
-            0 0 80px ${getDynamicColor()}
-          `;
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-          e.currentTarget.style.filter = 'brightness(1) contrast(1)';
-          e.currentTarget.style.boxShadow = `
-            0 50px 100px -20px rgba(0, 0, 0, 0.5),
-            0 0 0 1px rgba(255, 255, 255, 0.1),
-            inset 0 2px 0 rgba(255, 255, 255, 0.2),
-            0 0 50px rgba(120, 119, 198, 0.3)
-          `;
-        }}
-      >
-        {/* Quantum Spinner System */}
-        <div 
-          style={{ 
-            position: 'relative', 
-            width: '120px', 
-            height: '120px',
-            filter: 'drop-shadow(0 0 20px rgba(120, 119, 198, 0.6))'
-          }}
-        >
-          {/* Quantum Field Ring */}
-          <div 
-            style={{
-              position: 'absolute',
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              backgroundImage: `conic-gradient(from 0deg, 
-                ${getDynamicColor(0)} 0deg,
-                ${getDynamicColor(60)} 60deg,
-                ${getDynamicColor(120)} 120deg,
-                ${getDynamicColor(180)} 180deg,
-                ${getDynamicColor(240)} 240deg,
-                ${getDynamicColor(300)} 300deg,
-                ${getDynamicColor(0)} 360deg
-              )`,
-              animation: 'quantumSpin 3s linear infinite',
-              filter: 'blur(8px)',
-              opacity: 0.8
-            }}
-          />
-          
-          {/* Neural Ring 1 */}
-          <div 
-            style={{
-              position: 'absolute',
-              width: '100px',
-              height: '100px',
-              top: '10px',
-              left: '10px',
-              border: `4px solid transparent`,
-              borderTop: `4px solid ${getDynamicColor(0)}`,
-              borderRight: `4px solid ${getDynamicColor(90)}`,
-              borderRadius: '50%',
-              animation: 'neuralSpin1 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite',
-              filter: 'drop-shadow(0 0 15px currentColor)'
-            }}
-          />
-          
-          {/* Neural Ring 2 */}
-          <div 
-            style={{
-              position: 'absolute',
-              width: '70px',
-              height: '70px',
-              top: '25px',
-              left: '25px',
-              border: `3px solid transparent`,
-              borderLeft: `3px solid ${getDynamicColor(120)}`,
-              borderBottom: `3px solid ${getDynamicColor(240)}`,
-              borderRadius: '50%',
-              animation: 'neuralSpin2 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse',
-              filter: 'drop-shadow(0 0 12px currentColor)'
-            }}
-          />
-          
-          {/* Neural Ring 3 */}
-          <div 
-            style={{
-              position: 'absolute',
-              width: '40px',
-              height: '40px',
-              top: '40px',
-              left: '40px',
-              border: `2px solid transparent`,
-              borderTop: `2px solid ${getDynamicColor(180)}`,
-              borderLeft: `2px solid ${getDynamicColor(270)}`,
-              borderRadius: '50%',
-              animation: 'neuralSpin3 1s linear infinite',
-              filter: 'drop-shadow(0 0 8px currentColor)'
-            }}
-          />
-          
-          {/* Quantum Core */}
-          <div 
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: '20px',
-              height: '20px',
-              backgroundImage: `radial-gradient(circle, 
-                ${getDynamicColor()} 0%, 
-                ${getDynamicColor(180)} 50%, 
-                transparent 100%
-              )`,
-              borderRadius: '50%',
-              transform: 'translate(-50%, -50%)',
-              animation: 'quantumPulse 2s ease-in-out infinite',
-              boxShadow: `
-                0 0 20px ${getDynamicColor()},
-                0 0 40px ${getDynamicColor(60)},
-                0 0 60px ${getDynamicColor(120)}
-              `
-            }}
-          />
-          
-          {/* Energy Orbs */}
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute',
-                width: '8px',
-                height: '8px',
-                backgroundImage: `radial-gradient(circle, ${getDynamicColor(i * 90)} 0%, transparent 70%)`,
-                borderRadius: '50%',
-                top: '50%',
-                left: '50%',
-                transformOrigin: '0 0',
-                transform: `
-                  translate(-50%, -50%) 
-                  rotate(${i * 90 + colorPhase}deg) 
-                  translateX(45px) 
-                  scale(${1 + Math.sin(Date.now() * 0.01 + i) * 0.5})
-                `,
-                animation: `energyOrb${i} ${2 + i * 0.5}s ease-in-out infinite`,
-                filter: 'blur(1px)',
-                opacity: 0.9
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Holographic Text Display */}
-        <div style={{ textAlign: 'center', position: 'relative' }}>
-          {/* Main Loading Text */}
-          <div 
-            style={{
-              backgroundImage: `linear-gradient(135deg, 
-                ${getDynamicColor(0)} 0%, 
-                ${getDynamicColor(120)} 50%, 
-                ${getDynamicColor(240)} 100%
-              )`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-              fontWeight: '800',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif",
-              animation: 'holographicShimmer 3s ease-in-out infinite',
-              marginBottom: '0.5rem',
-              textShadow: `
-                0 0 10px ${getDynamicColor()},
-                0 0 20px ${getDynamicColor(60)},
-                0 0 30px ${getDynamicColor(120)}
-              `
-            }}
-          >
-            QUANTUM LOADING
+    <LoadingContainer $themeColors={themeColors}>
+      <TruckLoader $themeColors={themeColors}>
+        <div className="truckWrapper">
+          <div className="truckBody">{truckSVG}</div>
+          <div className="truckTires">
+            {tireSVG}
+            {tireSVG}
           </div>
-          
-          {/* Subtitle */}
-          <div 
-            style={{
-              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-              color: 'rgba(255,255,255,0.8)',
-              fontWeight: '400',
-              letterSpacing: '0.05em',
-              animation: 'subtleGlow 2s ease-in-out infinite alternate',
-              marginBottom: '1rem'
-            }}
-          >
-            Neural networks initializing...
-          </div>
-          
-          {/* Progress Percentage */}
-          <div 
-            style={{
-              fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
-              color: getDynamicColor(),
-              fontWeight: '600',
-              fontFamily: "'SF Mono', 'Monaco', monospace",
-              animation: 'dataFlow 1s ease-in-out infinite'
-            }}
-          >
-            {Math.floor((colorPhase / 360) * 100 + Math.random() * 10)}%
-          </div>
+          <div className="road" />
+          {lampPostSVG}
         </div>
-
-        {/* Neural Progress Indicator */}
-        <div style={{ 
-          display: 'flex', 
-          gap: '12px', 
-          alignItems: 'center',
-          position: 'relative'
-        }}>
-          {[0, 1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              style={{
-                width: 'clamp(8px, 1.5vw, 12px)',
-                height: 'clamp(8px, 1.5vw, 12px)',
-                borderRadius: '50%',
-                backgroundImage: `radial-gradient(circle, 
-                  ${getDynamicColor(i * 72)} 0%, 
-                  ${getDynamicColor(i * 72 + 180)} 100%
-                )`,
-                animation: `neuralPulse 2s ease-in-out infinite`,
-                animationDelay: `${i * 0.2}s`,
-                filter: `drop-shadow(0 0 8px ${getDynamicColor(i * 72)})`,
-                transform: `scale(${1 + Math.sin(Date.now() * 0.005 + i) * 0.3})`
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Floating Data Points */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            pointerEvents: 'none',
-            overflow: 'hidden',
-            borderRadius: '32px'
-          }}
-        >
-          {[...Array(12)].map((_, i) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute',
-                width: '4px',
-                height: '4px',
-                backgroundImage: getDynamicColor(i * 30),
-                borderRadius: '50%',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `dataPoint 4s ease-in-out infinite`,
-                animationDelay: `${i * 0.3}s`,
-                filter: 'blur(0.5px)',
-                opacity: 0.7
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Ultra Advanced CSS Animations & Effects */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-      
-        `
-      }} />
-    </div>
+      </TruckLoader>
+    </LoadingContainer>
   );
 });
 
-LoadingFallback.displayName = 'LoadingFallback';
+// Styled Components tối ưu với dark mode support và performance optimizations
+const LoadingContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: ${props => props.$themeColors.background};
+  backdrop-filter: ${props => props.$themeColors.backdropFilter};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+`;
+
+const TruckLoader = styled.div`
+  .truckWrapper {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+    overflow-x: hidden;
+  }
+
+  .truckBody {
+    width: 130px;
+    height: fit-content;
+    margin-bottom: 6px;
+    animation: motion 1s linear infinite;
+    will-change: transform; /* GPU acceleration hint */
+    transition: filter 0.3s ease;
+  }
+
+  @keyframes motion {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(3px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .truckTires {
+    width: 130px;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px 0px 15px;
+    position: absolute;
+    bottom: 0;
+    
+    svg {
+      width: 24px;
+      transition: filter 0.3s ease;
+    }
+  }
+
+  .road {
+    width: 100%;
+    height: 1.5px;
+    background-color: ${props => props.$themeColors.road};
+    position: relative;
+    bottom: 0;
+    align-self: flex-end;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      height: 100%;
+      background-color: ${props => props.$themeColors.road};
+      border-radius: 3px;
+      animation: roadAnimation 1.4s linear infinite;
+      will-change: transform; /* GPU acceleration hint */
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    &::before {
+      width: 20px;
+      right: -50%;
+      border-left: 10px solid ${props => props.$themeColors.roadLines};
+    }
+
+    &::after {
+      width: 10px;
+      right: -65%;
+      border-left: 4px solid ${props => props.$themeColors.roadLines};
+    }
+  }
+
+  .lampPost {
+    position: absolute;
+    bottom: 0;
+    right: -90%;
+    height: 90px;
+    animation: roadAnimation 1.4s linear infinite;
+    will-change: transform; /* GPU acceleration hint */
+    transition: fill 0.3s ease, filter 0.3s ease;
+    
+    /* Add subtle glow effect for dark mode */
+    ${props => props.$themeColors.background.includes('0, 0, 0') && `
+      filter: drop-shadow(0 0 2px rgba(248, 61, 61, 0.3));
+    `}
+  }
+
+  @keyframes roadAnimation {
+    0% { transform: translateX(0px); }
+    100% { transform: translateX(-350px); }
+  }
+
+  /* Performance optimizations */
+  * {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  
+  /* Preload animations for smoother performance */
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    animation: none;
+  }
+`;
+
+LoadingFallback.displayName = "LoadingFallback";
 
 export default LoadingFallback;
