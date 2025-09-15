@@ -54,7 +54,7 @@
       &.active {
         border-color: var(--primary-color);
         background: var(--primary-color);
-        color: white;
+  
       }
 
       .lang-info {
@@ -168,7 +168,7 @@
 
       &--active {
         background: var(--primary-color);
-        color: white;
+        color: rgb(0, 0, 0);
       }
 
       .lang-details {
@@ -215,7 +215,7 @@
       
       .lang-name {
         font-size: 0.7rem;
-        color: rgb(0, 0, 0);
+   
       }
     }
     
@@ -235,6 +235,7 @@
       
       .lang-name {
         font-size: 0.75rem;
+          
       }
     }
     
