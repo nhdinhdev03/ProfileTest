@@ -11,6 +11,21 @@
   }
 }
 
+@keyframes checkPop {
+  0% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -710,32 +725,47 @@
   &__mobile-controls {
     display: flex;
     flex-direction: column;
-    gap: $spacing-lg;
+    gap: $spacing-base;
     width: 100%;
-    padding: $spacing-base;
+    padding: $spacing-sm $spacing-base;
     background: var(--bg-tertiary);
-    border-radius: 16px;
+    border-radius: 12px;
     backdrop-filter: blur(10px);
+    
+    // Enhanced mobile responsiveness
+    @media (max-width: 375px) {
+      gap: $spacing-sm;
+      padding: $spacing-xs $spacing-sm;
+      border-radius: 8px;
+    }
   }
 
   &__mobile-language-toggle {
-    // Simple mobile language toggle styling
+    // Enhanced mobile language toggle styling
     .language-toggle--compact {
       .language-toggle__header {
         text-align: center;
-        margin-bottom: $spacing-sm;
+        margin-bottom: $spacing-xs;
 
         .language-toggle__title {
           color: var(--text-secondary);
           font-size: $font-xs;
           font-weight: $font-semibold;
           letter-spacing: 0.5px;
+          
+          @media (max-width: 375px) {
+            font-size: 0.6rem;
+          }
         }
       }
 
       .language-selector {
         gap: $spacing-sm;
         justify-content: center;
+        
+        @media (max-width: 375px) {
+          gap: $spacing-xs;
+        }
       }
 
       .language-btn {
@@ -743,15 +773,42 @@
         background: var(--bg-secondary);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
 
         &:hover {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
           transform: translateY(-1px);
         }
 
+        &:active {
+          transform: translateY(0) scale(0.95);
+        }
+
         &.active {
           background: var(--primary-color);
           box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.3);
+          
+          .check-indicator {
+            display: flex;
+            animation: checkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          }
+        }
+        
+        // Enhanced touch feedback
+        @media (hover: none) and (pointer: coarse) {
+          &:hover {
+            transform: none;
+          }
+          
+          &:active {
+            background: var(--bg-tertiary);
+            transform: scale(0.95);
+          }
+          
+          &.active:active {
+            background: var(--primary-color);
+          }
         }
       }
     }
