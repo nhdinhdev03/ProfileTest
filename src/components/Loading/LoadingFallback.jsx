@@ -153,6 +153,8 @@ const LoadingContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: ${props => props.$themeColors.background};
   backdrop-filter: ${props => props.$themeColors.backdropFilter};
   display: flex;
@@ -160,9 +162,46 @@ const LoadingContainer = styled.div`
   justify-content: center;
   z-index: 10000;
   transition: background 0.3s ease, backdrop-filter 0.3s ease;
+  
+  /* Mobile optimizations - đảm bảo center hoàn hảo */
+  @media (max-width: 767px) {
+    backdrop-filter: ${props => props.$themeColors.backdropFilter.replace('blur(3px)', 'blur(1px)')};
+    /* Đảm bảo không bị ảnh hưởng bởi address bar mobile */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Ultra small mobile devices */
+  @media (max-width: 374px) {
+    backdrop-filter: none; /* Disable backdrop-filter for better performance */
+  }
+  
+  /* Handle safe areas for mobile devices with notches */
+  padding: max(env(safe-area-inset-top), 0px) 
+           max(env(safe-area-inset-right), 0px) 
+           max(env(safe-area-inset-bottom), 0px) 
+           max(env(safe-area-inset-left), 0px);
+           
+  /* iOS Safari viewport fix */
+  @supports (-webkit-touch-callout: none) {
+    height: -webkit-fill-available;
+  }
+  
+  /* Landscape mode mobile optimization */
+  @media (max-width: 767px) and (orientation: landscape) {
+    height: 100vh;
+    min-height: 100vh;
+  }
 `;
 
 const TruckLoader = styled.div`
+  /* Container chính tối ưu cho mobile */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
   .truckWrapper {
     width: 200px;
     height: 100px;
@@ -172,6 +211,28 @@ const TruckLoader = styled.div`
     align-items: center;
     justify-content: flex-end;
     overflow-x: hidden;
+    
+    /* Mobile responsive sizes - giảm dần theo breakpoint */
+    @media (max-width: 767px) {
+      width: 160px;
+      height: 80px;
+    }
+    
+    @media (max-width: 479px) {
+      width: 140px;
+      height: 70px;
+    }
+    
+    @media (max-width: 374px) {
+      width: 120px;
+      height: 60px;
+    }
+    
+    /* Landscape mode optimization */
+    @media (max-width: 767px) and (orientation: landscape) {
+      width: 140px;
+      height: 70px;
+    }
   }
 
   .truckBody {
@@ -179,8 +240,30 @@ const TruckLoader = styled.div`
     height: fit-content;
     margin-bottom: 6px;
     animation: motion 1s linear infinite;
-    will-change: transform; /* GPU acceleration hint */
+    will-change: transform;
     transition: filter 0.3s ease;
+    
+    /* Mobile responsive sizes với tỷ lệ phù hợp */
+    @media (max-width: 767px) {
+      width: 104px; /* 80% of 130px */
+      margin-bottom: 5px;
+    }
+    
+    @media (max-width: 479px) {
+      width: 91px; /* 70% of 130px */
+      margin-bottom: 4px;
+    }
+    
+    @media (max-width: 374px) {
+      width: 78px; /* 60% of 130px */
+      margin-bottom: 3px;
+    }
+    
+    /* Landscape mode optimization */
+    @media (max-width: 767px) and (orientation: landscape) {
+      width: 91px;
+      margin-bottom: 4px;
+    }
   }
 
   @keyframes motion {
@@ -203,6 +286,44 @@ const TruckLoader = styled.div`
       width: 24px;
       transition: filter 0.3s ease;
     }
+    
+    /* Mobile responsive sizes */
+    @media (max-width: 767px) {
+      width: 104px;
+      padding: 0px 8px 0px 12px;
+      
+      svg {
+        width: 19px;
+      }
+    }
+    
+    @media (max-width: 479px) {
+      width: 91px;
+      padding: 0px 7px 0px 10px;
+      
+      svg {
+        width: 17px;
+      }
+    }
+    
+    @media (max-width: 374px) {
+      width: 78px;
+      padding: 0px 6px 0px 9px;
+      
+      svg {
+        width: 14px;
+      }
+    }
+    
+    /* Landscape mode optimization */
+    @media (max-width: 767px) and (orientation: landscape) {
+      width: 91px;
+      padding: 0px 7px 0px 10px;
+      
+      svg {
+        width: 17px;
+      }
+    }
   }
 
   .road {
@@ -214,6 +335,16 @@ const TruckLoader = styled.div`
     align-self: flex-end;
     border-radius: 3px;
     transition: background-color 0.3s ease;
+    
+    /* Mobile responsive height */
+    @media (max-width: 479px) {
+      height: 1px;
+    }
+    
+    @media (max-width: 374px) {
+      height: 1px;
+      border-radius: 2px;
+    }
 
     &::before,
     &::after {
@@ -231,12 +362,34 @@ const TruckLoader = styled.div`
       width: 20px;
       right: -50%;
       border-left: 10px solid ${props => props.$themeColors.roadLines};
+      
+      /* Mobile responsive sizes */
+      @media (max-width: 479px) {
+        width: 16px;
+        border-left-width: 8px;
+      }
+      
+      @media (max-width: 374px) {
+        width: 14px;
+        border-left-width: 6px;
+      }
     }
 
     &::after {
       width: 10px;
       right: -65%;
       border-left: 4px solid ${props => props.$themeColors.roadLines};
+      
+      /* Mobile responsive sizes */
+      @media (max-width: 479px) {
+        width: 8px;
+        border-left-width: 3px;
+      }
+      
+      @media (max-width: 374px) {
+        width: 6px;
+        border-left-width: 2px;
+      }
     }
   }
 
@@ -246,12 +399,40 @@ const TruckLoader = styled.div`
     right: -90%;
     height: 90px;
     animation: roadAnimation 1.4s linear infinite;
-    will-change: transform; /* GPU acceleration hint */
+    will-change: transform;
     transition: fill 0.3s ease, filter 0.3s ease;
+    
+    /* Mobile responsive sizes */
+    @media (max-width: 767px) {
+      height: 72px; /* 80% of 90px */
+    }
+    
+    @media (max-width: 479px) {
+      height: 63px; /* 70% of 90px */
+    }
+    
+    @media (max-width: 374px) {
+      height: 54px; /* 60% of 90px */
+      right: -95%; /* Adjust position for smaller screens */
+    }
+    
+    /* Landscape mode optimization */
+    @media (max-width: 767px) and (orientation: landscape) {
+      height: 63px;
+    }
     
     /* Add subtle glow effect for dark mode */
     ${props => props.$themeColors.background.includes('0, 0, 0') && `
       filter: drop-shadow(0 0 2px rgba(248, 61, 61, 0.3));
+      
+      /* Reduce glow on mobile for performance */
+      @media (max-width: 767px) {
+        filter: drop-shadow(0 0 1px rgba(248, 61, 61, 0.2));
+      }
+      
+      @media (max-width: 374px) {
+        filter: none; /* Remove glow on very small screens */
+      }
     `}
   }
 
@@ -259,11 +440,51 @@ const TruckLoader = styled.div`
     0% { transform: translateX(0px); }
     100% { transform: translateX(-350px); }
   }
+  
+  /* Mobile optimized road animation với khoảng cách phù hợp */
+  @media (max-width: 767px) {
+    @keyframes roadAnimation {
+      0% { transform: translateX(0px); }
+      100% { transform: translateX(-280px); }
+    }
+  }
+  
+  @media (max-width: 479px) {
+    @keyframes roadAnimation {
+      0% { transform: translateX(0px); }
+      100% { transform: translateX(-245px); }
+    }
+  }
+  
+  @media (max-width: 374px) {
+    @keyframes roadAnimation {
+      0% { transform: translateX(0px); }
+      100% { transform: translateX(-210px); }
+    }
+  }
 
   /* Performance optimizations */
   * {
     transform-style: preserve-3d;
     backface-visibility: hidden;
+  }
+  
+  /* Mobile performance optimizations */
+  @media (max-width: 767px) {
+    * {
+      /* Reduce transform complexity on mobile */
+      transform-style: flat;
+    }
+  }
+  
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    /* Disable hover effects on touch devices */
+    .truckBody,
+    .truckTires svg,
+    .lampPost {
+      transition: none;
+    }
   }
   
   /* Preload animations for smoother performance */
