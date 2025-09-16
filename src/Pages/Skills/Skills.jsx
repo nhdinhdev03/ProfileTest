@@ -31,7 +31,7 @@ import {
   SiAngular,
 } from "react-icons/si";
 import { useTranslation } from "react-i18next";
-import TechMarquee from "../../components/TechMarquee/TechMarquee";
+import TechMarquee from "../../components/Skills/TechMarquee/TechMarquee";
 import "./Skills.scss";
 
 
