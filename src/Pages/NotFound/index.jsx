@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "router/routeConstants";
 import "./NotFound.scss";
@@ -158,7 +158,7 @@ export default function NotFound() {
         {/* Animated Message */}
         <p className="error-message">
           <span className="typewriter">
-            Rất tiếc, trang bạn đang tìm kiếm đã biến mất vào không gian mạng...
+            Rất tiếc, trang bạn đang tìm kiếm không tồn tại...
           </span>
         </p>
 
@@ -209,13 +209,6 @@ export default function NotFound() {
           </Link>
         </div>
 
-        {/* Progress Bar Animation */}
-        <div className="progress-container">
-          <div className="progress-label">Đang tìm kiếm trang thay thế...</div>
-          <div className="progress-bar">
-            <div className="progress-fill"></div>
-          </div>
-        </div>
       </div>
 
       {/* Mouse Follower */}

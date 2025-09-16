@@ -405,33 +405,11 @@
   100% { left: 100%; }
 }
 
-// Progress Bar
-.progress-container {
-  margin-top: 3rem;
-}
 
-.progress-label {
-  color: #cccccc;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  animation: fadeInOut 2s ease-in-out infinite;
-}
 
-.progress-bar {
-  width: 300px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  margin: 0 auto;
-  overflow: hidden;
-}
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ff006e, #8338ec, #3a86ff);
-  border-radius: 2px;
-  animation: progressLoad 3s ease-in-out infinite;
-}
+
+
 
 @keyframes progressLoad {
   0% { 
@@ -526,10 +504,7 @@
     font-size: 1rem;
   }
   
-  .progress-bar {
-    width: 250px;
-  }
-  
+ 
   .gradient-orb {
     &.orb-1 {
       width: 200px;
