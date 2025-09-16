@@ -5,6 +5,11 @@
   background: var(--bg-primary);
   position: relative;
   overflow: hidden;
+  
+  // Modern CSS performance optimizations
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
 
   // Subtle background pattern
   &::before {
@@ -18,12 +23,40 @@
       radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.03) 0%, transparent 25%),
       radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.03) 0%, transparent 25%);
     pointer-events: none;
+    will-change: auto;
+  }
+
+  // Performance optimizations for low-end devices
+  &.low-performance {
+    &::before {
+      display: none; // Remove background patterns on low-performance devices
+    }
+    
+    .experience__card {
+      will-change: auto;
+      transition: none;
+      
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+
+  // Loading state styles
+  &.updating {
+    .experience__grid {
+      opacity: 0.7;
+      pointer-events: none;
+    }
   }
 
   &__content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 clamp($spacing-base, 4vw, $spacing-lg);
+    
+    // CSS containment for better performance
+    contain: layout style;
   }
 
   // Section Header - Fully Responsive
@@ -65,10 +98,17 @@
     margin: 0 auto;
   }
 
-  // Grid Layout - Enhanced Responsive
+  // Grid Layout - Enhanced Responsive with Container Queries
   &__grid {
     display: grid;
     gap: clamp($spacing-xl, 4vw, $spacing-4xl);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    // Modern container-based responsive design
+    container-type: inline-size;
+    container-name: experience-grid;
     
     // Mobile: 1 column
     grid-template-columns: 1fr;
@@ -89,9 +129,25 @@
     @media (min-width: $breakpoint-2xl) {
       grid-template-columns: repeat(3, 1fr);
     }
+
+    // Container queries for better responsive behavior
+    @container experience-grid (min-width: 600px) {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    @container experience-grid (min-width: 900px) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    // List items should not have any styling
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
   }
 
-  // Experience Cards - Fully Responsive
+  // Experience Cards - Fully Responsive with Modern CSS Features
   &__card {
     background: var(--bg-secondary);
     border-radius: clamp(16px, 2vw, 24px);
@@ -102,6 +158,26 @@
     overflow: hidden;
     width: 100%;
     max-width: 100%;
+    
+    // Modern CSS optimizations
+    contain: layout style paint;
+    will-change: transform;
+    
+    // Better focus management
+    &:focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+
+    // Enhanced mobile optimization
+    &.mobile-optimized {
+      will-change: auto;
+      transition-duration: 0.2s;
+      
+      &:hover {
+        transform: none;
+      }
+    }
 
     // Subtle gradient overlay
     &::before {
@@ -114,6 +190,7 @@
       background: linear-gradient(90deg, #6366f1, #ec4899, #06b6d4);
       opacity: 0;
       transition: opacity 0.3s ease;
+      will-change: opacity;
     }
 
     &:hover {
@@ -125,6 +202,20 @@
 
       &::before {
         opacity: 1;
+      }
+    }
+
+    // Performance optimization for low-end devices
+    &.low-performance {
+      will-change: auto;
+      
+      &::before {
+        display: none;
+      }
+      
+      &:hover {
+        box-shadow: none;
+        transform: none;
       }
     }
   }
@@ -288,12 +379,27 @@
     font-size: clamp($font-xs, 2.5vw, $font-sm);
   }
 
-  // Technologies - Fully Responsive Grid
+  // Technologies - Enhanced as fieldset with buttons
   &__technologies {
+    border: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-wrap: wrap;
     gap: clamp($spacing-xs, 1.5vw, $spacing-sm);
     justify-content: flex-start;
+    
+    legend {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
     
     // Center on very small screens
     @media (max-width: 320px) {
@@ -315,19 +421,85 @@
     max-width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
+    
+    // Focus management
+    &:focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 1px;
+    }
 
     &:hover {
       color: white;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
+    
+    // Performance optimization
+    .low-performance & {
+      transition: none;
+      
+      &:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  // Loading indicator for transitions
+  &__loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background: rgba(var(--bg-primary-rgb), 0.9);
+    padding: $spacing-lg;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+
+  &__loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(var(--primary-light-rgb), 0.2);
+    border-top: 3px solid var(--primary-light);
+    border-radius: 50%;
+    animation: experience-spinner 1s linear infinite;
+  }
+
+  // Screen reader only content
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 
-// Enhanced Mobile Optimizations
+// Loading spinner animation
+@keyframes experience-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Enhanced Mobile Optimizations with CSS Custom Properties
 @media (max-width: $breakpoint-sm) {
   .experience {
     padding: $spacing-3xl 0;
+    
+    // CSS custom properties for dynamic styling
+    --card-padding: #{$spacing-lg};
+    --card-gap: #{$spacing-base};
+    --border-radius: 12px;
 
     &__content {
       padding: 0 $spacing-base;
@@ -338,20 +510,21 @@
     }
 
     &__card {
-      padding: $spacing-lg;
+      padding: var(--card-padding);
+      border-radius: var(--border-radius);
     }
 
     &__card-header {
-      margin-bottom: $spacing-base;
+      margin-bottom: var(--card-gap);
     }
 
     &__job-info {
-      margin-bottom: $spacing-base;
+      margin-bottom: var(--card-gap);
     }
 
     &__achievements,
     &__job-description {
-      margin-bottom: $spacing-base;
+      margin-bottom: var(--card-gap);
     }
 
     &__technologies {
@@ -467,61 +640,145 @@
   }
 }
 
-// Dark mode enhancements
+// Dark mode enhancements with CSS custom properties
 @media (prefers-color-scheme: dark) {
   .experience {
+    --shadow-color: rgba(0, 0, 0, 0.25);
+    --shadow-color-light: rgba(0, 0, 0, 0.1);
+    
     &__card {
       &:hover {
         box-shadow: 
-          0 20px 25px -5px rgba(0, 0, 0, 0.25),
-          0 10px 10px -5px rgba(0, 0, 0, 0.1),
+          0 20px 25px -5px var(--shadow-color),
+          0 10px 10px -5px var(--shadow-color-light),
           0 0 0 1px rgba(99, 102, 241, 0.1);
       }
     }
   }
 }
 
-// Reduced motion support
+// Reduced motion support with enhanced accessibility
 @media (prefers-reduced-motion: reduce) {
   .experience {
     &__card,
     &__achievement,
     &__tech-tag,
     &__icon-wrapper,
-    &__icon {
+    &__icon,
+    &__loading-spinner {
+      animation: none !important;
+      transition: none !important;
+    }
+    
+    // Maintain focus indicators without motion
+    &__card:focus-visible,
+    &__tech-tag:focus-visible {
+      transition: outline 0.1s ease;
+    }
+  }
+}
+
+// High contrast mode with better visibility
+@media (prefers-contrast: high) {
+  .experience {
+    --border-width: 2px;
+    --focus-outline-width: 3px;
+    
+    &__card {
+      border-width: var(--border-width);
+      
+      &:focus-visible {
+        outline-width: var(--focus-outline-width);
+      }
+    }
+
+    &__tech-tag {
+      border-width: var(--border-width);
+      
+      &:focus-visible {
+        outline-width: var(--focus-outline-width);
+      }
+    }
+
+    &__subtitle {
+      border-width: var(--border-width);
+    }
+  }
+}
+
+// Performance optimizations for low-end devices
+@media (max-width: 480px) and (max-height: 800px) {
+  .experience {
+    // Reduce visual complexity on small, low-end devices
+    &::before {
+      display: none;
+    }
+    
+    &__card {
+      &::before {
+        display: none;
+      }
+      
+      box-shadow: none !important;
       transition: none;
     }
   }
 }
 
-// High contrast mode
-@media (prefers-contrast: high) {
-  .experience {
-    &__card {
-      border-width: 2px;
-    }
-
-    &__tech-tag {
-      border-width: 2px;
-    }
-
-    &__subtitle {
-      border-width: 2px;
-    }
-  }
-}
-
-// Print styles
+// Print styles with better structure
 @media print {
   .experience {
     &__card {
       box-shadow: none;
       border: 2px solid #000;
       page-break-inside: avoid;
+      margin-bottom: 1rem;
     }
 
     &__grid {
       grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    &__loading,
+    &::before {
+      display: none;
+    }
+    
+    &__tech-tag {
+      border: 1px solid #000;
+      margin: 0.2rem;
+    }
+  }
+}
+
+// Support for viewport units in containers
+@supports (height: 100dvh) {
+  .experience {
+    // Use dynamic viewport height when available
+    min-height: 100dvh;
+  }
+}
+
+// Progressive enhancement for CSS containment
+@supports (contain: layout style paint) {
+  .experience {
+    &__content {
+      contain: layout style paint;
+    }
+    
+    &__card {
+      contain: layout style;
+    }
+  }
+}
+
+// CSS Grid subgrid support (future enhancement)
+@supports (grid-template-rows: subgrid) {
+  .experience {
+    &__grid {
+      // Enhanced grid alignment when subgrid becomes widely supported
+      grid-template-rows: subgrid;
     }
   }
 }
