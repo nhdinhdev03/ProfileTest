@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FiExternalLink, FiGithub, FiEye, FiFilter, FiGrid, FiList } from 'react-icons/fi';
 import useSaveScrollPosition from 'hooks/useSaveScrollPosition';
 import './Projects.scss';
 
-function Projects() {
+const Projects = memo(function Projects() {
   const { t, i18n } = useTranslation();
   
   // Sử dụng hook lưu và khôi phục vị trí cuộn
@@ -13,15 +13,14 @@ function Projects() {
   
   const [filter, setFilter] = useState('featured');
   const [viewMode, setViewMode] = useState('grid');
-  const [filteredProjects, setFilteredProjects] = useState([]);
 
   // Helper function to get localized description
-  const getLocalizedDescription = (project) => {
+  const getLocalizedDescription = useCallback((project) => {
     return i18n.language === 'en' ? project.descriptionEn : project.description;
-  };
+  }, [i18n.language]);
 
-  // Projects data - stable and simple
-  const projects = [
+  // Projects data - stable and simple - memoized to prevent recreation
+  const projects = useMemo(() => [
     {
       id: 1,
       title: 'E-Commerce Platform',
@@ -106,25 +105,17 @@ function Projects() {
       status: 'completed',
       year: '2023'
     }
-  ];
+  ], []);
 
-  // Filter projects based on selected filter
-  useEffect(() => {
-    let filtered = projects;
-    
-    if (filter !== 'all') {
-      if (filter === 'featured') {
-        filtered = projects.filter(project => project.featured);
-      } else {
-        filtered = projects.filter(project => project.category === filter);
-      }
-    }
-    
-    setFilteredProjects(filtered);
-  }, [filter]);
+  // Filter projects based on selected filter - memoized for performance
+  const filteredProjects = useMemo(() => {
+    if (filter === 'all') return projects;
+    if (filter === 'featured') return projects.filter(project => project.featured);
+    return projects.filter(project => project.category === filter);
+  }, [projects, filter]);
 
-  // Filter options
-  const filterOptions = [
+  // Filter options - memoized to prevent recreation
+  const filterOptions = useMemo(() => [
     { 
       key: 'featured', 
       label: t('projects.filters.featured'), 
@@ -150,16 +141,19 @@ function Projects() {
       label: t('projects.filters.mobile'), 
       count: projects.filter(p => p.category === 'mobile').length 
     }
-  ];
+  ], [projects, t]);
 
-  // Animation variants
+  // Optimized animation variants với spring transitions
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        staggerChildren: 0.08,
+        delayChildren: 0.1
       }
     }
   };
@@ -167,14 +161,39 @@ function Projects() {
   const itemVariants = {
     hidden: { 
       opacity: 0, 
-      y: 20 
+      y: 30,
+      scale: 0.95
     },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.5,
-        ease: "easeOut"
+        type: "spring",
+        stiffness: 200,
+        damping: 20
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      scale: 0.95,
+      transition: {
+        duration: 0.2
+      }
+    }
+  };
+
+  // Filter transition variants
+  const filterVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25
       }
     }
   };
@@ -203,43 +222,57 @@ function Projects() {
         </motion.div>
 
         {/* Filters */}
-        <motion.div className="projects__filters" variants={itemVariants}>
+        <motion.div className="projects__filters" variants={filterVariants}>
           <div className="projects__filter-group">
             <FiFilter className="projects__filter-icon" />
             {filterOptions.map(option => (
-              <button
+              <motion.button
                 key={option.key}
                 className={`projects__filter-btn ${filter === option.key ? 'active' : ''}`}
                 onClick={() => setFilter(option.key)}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { type: "spring", stiffness: 400, damping: 10 }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  transition: { duration: 0.1 }
+                }}
+                layout
               >
                 {option.label}
                 <span className="projects__filter-count">{option.count}</span>
-              </button>
+              </motion.button>
             ))}
           </div>
 
           <div className="projects__view-toggle">
-            <button
+            <motion.button
               className={`projects__view-btn ${viewMode === 'grid' ? 'active' : ''}`}
               onClick={() => setViewMode('grid')}
               title={t('projects.view_modes.grid')}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               <FiGrid />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className={`projects__view-btn ${viewMode === 'list' ? 'active' : ''}`}
               onClick={() => setViewMode('list')}
               title={t('projects.view_modes.list')}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               <FiList />
-            </button>
+            </motion.button>
           </div>
         </motion.div>
 
         {/* Projects Grid */}
         <motion.div 
           className={`projects__grid ${viewMode === 'list' ? 'projects__grid--list' : ''}`}
-          variants={containerVariants}
+          layout
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           <AnimatePresence mode="wait">
             {filteredProjects.map((project) => (
@@ -250,11 +283,16 @@ function Projects() {
                 layout
                 initial="hidden"
                 animate="visible"
-                exit="hidden"
+                exit="exit"
                 whileHover={{ 
-                  y: -5,
-                  transition: { duration: 0.2 }
+                  y: -8,
+                  transition: { 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 25 
+                  }
                 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <div className="projects__card-image">
                   <img 
@@ -327,7 +365,14 @@ function Projects() {
         {filteredProjects.length === 0 && (
           <motion.div 
             className="projects__empty"
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 200, 
+              damping: 20,
+              delay: 0.2 
+            }}
           >
             <p>{t('projects.no_projects')}</p>
           </motion.div>
@@ -335,6 +380,6 @@ function Projects() {
       </div>
     </motion.section>
   );
-}
+});
 
 export default Projects;

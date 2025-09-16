@@ -1,5 +1,29 @@
 @use 'styles/variables' as *;
 
+// Keyframe animations for smooth transitions
+@keyframes filterActivate {
+  0% {
+    transform: translateY(-2px) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.05);
+  }
+  100% {
+    transform: translateY(-2px) scale(1);
+  }
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .projects {
   padding: $spacing-6xl 0;
   background: var(--bg-primary);
@@ -114,18 +138,39 @@
     font-weight: $font-medium;
     font-size: $font-sm;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
 
     @media (max-width: $breakpoint-sm) {
       padding: $spacing-xs $spacing-base;
       font-size: $font-xs;
     }
 
+    // Smooth glow effect on hover
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
     &:hover {
       border-color: var(--primary-light);
       color: var(--text-primary);
       transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.15);
+
+      &::before {
+        opacity: 0.1;
+      }
     }
 
     &.active {
@@ -133,10 +178,17 @@
       border-color: transparent;
       color: white;
       transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.3);
+      animation: filterActivate 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+      &::before {
+        opacity: 1;
+      }
 
       .projects__filter-count {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.25);
         color: white;
+        backdrop-filter: blur(10px);
       }
     }
   }
@@ -172,16 +224,40 @@
     color: var(--text-tertiary);
     font-size: $font-lg;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: var(--primary-light);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
     &:hover {
       color: var(--text-primary);
-      background: var(--bg-tertiary);
+      transform: translateY(-1px);
+
+      &::before {
+        opacity: 0.1;
+        transform: scale(1);
+      }
     }
 
     &.active {
       background: var(--primary-light);
       color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+
+      &::before {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
   }
 
@@ -221,17 +297,36 @@
     border: 1px solid var(--border-color);
     border-radius: 20px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    position: relative;
 
     @media (max-width: $breakpoint-sm) {
       border-radius: 16px;
     }
 
+    // Enhanced glow effect
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: var(--gradient-primary);
+      border-radius: 22px;
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.4s ease;
+    }
+
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transform: translateY(-8px);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(var(--primary-rgb), 0.1);
       border-color: var(--primary-light);
+
+      &::before {
+        opacity: 0.1;
+      }
 
       .projects__card-overlay {
         opacity: 1;
@@ -240,7 +335,14 @@
       .projects__card-image img {
         transform: scale(1.05);
       }
+
+      .projects__tech-tag {
+        transform: translateY(-1px);
+      }
     }
+
+    // Staggered animation entrance
+    animation: cardEntrance 0.6s ease-out;
   }
 
   &__card-image {
@@ -393,13 +495,34 @@
     font-size: $font-xs;
     font-weight: $font-medium;
     border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
     &:hover {
-      background: var(--primary-light);
       color: white;
       border-color: var(--primary-light);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    // Ensure text stays above background
+    > * {
+      position: relative;
+      z-index: 1;
     }
   }
 
