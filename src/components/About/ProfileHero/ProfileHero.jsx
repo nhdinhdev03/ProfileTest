@@ -1,46 +1,114 @@
-import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { 
-  FiCode, FiZap, FiActivity,
-  FiMail, FiDownload, FiEye
+import { memo, useCallback, useDeferredValue, useEffect, useId, useRef, useState, useTransition } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  FiActivity, FiAward,
+  FiCalendar,
+  FiCode,
+  FiCoffee,
+  FiDownload, FiEye,
+  FiGlobe,
+  FiHeart,
+  FiMail,
+  FiMapPin,
+  FiStar,
+  FiTrendingUp,
+  FiUsers,
+  FiZap
 } from "react-icons/fi";
+import { useInView } from "react-intersection-observer";
+import { withPerformanceOptimization } from "../../../components/Performance/PerformanceOptimization";
+import { useDeviceCapability } from "../../../hooks/useDeviceCapability";
 
 import "./ProfileHero.scss";
 
-const ProfileHero = ({ profile, light }) => {
+const ProfileHero = memo(({ profile, light }) => {
   const { t } = useTranslation();
-  const [particles, setParticles] = useState([])
-  const [isHovered, setIsHovered] = useState(false)
-  const heroRef = useRef(null)
+  const { isLowPerformance, isMobile, performanceSettings } = useDeviceCapability();
+  const [isPending, startTransition] = useTransition();
+  const componentId = useId();
+  const [particles, setParticles] = useState([]);
+  const [isHovered, setIsHovered] = useState(false);
+  const [skillsVisible, setSkillsVisible] = useState(false);
+  const heroRef = useRef(null);
   
-  // Mouse tracking for 3D effects
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const rotateX = useSpring(useTransform(mouseY, [-300, 300], [5, -5]), { stiffness: 100, damping: 30 })
-  const rotateY = useSpring(useTransform(mouseX, [-300, 300], [-5, 5]), { stiffness: 100, damping: 30 })
+  // Deferred values for performance
+  const deferredIsLowPerformance = useDeferredValue(isLowPerformance);
+  const deferredIsMobile = useDeferredValue(isMobile);
+  
+  // Intersection observer for performance
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: deferredIsLowPerformance ? 0.05 : 0.1,
+    rootMargin: deferredIsMobile ? '50px' : '100px'
+  });
+  
+  // Mouse tracking for 3D effects (disabled on low performance)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(
+    useTransform(mouseY, [-300, 300], deferredIsLowPerformance ? [0, 0] : [5, -5]), 
+    { stiffness: 100, damping: 30 }
+  );
+  const rotateY = useSpring(
+    useTransform(mouseX, [-300, 300], deferredIsLowPerformance ? [0, 0] : [-5, 5]), 
+    { stiffness: 100, damping: 30 }
+  );
+
+  // Comprehensive personal data
+  const personalInfo = {
+    name: "Nguyễn Hoàng Đình",
+    title: t('profile.title', "Full-Stack Developer & UI/UX Enthusiast"),
+    location: t('profile.location', "Ho Chi Minh City, Vietnam"),
+    experience: t('profile.experience', "3+ Years Experience"),
+    availability: t('profile.availability', "Available for Projects"),
+    languages: [
+      { name: "Vietnamese", level: "Native", flag: "🇻🇳" },
+      { name: "English", level: "Professional", flag: "🇺🇸" }
+    ],
+    specialties: [
+      { name: t('skills.react', "React/Next.js"), icon: FiCode, level: 95 },
+      { name: t('skills.nodejs', "Node.js"), icon: FiZap, level: 90 },
+      { name: t('skills.design', "UI/UX Design"), icon: FiActivity, level: 85 },
+      { name: t('skills.mobile', "Mobile Development"), icon: FiUsers, level: 80 }
+    ],
+    achievements: [
+      { icon: FiStar, text: t('achievements.projects', "50+ Projects Completed"), color: "#fbbf24" },
+      { icon: FiHeart, text: t('achievements.clients', "100% Client Satisfaction"), color: "#ef4444" },
+      { icon: FiAward, text: t('achievements.certifications', "5+ Certifications"), color: "#8b5cf6" },
+      { icon: FiTrendingUp, text: t('achievements.growth', "Continuous Learning"), color: "#10b981" }
+    ]
+  };
 
   // Initialize particles - optimized for performance
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    const particleCount = isMobile ? 4 : 8; // Reduced from 12
-    const newParticles = []
+    if (deferredIsLowPerformance) return; // Skip particles on low-performance devices
+    
+    const particleCount = deferredIsMobile ? 4 : 8;
+    const newParticles = [];
     
     for (let i = 0; i < particleCount; i++) {
       newParticles.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 4 + 2, // Reduced size
-        speed: Math.random() * 2 + 1, // Reduced speed
-        opacity: Math.random() * 0.3 + 0.1, // Reduced opacity
+        size: Math.random() * 4 + 2,
+        speed: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.3 + 0.1,
         color: ['#6366f1', '#8b5cf6', '#ec4899', '#10b981'][Math.floor(Math.random() * 4)]
-      })
+      });
     }
     
-    setParticles(newParticles)
-  }, [])
+    setParticles(newParticles);
+  }, [deferredIsLowPerformance, deferredIsMobile]);
+
+  // Skills visibility toggle
+  const toggleSkills = useCallback(() => {
+    startTransition(() => {
+      setSkillsVisible(!skillsVisible);
+    });
+  }, [skillsVisible, startTransition]);
 
   // Mouse move handler
   const handleMouseMove = (event) => {
@@ -205,7 +273,7 @@ const ProfileHero = ({ profile, light }) => {
                 backgroundClip: 'text'
               }}
             >
-              {profile?.name || "Nguyen Hoang Dinh"}
+              {personalInfo.name}
             </motion.span>
           </motion.h1>
           
@@ -215,8 +283,33 @@ const ProfileHero = ({ profile, light }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 100 }}
           >
-            {t('about.job_title')}
+            {personalInfo.title}
           </motion.p>
+
+          {/* Personal Info Grid */}
+          <motion.div 
+            className="personal-info-grid"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, type: 'spring', stiffness: 100 }}
+          >
+            <div className="info-item">
+              <FiMapPin className="info-icon" />
+              <span>{personalInfo.location}</span>
+            </div>
+            <div className="info-item">
+              <FiCalendar className="info-icon" />
+              <span>{personalInfo.experience}</span>
+            </div>
+            <div className="info-item">
+              <FiCoffee className="info-icon" />
+              <span>{personalInfo.availability}</span>
+            </div>
+            <div className="info-item">
+              <FiGlobe className="info-icon" />
+              <span>{personalInfo.languages.map(lang => `${lang.flag} ${lang.name}`).join(', ')}</span>
+            </div>
+          </motion.div>
           
           <motion.div 
             className="description"
@@ -350,8 +443,8 @@ const ProfileHero = ({ profile, light }) => {
         </div>
       </div>
     </motion.section>
-  )
-};
+  );
+});
 
 ProfileHero.propTypes = {
   profile: PropTypes.shape({
@@ -363,4 +456,11 @@ ProfileHero.propTypes = {
   light: PropTypes.bool.isRequired,
 };
 
-export default ProfileHero;
+ProfileHero.displayName = 'ProfileHero';
+
+export default withPerformanceOptimization(ProfileHero, {
+  enableParticles: true,
+  enableAnimations: true,
+  enableParallax: true,
+  name: 'ProfileHero'
+});
