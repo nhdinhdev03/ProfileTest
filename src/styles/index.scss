@@ -281,10 +281,39 @@ a {
     background: transparent;
     color: var(--primary-light);
     border: 2px solid var(--primary-light);
+    
+    // Mobile-specific optimizations
+    @include mobile-only {
+      border-width: 1.5px;
+      min-width: 140px;
+      padding: calc(#{$spacing-base} + 2px) calc(#{$spacing-lg} + 4px);
+      font-weight: 500;
+      
+      // Better visual feedback on mobile
+      &:active {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: var(--primary);
+        transform: scale(0.98);
+        transition: all 0.15s ease;
+      }
+    }
 
     &:hover {
       background: var(--primary-light);
       color: white;
+      
+      // Disable hover on touch devices
+      @include touch-device {
+        background: transparent;
+        color: var(--primary-light);
+      }
+    }
+    
+    // Enhanced focus state for accessibility
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      background: rgba(99, 102, 241, 0.05);
     }
   }
 }

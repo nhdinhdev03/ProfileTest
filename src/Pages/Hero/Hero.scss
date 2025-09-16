@@ -143,11 +143,59 @@
       justify-content: flex-start;
     }
 
+    // Mobile optimizations for action buttons
+    @include mobile-only {
+      gap: $spacing-sm;
+      margin-bottom: $spacing-xl;
+      width: 100%;
+      
+      // Stack buttons vertically on small screens
+      @media (max-width: 360px) {
+        flex-direction: column;
+        align-items: stretch;
+        
+        a {
+          width: 70%;
+          text-align: center;
+        }
+      }
+    }
+
     a {
       position: relative;
       z-index: 2;
       pointer-events: auto; // Explicitly enable pointer events
       cursor: pointer;
+      
+      // Enhanced mobile touch experience for Download CV button
+      &.btn-outline {
+        @include mobile-only {
+          // Larger touch target for better UX
+          min-height: 50px;
+          padding: calc(#{$spacing-base} + 4px) $spacing-xl;
+          
+          // Better visual feedback
+          transition: all 0.2s ease;
+          
+          &:active {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+            transform: scale(0.97);
+          }
+          
+          // Icon spacing optimization
+          svg {
+            margin-right: calc(#{$spacing-xs} + 2px);
+            font-size: 1.1em;
+          }
+        }
+        
+        // Tablet optimization
+        @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-lg) {
+          min-height: 48px;
+          padding: calc(#{$spacing-base} + 2px) calc(#{$spacing-lg} + 4px);
+        }
+      }
     }
   }
 
@@ -1092,7 +1140,7 @@
       
       .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: 200px;
         padding: $spacing-base $spacing-xl;
         font-size: $font-base;
         min-height: 48px; // Better touch target

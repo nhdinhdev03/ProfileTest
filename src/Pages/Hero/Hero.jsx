@@ -597,10 +597,21 @@ const Hero = memo(() => {
                   href="/resume.pdf"
                   className="btn btn-outline"
                   whileHover={isTouch ? undefined : { scale: 1.05 }}
-                  whileTap={isTouch ? undefined : { scale: 0.95 }}
+                  whileTap={isTouch ? { scale: 0.97 } : { scale: 0.95 }}
                   download
+                  aria-label={`${t("hero.download_cv_button")} - PDF file`}
+                  role="button"
+                  tabIndex={0}
+                  onFocus={(e) => {
+                    if (!isTouch) {
+                      e.target.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.3)';
+                    }
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.boxShadow = 'none';
+                  }}
                 >
-                  <FiDownload />
+                  <FiDownload aria-hidden="true" />
                   {t("hero.download_cv_button")}
                 </motion.a>
               </motion.div>

@@ -48,6 +48,38 @@ img[loading="lazy"] {
 // Performance optimization for low-end devices
 @media (max-width: 768px) {
   // Disable expensive animations on mobile
+  .btn {
+    // Optimize button animations for mobile
+    will-change: transform;
+    
+    &:active {
+      // Use transform instead of expensive effects
+      transform: scale(0.97);
+      transition: transform 0.15s ease;
+    }
+    
+    // Disable complex hover animations on touch devices
+    @media (hover: none) {
+      &:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  }
+  
+  // Optimize outline button performance
+  .btn-outline {
+    // Use GPU acceleration for better performance
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    
+    // Optimize active state for mobile
+    &:active {
+      transform: translateZ(0) scale(0.97);
+      background-color: rgba(99, 102, 241, 0.1);
+    }
+  }
+}
   .hero__particles,
   .hero__morphing-shapes,
   .hero__floating-elements,
@@ -62,7 +94,7 @@ img[loading="lazy"] {
     animation-duration: 0.2s !important;
     transition-duration: 0.2s !important;
   }
-}
+
 
 // Further optimizations for very low-end devices
 @media (max-width: 480px) {
