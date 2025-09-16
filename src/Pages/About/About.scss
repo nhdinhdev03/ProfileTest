@@ -47,11 +47,14 @@
 // Enhanced gradient line
 .gradient-line {
   height: 3px;
-  margin: $spacing-2xl 0 $spacing-3xl;
+  margin: clamp(1rem, 4vw, 2rem) 0;
   background: var(--gradient-primary);
   border-radius: 999px;
   position: relative;
   overflow: hidden;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 
   &::before {
     content: '';
@@ -62,6 +65,11 @@
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     animation: shimmer 3s ease-in-out infinite;
+  }
+  
+  @media (max-width: 768px) {
+    margin: clamp(0.5rem, 2vw, 1rem) 0;
+    height: 2px;
   }
 }
 

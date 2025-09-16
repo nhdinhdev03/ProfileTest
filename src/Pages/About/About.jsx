@@ -1,9 +1,11 @@
-import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ProfileHero from "../../components/About/ProfileHero";
+import { useInView } from "react-intersection-observer";
 import ContactSection from "../../components/About/ContactSection";
+import Education from "../../components/About/Education";
+import ExperienceTimeline from "../../components/About/ExperienceTimeline";
+import ProfileHero from "../../components/About/ProfileHero";
 
 import "./About.scss";
 
@@ -209,12 +211,28 @@ function About() {
             <ProfileHero profile={profile} light={light} />
           </motion.div>
           
+          <motion.div variants={itemVariants}>
+            <ExperienceTimeline light={light} />
+          </motion.div>
+          
           <motion.div 
             className="gradient-line" 
             aria-hidden="true"
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
-            transition={{ delay: 0.6, duration: 1.2, ease: 'easeOut' }}
+            transition={{ delay: 1.2, duration: 1.2, ease: 'easeOut' }}
+          />
+          
+          <motion.div variants={itemVariants}>
+            <Education light={light} />
+          </motion.div>
+          
+          <motion.div 
+            className="gradient-line" 
+            aria-hidden="true"
+            initial={{ width: 0 }}
+            animate={{ width: '100%' }}
+            transition={{ delay: 1.5, duration: 1.2, ease: 'easeOut' }}
           />
           
           <motion.div variants={itemVariants}>
