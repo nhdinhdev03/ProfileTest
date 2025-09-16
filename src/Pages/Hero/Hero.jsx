@@ -1,4 +1,12 @@
-import React, { useEffect, useState, useRef, useCallback, memo, Suspense, lazy } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  memo,
+  Suspense,
+  lazy,
+} from "react";
 import { Link } from "react-router-dom";
 import {
   motion,
@@ -11,6 +19,7 @@ import {
 } from "framer-motion";
 import {
   FiDownload,
+  FiFacebook,
   FiGithub,
   FiLinkedin,
   FiMail,
@@ -26,7 +35,9 @@ import { ROUTES } from "router/routeConstants";
 
 // Lazy load heavy components để tối ưu performance
 const Experience = lazy(() => import("components/Hero/Experience/Experience"));
-const CommunityTestimonials = lazy(() => import("components/Hero/CommunityTestimonials/CommunityTestimonials"));
+const CommunityTestimonials = lazy(() =>
+  import("components/Hero/CommunityTestimonials/CommunityTestimonials")
+);
 
 const Hero = memo(() => {
   const { t } = useTranslation();
@@ -137,7 +148,7 @@ const Hero = memo(() => {
           const pauseAnimate = (pauseTimestamp) => {
             if (!pauseStart) pauseStart = pauseTimestamp;
             const pauseElapsed = pauseTimestamp - pauseStart;
-            
+
             if (pauseElapsed >= pauseTime) {
               setIsDeleting(true);
             } else {
@@ -604,11 +615,12 @@ const Hero = memo(() => {
                   tabIndex={0}
                   onFocus={(e) => {
                     if (!isTouch) {
-                      e.target.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.3)';
+                      e.target.style.boxShadow =
+                        "0 0 0 3px rgba(99, 102, 241, 0.3)";
                     }
                   }}
                   onBlur={(e) => {
-                    e.target.style.boxShadow = 'none';
+                    e.target.style.boxShadow = "none";
                   }}
                 >
                   <FiDownload aria-hidden="true" />
@@ -618,7 +630,7 @@ const Hero = memo(() => {
 
               <motion.div className="hero__social" variants={itemVariants}>
                 <motion.a
-                  href="https://github.com"
+                  href="https://github.com/nhdinhdev03"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hero__social-link"
@@ -628,17 +640,17 @@ const Hero = memo(() => {
                   <FiGithub />
                 </motion.a>
                 <motion.a
-                  href="https://linkedin.com"
+                  href="https://www.facebook.com/nhdinh.dev03"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hero__social-link"
                   whileHover={isTouch ? undefined : { scale: 1.2, rotate: -5 }}
                   whileTap={isTouch ? undefined : { scale: 0.9 }}
                 >
-                  <FiLinkedin />
+                  <FiFacebook />
                 </motion.a>
                 <motion.a
-                  href="mailto:developer@example.com"
+                  href="nhdinh.dev03@gmail.com"
                   className="hero__social-link"
                   whileHover={isTouch ? undefined : { scale: 1.2, rotate: 5 }}
                   whileTap={isTouch ? undefined : { scale: 0.9 }}
@@ -1362,17 +1374,43 @@ const Hero = memo(() => {
         </div>
       </motion.section>
 
-      <Suspense fallback={<div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div
+            style={{
+              minHeight: "200px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            Loading...
+          </div>
+        }
+      >
         <Experience />
       </Suspense>
 
-      <Suspense fallback={<div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div
+            style={{
+              minHeight: "200px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            Loading...
+          </div>
+        }
+      >
         <CommunityTestimonials />
       </Suspense>
     </>
   );
 });
 
-Hero.displayName = 'Hero';
+Hero.displayName = "Hero";
 
 export default Hero;
