@@ -25,6 +25,7 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     resources,
+    lng: 'en', // Default language set to English
     fallbackLng: 'en', // Fallback language if translation not found
     debug: process.env.NODE_ENV === 'development',
 
@@ -40,7 +41,7 @@ i18n
       checkWhitelist: true, // Check if detected language is in supported languages
     },
 
-    // Supported languages whitelist
+    // Supported languages whitelist - English first as default
     supportedLngs: ['en', 'vi'],
     nonExplicitSupportedLngs: true,
 

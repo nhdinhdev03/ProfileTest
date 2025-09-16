@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import img from "assets/Img";
-import useLanguagePersistence from "../../hooks/useLanguagePersistence";
+import useLanguagePersistence from "hooks/useLanguagePersistence";
 import "./LanguageToggle.scss";
 
 const LanguageToggle = ({ className = "", variant = "dropdown" }) => {
@@ -21,18 +21,18 @@ const LanguageToggle = ({ className = "", variant = "dropdown" }) => {
 
   const languages = [
     {
-      code: "vi",
-      name: t("language.vietnamese"),
-      flag: img.Co_VN,
-      shortName: " ",
-      nativeName: "VI",
-    },
-    {
       code: "en",
       name: t("language.english"),
       flag: img.Co_My,
       shortName: " ",
       nativeName: "EN",
+    },
+    {
+      code: "vi",
+      name: t("language.vietnamese"),
+      flag: img.Co_VN,
+      shortName: " ",
+      nativeName: "VI",
     },
   ];
 
