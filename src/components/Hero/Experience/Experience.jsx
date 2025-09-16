@@ -11,9 +11,10 @@ import {
   FiZap
 } from 'react-icons/fi'
 import { useInView } from 'react-intersection-observer'
-import { withPerformanceOptimization } from '../../../components/Performance/PerformanceOptimization'
-import { useDeviceCapability } from '../../../hooks/useDeviceCapability'
+
 import './Experience.scss'
+import useDeviceCapability from 'hooks/useDeviceCapability'
+import withPerformanceOptimization from 'components/Performance/PerformanceOptimization'
 
 const Experience = memo(() => {
   const { t } = useTranslation()

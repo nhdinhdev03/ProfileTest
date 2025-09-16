@@ -1,9 +1,44 @@
 @use "../../../styles/variables.scss" as *;
+
 .community-testimonials {
   position: relative;
   padding: clamp(4rem, 8vw, 6rem) 0;
-
   overflow: hidden;
+  
+  // Modern CSS performance optimizations
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 1000px;
+
+  // Performance optimizations for low-end devices
+  &.low-performance {
+    // Disable background effects
+    .community-testimonials__background {
+      display: none;
+    }
+    
+    // Simplify animations
+    .community-testimonials__card {
+      will-change: auto;
+      transition: none;
+      
+      &:hover {
+        transform: none;
+      }
+    }
+    
+    .community-testimonials__card-glow {
+      display: none;
+    }
+  }
+
+  // Loading state styles
+  &.updating {
+    .community-testimonials__grid {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  }
 
   // Ultra-wide screens
   @media (min-width: 1920px) {
@@ -31,6 +66,9 @@
     padding: 0 clamp(1rem, 4vw, 2rem);
     position: relative;
     z-index: 2;
+    
+    // CSS containment for better performance
+    contain: layout style;
 
     @media (max-width: 480px) {
       padding: 0 1rem;
@@ -40,6 +78,9 @@
   &__header {
     text-align: center;
     margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    
+    // CSS containment
+    contain: layout style;
   }
 
   &__badge {
@@ -59,6 +100,12 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
+    
+    // Focus management
+    &:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
 
     &::before {
       content: "";
@@ -74,11 +121,17 @@
         transparent
       );
       animation: shimmer 3s infinite;
+      will-change: transform;
     }
 
     &-icon {
       font-size: 1.1rem;
       animation: heartbeat 2s ease-in-out infinite;
+      
+      // Performance optimization
+      .low-performance & {
+        animation: none;
+      }
     }
   }
 
@@ -185,6 +238,35 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
+    list-style: none;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    
+    // Modern container-based responsive design
+    container-type: inline-size;
+    container-name: testimonials-grid;
+    
+    // CSS containment for performance
+    contain: layout style;
+
+    // Container queries for better responsive behavior
+    @container testimonials-grid (min-width: 800px) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    @container testimonials-grid (min-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    // List items should not have any styling
+    > div[role="listitem"] {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
 
     // Large desktop (1440px+)
     @media (min-width: 1440px) {
@@ -193,6 +275,7 @@
       max-width: 1200px;
       margin-left: auto;
       margin-right: auto;
+      margin-bottom: 3rem;
     }
 
     // Desktop (1024px - 1439px)
@@ -236,6 +319,26 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     overflow: hidden;
+    
+    // Modern CSS optimizations
+    contain: layout style paint;
+    will-change: transform;
+    
+    // Focus management
+    &:focus-visible {
+      outline: 2px solid #6366f1;
+      outline-offset: 2px;
+    }
+
+    // Enhanced mobile optimization
+    &.mobile-optimized {
+      will-change: auto;
+      transition-duration: 0.2s;
+      
+      &:hover {
+        transform: none;
+      }
+    }
 
     &::before {
       content: "";
@@ -259,6 +362,17 @@
         0 8px 32px rgba(99, 102, 241, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    // Performance optimization for low-end devices
+    &.low-performance {
+      will-change: auto;
+      backdrop-filter: none;
+      
+      &:hover {
+        transform: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
     }
 
     // Tablet responsive
@@ -353,11 +467,115 @@
     border: 3px solid #6366f1;
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
     flex-shrink: 0;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    
+    // Performance optimizations
+    contain: layout style paint;
+    will-change: transform;
+    
+    // Loading state
+    &.loading {
+      animation: avatarPulse 1.5s ease-in-out infinite;
+      background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    }
+    
+    // Error state
+    &.error {
+      background: linear-gradient(135deg, #fef2f2, #fee2e2);
+      border-color: rgba(239, 68, 68, 0.3);
+      
+      &::after {
+        content: "⚠";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ef4444;
+        font-size: 20px;
+      }
+    }
+    
+    // Success state with gentle scale
+    &.loaded {
+      animation: avatarLoaded 0.4s ease-out;
+    }
+    
+    // Enhanced mobile optimization
+    &.mobile-optimized {
+      will-change: auto;
+      transition-duration: 0.2s;
+    }
+    
+    // Hover effects
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4),
+                  0 3px 10px rgba(99, 102, 241, 0.2);
+    }
+    
+    // Performance mode
+    &.low-performance {
+      will-change: auto;
+      
+      &:hover {
+        transform: none;
+      }
+    }
+    
+    // Touch devices
+    @media (hover: none) {
+      &:hover {
+        transform: none;
+      }
+    }
 
     @media (max-width: 480px) {
       width: 55px;
       height: 55px;
       border-width: 2px;
+      
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+  }
+
+  // Avatar wrapper for positioning and loading states
+  &__avatar-wrapper {
+    position: relative;
+    width: clamp(50px, 8vw, 60px);
+    height: clamp(50px, 8vw, 60px);
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    
+    // Performance optimizations
+    contain: layout;
+    
+    // Loading placeholder
+    &.loading::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(240, 240, 240, 0.8) 0%,
+        rgba(255, 255, 255, 0.9) 50%,
+        rgba(240, 240, 240, 0.8) 100%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    
+    @media (max-width: 480px) {
+      width: 55px;
+      height: 55px;
     }
   }
 
@@ -1040,6 +1258,127 @@
 
     &__bg-shape {
       animation: none !important;
+    }
+  }
+}
+
+// Enhanced animation keyframes for performance
+@keyframes avatarPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes avatarLoaded {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes contentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .community-testimonials {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    &__card {
+      &:hover {
+        transform: none !important;
+      }
+    }
+
+    &__avatar {
+      &:hover {
+        transform: none !important;
+      }
+    }
+  }
+
+  @keyframes avatarPulse {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes avatarLoaded {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes shimmer {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes cardEntrance {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes contentFadeIn {
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
 }

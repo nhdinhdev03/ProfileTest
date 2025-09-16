@@ -1,11 +1,77 @@
-import React, { memo, useMemo } from "react";
 import { motion } from "framer-motion";
+import { memo, useCallback, useDeferredValue, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FiStar, FiHeart, FiUsers } from "react-icons/fi";
+import { FiHeart, FiStar, FiUsers } from "react-icons/fi";
+import { useInView } from "react-intersection-observer";
+
 import "./CommunityTestimonials.scss";
+import useDeviceCapability from "hooks/useDeviceCapability";
 
 const CommunityTestimonials = memo(() => {
   const { t } = useTranslation();
+  const { isLowPerformance, isMobile } = useDeviceCapability();
+
+  const [retryAttempts, setRetryAttempts] = useState({});
+  
+  // Deferred values for better performance during updates
+  const deferredIsLowPerformance = useDeferredValue(isLowPerformance);
+  const deferredIsMobile = useDeferredValue(isMobile);
+  
+  // Intersection observer for performance
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: deferredIsLowPerformance ? 0.05 : 0.1,
+    rootMargin: deferredIsMobile ? '50px' : '100px'
+  });
+  
+  // Image loading handlers with error recovery
+  const handleImageLoad = useCallback((testimonialId) => {
+    setImageLoadStates(prev => ({
+      ...prev,
+      [testimonialId]: 'loaded'
+    }));
+    setImageErrors(prev => ({
+      ...prev,
+      [testimonialId]: false
+    }));
+  }, []);
+  
+  const handleImageError = useCallback((testimonialId) => {
+    console.warn(`Failed to load avatar for testimonial ${testimonialId}`);
+    setImageLoadStates(prev => ({
+      ...prev,
+      [testimonialId]: 'error'
+    }));
+    setImageErrors(prev => ({
+      ...prev,
+      [testimonialId]: true
+    }));
+  }, []);
+  
+  const handleImageRetry = useCallback((testimonialId) => {
+    const currentAttempts = retryAttempts[testimonialId] || 0;
+    if (currentAttempts < 3) {
+      setRetryAttempts(prev => ({
+        ...prev,
+        [testimonialId]: currentAttempts + 1
+      }));
+      setImageLoadStates(prev => ({
+        ...prev,
+        [testimonialId]: 'loading'
+      }));
+      setImageErrors(prev => ({
+        ...prev,
+        [testimonialId]: false
+      }));
+    }
+  }, [retryAttempts]);
+  
+  const handleImageLoadStart = useCallback((testimonialId) => {
+    setImageLoadStates(prev => ({
+      ...prev,
+      [testimonialId]: 'loading'
+    }));
+  }, []);
   
   // Memoize testimonials data để tối ưu performance
   const testimonials = useMemo(() => [
