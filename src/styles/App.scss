@@ -3,7 +3,7 @@
 @use 'responsive.scss' as *;
 @use 'typography.scss' as *;
 
-// Theme transition optimization - ngăn chặn FOUC
+// Theme transition optimization - prevent FOUC
 html.theme-transitioning {
   visibility: hidden;
 }
@@ -74,12 +74,12 @@ html:not(.theme-transitioning) {
     /* Prevent content being hidden under fixed header; include safe area */
     padding-top: calc(var(--header-height, 80px) + env(safe-area-inset-top, 0px));
     
-    // Responsive padding cho content
+    // Responsive padding for content
     padding-left: clamp($spacing-base, 2vw, $spacing-xl);
     padding-right: clamp($spacing-base, 2vw, $spacing-xl);
     padding-bottom: $spacing-2xl;
     
-    // Tối ưu scroll behavior
+    // Optimize scroll behavior
     scroll-behavior: smooth;
     overscroll-behavior: contain;
     
@@ -209,7 +209,7 @@ html {
     font-size: $font-base;
     min-height: 48px;
     
-    // Tối ưu cho màn hình rất nhỏ
+    // Optimize for very small screens
     @include mobile-xxs-only {
       min-height: 52px;
       padding: $spacing-lg $spacing-xl;

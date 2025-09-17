@@ -1096,7 +1096,7 @@
     }
     
     &__visual {
-      // Yêu cầu: Ẩn hoàn toàn phần visual trên mobile
+      // Required: Hide visual section completely on mobile
       // Previously we reordered and simplified it; now we just hide it
       display: none !important;
     }

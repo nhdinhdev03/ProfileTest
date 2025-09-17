@@ -107,7 +107,7 @@
 
 // Performance optimizations
 * {
-  // Tắt smooth scrolling cho elements nhỏ để tránh jank
+  // Disable smooth scrolling for small elements to avoid jank
   &:not(html):not(body) {
     scroll-behavior: auto;
   }
