@@ -9,69 +9,47 @@ import ProfileHero from "../../components/About/ProfileHero";
 
 import "./About.scss";
 
-// Optimized GitHub data hook
-function useGithubData() {
-  const [data, setData] = useState({
-    profile: null,
-    repos: [],
-    loading: true,
-    error: null,
-  });
+// Optimized GitHub profile hook
+function useGithubProfile() {
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     let ignore = false;
     const ctrl = new AbortController();
 
-    async function fetchData() {
+    async function fetchProfile() {
       try {
-        const [profileRes, reposRes] = await Promise.all([
-          fetch("https://api.github.com/users/nhdinhdev03", {
-            signal: ctrl.signal,
-            headers: { Accept: "application/vnd.github+json" },
-          }),
-          fetch(
-            "https://api.github.com/users/nhdinhdev03/repos?per_page=6&sort=updated",
-            {
-              signal: ctrl.signal,
-              headers: { Accept: "application/vnd.github+json" },
-            }
-          ),
-        ]);
-        if (!profileRes.ok || !reposRes.ok) throw new Error("Failed to fetch");
-
-        const [profile, repos] = await Promise.all([
-          profileRes.json(),
-          reposRes.json(),
-        ]);
+        const profileRes = await fetch("https://api.github.com/users/nhdinhdev03", {
+          signal: ctrl.signal,
+          headers: { Accept: "application/vnd.github+json" },
+        });
+        
+        if (!profileRes.ok) throw new Error("Failed to fetch");
+        const profileData = await profileRes.json();
 
         if (!ignore) {
-          setData({
-            profile,
-            repos: Array.isArray(repos) ? repos.filter((r) => !r.archived) : [],
-            loading: false,
-            error: null,
-          });
+          setProfile(profileData);
         }
       } catch (error) {
         if (!ignore && error.name !== "AbortError") {
-          setData((prev) => ({ ...prev, loading: false, error }));
+          console.warn("Failed to fetch GitHub profile:", error);
         }
       }
     }
 
-    fetchData();
+    fetchProfile();
     return () => {
       ignore = true;
       ctrl.abort();
     };
   }, []);
 
-  return data;
+  return profile;
 };
 
 // Main About Component
 function About() {
-  const { profile } = useGithubData();
+  const profile = useGithubProfile();
   const [particles, setParticles] = useState([])
   const aboutRef = useRef(null)
   const { t } = useTranslation();
