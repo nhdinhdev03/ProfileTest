@@ -8,17 +8,18 @@ import {
   FiYoutube
 } from "react-icons/fi";
 import { useInView } from "react-intersection-observer";
-import { useDeviceCapability } from "../../../hooks/useDeviceCapability";
+
 
 import "./ContactSection.scss";
+import useDeviceCapability from "hooks/useDeviceCapability";
 
 const ContactSection = memo(({ profile, light }) => {
   const { t } = useTranslation();
-  const { isLowPerformance, isMobile, performanceSettings } = useDeviceCapability();
-  const [isPending, startTransition] = useTransition();
-  const componentId = useId();
+  const { isLowPerformance, isMobile } = useDeviceCapability();
+  const [startTransition] = useTransition();
+
   const [activeContact, setActiveContact] = useState(null);
-  const [availability, setAvailability] = useState('available'); // available, busy, away
+  const [availability] = useState('available'); // available, busy, away
   
   // Deferred values for performance
   const deferredIsLowPerformance = useDeferredValue(isLowPerformance);

@@ -18,15 +18,15 @@ import {
   FiZap
 } from "react-icons/fi";
 import { useInView } from "react-intersection-observer";
-import { withPerformanceOptimization } from "../../../components/Performance/PerformanceOptimization";
-import { useDeviceCapability } from "../../../hooks/useDeviceCapability";
+
 
 import "./ExperienceTimeline.scss";
+import useDeviceCapability from "hooks/useDeviceCapability";
+import withPerformanceOptimization from "components/PerformanceOptimization";
 
 const ExperienceTimeline = memo(() => {
   const { t } = useTranslation();
-  const { isLowPerformance, isMobile, performanceSettings } = useDeviceCapability();
-  const componentId = useId();
+  const { isLowPerformance, isMobile } = useDeviceCapability();
   const [activeExperience, setActiveExperience] = useState(null);
   
   // Deferred values for performance

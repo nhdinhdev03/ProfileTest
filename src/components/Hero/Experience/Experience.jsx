@@ -14,7 +14,8 @@ import { useInView } from 'react-intersection-observer'
 
 import './Experience.scss'
 import useDeviceCapability from 'hooks/useDeviceCapability'
-import withPerformanceOptimization from 'components/Performance/PerformanceOptimization'
+import withPerformanceOptimization from 'components/PerformanceOptimization'
+
 
 const Experience = memo(() => {
   const { t } = useTranslation()

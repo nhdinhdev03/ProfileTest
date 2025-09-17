@@ -18,16 +18,17 @@ import {
   FiZap
 } from "react-icons/fi";
 import { useInView } from "react-intersection-observer";
-import { withPerformanceOptimization } from "../../../components/Performance/PerformanceOptimization";
-import { useDeviceCapability } from "../../../hooks/useDeviceCapability";
+
 
 import "./ProfileHero.scss";
+import useDeviceCapability from "hooks/useDeviceCapability";
+import withPerformanceOptimization from "components/PerformanceOptimization";
 
 const ProfileHero = memo(({ profile, light }) => {
   const { t } = useTranslation();
-  const { isLowPerformance, isMobile, performanceSettings } = useDeviceCapability();
-  const [isPending, startTransition] = useTransition();
-  const componentId = useId();
+  const { isLowPerformance, isMobile } = useDeviceCapability();
+  const [startTransition] = useTransition();
+
   const [particles, setParticles] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [skillsVisible, setSkillsVisible] = useState(false);

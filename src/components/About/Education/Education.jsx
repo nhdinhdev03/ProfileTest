@@ -13,14 +13,15 @@ import {
     FaMedal
 } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
-import { useDeviceCapability } from '../../../hooks/useDeviceCapability';
-import { withPerformanceOptimization } from '../../Performance/PerformanceOptimization';
+
+
 import './Education.scss';
+import withPerformanceOptimization from 'components/PerformanceOptimization';
+import useDeviceCapability from 'hooks/useDeviceCapability';
 
 const Education = () => {
   const [isPending, startTransition] = useTransition();
-  const educationId = useId();
-  const { isLowPerformance, isMobile, performanceSettings } = useDeviceCapability();
+  const { isLowPerformance, isMobile } = useDeviceCapability();
   const [expandedItems, setExpandedItems] = React.useState(new Set());
   
   const [ref, inView] = useInView({
