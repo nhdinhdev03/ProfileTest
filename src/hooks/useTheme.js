@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useTheme = (initialTheme = 'dark') => {
-  // Đọc theme từ localStorage ngay lập tức hoặc từ document attribute nếu đã được set bởi inline script
   const getInitialTheme = () => {
     try {
       // Ưu tiên lấy từ document attribute (đã được set bởi inline script)
@@ -10,12 +9,9 @@ export const useTheme = (initialTheme = 'dark') => {
       
       // Fallback sang localStorage
       const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) return savedTheme;
-      
-      // Cuối cùng mới dùng initialTheme
-      return initialTheme;
-    } catch (e) {
-      console.error('Error reading theme:', e);
+      return savedTheme || initialTheme;
+    } catch (error) {
+      console.warn('Failed to retrieve theme from storage:', error.message);
       return initialTheme;
     }
   };
@@ -23,18 +19,18 @@ export const useTheme = (initialTheme = 'dark') => {
   const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
-    // Chỉ đồng bộ lại nếu theme trong state khác với theme trong document
-    const currentDocumentTheme = document.documentElement.getAttribute('data-theme');
-    if (currentDocumentTheme !== theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-    }
+    document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+    
+    try {
+      localStorage.setItem('theme', newTheme);
+    } catch (error) {
+      console.warn('Failed to save theme to localStorage:', error.message);
+    }
   };
 
   return [theme, toggleTheme];

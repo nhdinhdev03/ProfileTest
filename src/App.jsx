@@ -1,15 +1,15 @@
-import React, { memo, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainLayout from "layouts/MainLayout";
 import { useTheme } from "hooks/useTheme";
+import MainLayout from "layouts/MainLayout";
+import { memo, Suspense } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { publicRoutes } from "router";
 
-import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
-import ScrollToTop from "components/Scroll/ScrollToTop/ScrollToTop";
-import PageTransition from "components/PageTransition/PageTransition";
 import LoadingFallback from "components/Loading/LoadingFallback";
-import "styles/App.scss";
+import PageTransition from "components/PageTransition/PageTransition";
+import ScrollToTop from "components/Scroll/ScrollToTop/ScrollToTop";
+import ScrollToTopOnNavigate from "components/Scroll/ScrollToTopOnNavigate/ScrollToTopOnNavigate";
 import NotFound from "pages/NotFound";
+import "styles/App.scss";
 
 // Import i18n configuration
 import "./i18n";
