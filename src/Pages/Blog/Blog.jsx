@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  FiArrowRight,
   FiCalendar,
   FiClock,
-  FiUser,
-  FiTag,
-  FiArrowRight,
-  FiSearch,
   FiFilter,
+  FiSearch,
+  FiTag,
+  FiUser,
 } from "react-icons/fi";
-import useSaveScrollPosition from "../../hooks/useSaveScrollPosition";
+import { Link } from "react-router-dom";
+
+import useSaveScrollPosition from "hooks/useSaveScrollPosition";
 import "./Blog.scss";
 
 function Blog() {
@@ -51,299 +52,14 @@ function Blog() {
         </blockquote>
 
         <h3>🔧 Technical Implementation</h3>
-        <pre><code>// Before React 18 - Blocking render
-function App() {
-  const [isPending, startTransition] = useTransition();
-  const [input, setInput] = useState('');
-  const [list, setList] = useState([]);
+        <p>React 18 giới thiệu <code>useTransition</code> và <code>useDeferredValue</code> để tối ưu performance.</p>
 
-  const handleChange = (e) => {
-    setInput(e.target.value);
-    
-    // Blocking update - freezes UI
-    const newList = generateHugeList(e.target.value);
-    setList(newList);
-  };
-}</code></pre>
-
-        <pre><code>// React 18 - Non-blocking with useTransition
-function App() {
-  const [isPending, startTransition] = useTransition();
-  const [input, setInput] = useState('');
-  const [list, setList] = useState([]);
-
-  const handleChange = (e) => {
-    // Urgent update - immediate
-    setInput(e.target.value);
-    
-    // Non-urgent update - can be interrupted
-    startTransition(() => {
-      const newList = generateHugeList(e.target.value);
-      setList(newList);
-    });
-  };
-
-  return (
-    <div>
-      <input value={input} onChange={handleChange} />
-      {isPending && <div>Loading...</div>}
-      <ExpensiveList items={list} />
-    </div>
-  );
-}</code></pre>
-
-        <h2 id="usetransition">⚡ useTransition: Priority-Based Updates</h2>
-        
-        <h3>Core Concept</h3>
-        <p><code>useTransition</code> cho phép bạn đánh dấu state updates là "non-urgent", giúp React ưu tiên các updates khác quan trọng hơn như user input.</p>
-
-        <h3>Advanced Usage Patterns</h3>
-        <pre><code>// Pattern 1: Search with debounced results
-function SearchComponent() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [isPending, startTransition] = useTransition();
-
-  const handleSearch = useCallback((searchTerm) => {
-    setQuery(searchTerm); // Urgent - immediate UI feedback
-    
-    startTransition(() => {
-      // Non-urgent - can be deferred
-      const searchResults = performExpensiveSearch(searchTerm);
-      setResults(searchResults);
-    });
-  }, []);
-
-  return (
-    <div>
-      <SearchInput 
-        value={query} 
-        onChange={handleSearch}
-        placeholder="Search..."
-      />
-      <div className={isPending ? 'loading' : ''}>
-        <SearchResults results={results} />
-      </div>
-    </div>
-  );
-}</code></pre>
-
-        <pre><code>// Pattern 2: Tab switching with heavy content
-function TabContainer() {
-  const [activeTab, setActiveTab] = useState('tab1');
-  const [tabContent, setTabContent] = useState(null);
-  const [isPending, startTransition] = useTransition();
-
-  const switchTab = (tabId) => {
-    setActiveTab(tabId); // Immediate tab highlight
-    
-    startTransition(() => {
-      // Heavy computation can be interrupted
-      const content = loadHeavyTabContent(tabId);
-      setTabContent(content);
-    });
-  };
-
-  return (
-    <div>
-      <TabNavigation 
-        activeTab={activeTab} 
-        onTabClick={switchTab} 
-      />
-      <TabContent 
-        content={tabContent} 
-        isLoading={isPending}
-      />
-    </div>
-  );
-}</code></pre>
-
-        <h2 id="usedeferredvalue">🎯 useDeferredValue: Smart Value Deferring</h2>
-        
-        <p><code>useDeferredValue</code> cho phép defer một value, giúp React ưu tiên updates khác trước khi update value này.</p>
-
-        <pre><code>// Optimizing expensive filtering
-function ProductList({ searchTerm, products }) {
-  const deferredSearchTerm = useDeferredValue(searchTerm);
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => 
-      product.name.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(deferredSearchTerm.toLowerCase())
-    );
-  }, [products, deferredSearchTerm]);
-
-  const isStale = searchTerm !== deferredSearchTerm;
-
-  return (
-    <div className={isStale ? 'opacity-50' : ''}>
-      <ProductGrid products={filteredProducts} />
-      {isStale && <div>Updating results...</div>}
-    </div>
-  );
-}</code></pre>
-
-        <h2 id="performance">📊 Performance Analysis & Real-World Impact</h2>
-        
-        <h3>Benchmark Results</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Scenario</th>
-              <th>React 17 (ms)</th>
-              <th>React 18 (ms)</th>
-              <th>Improvement</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Large list filtering</td>
-              <td>450ms blocked</td>
-              <td>45ms + background</td>
-              <td>90% faster perceived</td>
-            </tr>
-            <tr>
-              <td>Tab switching</td>
-              <td>280ms blocked</td>
-              <td>16ms immediate</td>
-              <td>95% faster response</td>
-            </tr>
-            <tr>
-              <td>Search suggestions</td>
-              <td>120ms blocked</td>
-              <td>8ms immediate</td>
-              <td>93% faster typing</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h3>🔍 Performance Monitoring</h3>
-        <pre><code>// Custom hook for transition performance tracking
-function useTransitionPerformance() {
-  const [isPending, startTransition] = useTransition();
-  const [metrics, setMetrics] = useState(null);
-
-  const trackTransition = useCallback((callback, label) => {
-    const start = performance.now();
-    
-    startTransition(() => {
-      callback();
-      
-      // Track completion in next tick
-      setTimeout(() => {
-        const duration = performance.now() - start;
-        setMetrics(prev => ({
-          ...prev,
-          [label]: { duration, timestamp: Date.now() }
-        }));
-      }, 0);
-    });
-  }, [startTransition]);
-
-  return { isPending, trackTransition, metrics };
-}</code></pre>
-
-        <h2 id="migration">🔄 Production Migration Strategy</h2>
-        
-        <h3>Phase 1: Enable Concurrent Features</h3>
-        <pre><code>// Step 1: Update to React 18
-npm install react@18 react-dom@18
-
-// Step 2: Use createRoot instead of render
-import { createRoot } from 'react-dom/client';
-
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<App />);</code></pre>
-
-        <h3>Phase 2: Identify Optimization Opportunities</h3>
-        <pre><code>// Audit expensive operations
-function auditExpensiveOperations() {
-  const expensiveComponents = [
-    'LargeDataTable',
-    'ComplexChart',
-    'SearchResults',
-    'FilteredList'
-  ];
-
-  return expensiveComponents.map(component => ({
-    component,
-    renderTime: measureRenderTime(component),
-    shouldUseTransition: renderTime > 16 // > 1 frame
-  }));
-}</code></pre>
-
-        <h2 id="best-practices">✅ Production Best Practices</h2>
-        
-        <h3>1. Strategic useTransition Usage</h3>
+        <h2 id="best-practices">✅ Key Best Practices</h2>
         <ul>
-          <li><strong>DO:</strong> Use for expensive list filtering, search results, data visualization</li>
-          <li><strong>DON'T:</strong> Use for simple state updates or critical user interactions</li>
-        </ul>
-
-        <h3>2. Error Boundaries với Concurrent Features</h3>
-        <pre><code>class ConcurrentErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, errorInfo: null };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    // Log concurrent rendering errors
-    console.error('Concurrent render error:', {
-      error,
-      errorInfo,
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent
-    });
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <FallbackUI onRetry={() => window.location.reload()} />;
-    }
-
-    return this.props.children;
-  }
-}</code></pre>
-
-        <h3>3. Testing Concurrent Features</h3>
-        <pre><code>// Testing transitions
-import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-
-test('search transitions work correctly', async () => {
-  render(<SearchComponent />);
-  
-  const searchInput = screen.getByRole('textbox');
-  
-  // Simulate fast typing
-  await userEvent.type(searchInput, 'react');
-  
-  // Input should update immediately
-  expect(searchInput.value).toBe('react');
-  
-  // Results should eventually appear
-  await waitFor(() => {
-    expect(screen.getByText(/search results/i)).toBeInTheDocument();
-  });
-});</code></pre>
-
-        <h3>🎯 Key Takeaways</h3>
-        <ul>
-          <li>Concurrent features improve <strong>perceived performance</strong>, not raw speed</li>
           <li>Use <code>useTransition</code> for expensive, non-urgent updates</li>
           <li>Use <code>useDeferredValue</code> for derived expensive computations</li>
           <li>Monitor performance impact with proper metrics</li>
-          <li>Test thoroughly, especially error scenarios</li>
         </ul>
-
-        <div class="author-note">
-          <p><strong>💡 Pro Tip:</strong> Start small - identify your most expensive UI updates and gradually apply concurrent features. The biggest wins come from optimizing user interactions that previously blocked the main thread.</p>
-        </div>
       `,
       category: "react",
       author: "Senior React Engineer",

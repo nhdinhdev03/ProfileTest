@@ -13,7 +13,8 @@ import {
   FiBriefcase,
 } from 'react-icons/fi';
 import './Breadcrumb.scss';
-import { ROUTES } from '../../router/routeConstants';
+import { ROUTES } from 'router/routeConstants';
+
 
 // Icon mapping for better performance và tree-shaking
 const ICONS = Object.freeze({
